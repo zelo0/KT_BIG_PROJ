@@ -50,7 +50,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.naver',
 ]
 
-SOCIALACCOUNT_LOGIN_ON_GET=True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = "http://localhost:8000/core/"
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -67,8 +71,9 @@ SOCIALACCOUNT_PROVIDERS = {
             'email',
         ],
         'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
+            'access_type': 'offline',
+        },
+        'OAUTH_PKCE_ENABLED': True,
     }
 }
 
