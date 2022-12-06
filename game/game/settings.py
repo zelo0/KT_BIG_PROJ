@@ -55,6 +55,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 SITE_ID = 1
 
 LOGIN_REDIRECT_URL = "http://localhost:8000/core/"
+LOGOUT_REDIRECT_URL = "http://localhost:8000/accounts/login/"
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -74,7 +75,16 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'offline',
         },
         'OAUTH_PKCE_ENABLED': True,
-    }
+    },
+    'kakao': {
+        'SCOPE': [
+            'profile_nickname',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    },
 }
 
 MIDDLEWARE = [
@@ -156,7 +166,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 # Media Files
 MEDIA_URL = '/media/'
