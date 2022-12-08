@@ -1,0 +1,23 @@
+{
+  "name": "kt_big_proj",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Soyuen-Yu/KT_BIG_PROJ.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Soyuen-Yu/KT_BIG_PROJ/issues"
+  },
+  "homepage": "https://github.com/Soyuen-Yu/KT_BIG_PROJ#readme",
+  "dependencies": {
+    "phaser": "^3.55.2"
+  }
+}
