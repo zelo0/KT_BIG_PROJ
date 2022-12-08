@@ -26,6 +26,8 @@
   <form class="signup" id="signup_form" method="POST" action="{% url 'account_signup' %}">
     {% csrf_token %}
 
+    <!-- {{ form.as_p }} -->
+
     {{ form.non_field_errors | safe }}
 
     <!-- {{ form.as_p }} -->
@@ -60,7 +62,7 @@
 
     <!-- local login btn -->
     <div class="d-flex justify-content-center custom-mb">
-      <button class="btn text-white btn-lg fs-5 px-5 auth-btn" style="background-color: #ac2bac;" role="button">
+      <button class="btn text-white btn-lg fs-5 px-5 auth-btn" style="background-color: #ac2bac;" type="submit" role="button">
         join
       </button>
     </div>
