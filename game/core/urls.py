@@ -4,5 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index),
-    path('signin', views.signin),
+    # 제거
+    path('signin/', views.signin),
+    path('recommend/', views.recommend),
 ]

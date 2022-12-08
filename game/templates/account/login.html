@@ -1,4 +1,4 @@
-{% extends "auth_base.html" %}
+{% extends "account/auth_base.html" %}
 {% load i18n %}
 {% load account socialaccount %}
 
@@ -39,7 +39,7 @@
 
 {% get_providers as socialaccount_providers %}
 
-<div class="container custom-mb">
+<div class="container">
   {% include 'core/components/back-button.html' %}
   <div class="mb-8 custom-mb">
     <h1>Welcome!</h1>
@@ -66,9 +66,10 @@
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
 
+    <!-- 비밀번호 초기화 -->
     <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
 
-    <!-- social login -->
+    <!-- social login btn group -->
     <div class="d-flex justify-content-evenly custom-mb">
       <a class="btn text-white btn-lg btn-floating" style="background-color: #FEE500;" href="/accounts/kakao/login/" role="button">
         <i class="fas fa-comment fa-kakao"></i>
@@ -81,7 +82,7 @@
       </a>
     </div>
 
-    <!-- local login -->
+    <!-- local login btn -->
     <div class="d-flex justify-content-center custom-mb">
       <button id="local-btn" class="btn text-white btn-lg fs-5 px-5" style="background-color: #ac2bac;" role="button">
         login
@@ -96,8 +97,6 @@
     </div>
   </form>
   
-  {% comment %} 회원가입 {% endcomment %}
-  <p>{% blocktrans with site.name as site_name %} <a href="{{ signup_url }}">회원가입</a>{% endblocktrans %}</p>
-
+ 
 </div>
 {% endblock content %}

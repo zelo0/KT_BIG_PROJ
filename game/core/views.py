@@ -6,3 +6,6 @@ def index(request):
 
 def signin(request):
   return render(request, 'core/signin.html')
+
+def recommend(request):
+  return render(request, 'core/recommend.html')
