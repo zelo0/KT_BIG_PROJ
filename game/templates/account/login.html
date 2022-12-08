@@ -4,33 +4,7 @@
 
 {% comment %} 수정 코드 {% endcomment %}
 {% block style %}
-<style>
-  .custom-mb {
-    margin-top: 2rem;
-  }
-  .form-outline {
-    border-bottom: 1px solid; !important
-  }
-  .fa-kakao {
-    color: #000000;
-  }
-  .fa-naver {
-    font-family: Arial;
-    font-weight: bold;
-    font-size: 14px;
-    color: #fff;
-  }
-  .fa-naver:before {
-    content: 'N';
-  }
-  #local-btn {
-    border-radius: 30% 5%;
-    width: 10rem;
-  }
-  #join-a {
-    color: white;
-  }
-</style>
+
 {% endblock style %}
 
 
@@ -53,13 +27,18 @@
   <!-- form -->
   <form class="login" method="POST" action="{% url 'account_login' %}">
     {% csrf_token %}
+
+    {{ form.non_field_errors | safe }}
+
+    <!-- {{ form.as_p }} -->
+
     <div class="form-outline custom-mb">
-        <input id="username" class="input-form form-control"/>
-        <label class="form-label" for="username">Username</label>
+        <input id="id_login" name="login" class="input-form form-control" required/>
+        <label class="form-label" for="id_login">Username</label>
     </div>
     <div class="form-outline custom-mb">
-        <input id="password" class="input-form form-control"/>
-        <label class="form-label" for="password">Password</label>
+        <input id="id_password" name="password" class="input-form form-control" required/>
+        <label class="form-label" for="id_password">Password</label>
     </div>
 
     {% if redirect_field_value %}
@@ -80,23 +59,23 @@
       <a class="btn text-white btn-lg btn-floating" style="background-color: #111;" href="/accounts/google/login/" role="button">
         <i class="fab fa-apple"></i>
       </a>
-    </div>
+    </div> 
 
     <!-- local login btn -->
     <div class="d-flex justify-content-center custom-mb">
-      <button id="local-btn" class="btn text-white btn-lg fs-5 px-5" style="background-color: #ac2bac;" role="button">
+      <button class="btn text-white btn-lg fs-5 px-5 auth-btn" style="background-color: #ac2bac;" role="button">
         login
       </button>
     </div>
     
-    <!-- local join -->
-    <div class="d-flex justify-content-center custom-mb">
-      <button id="local-btn" class="btn text-white btn-lg fs-5 px-5" style="background-color: #ac2bac;" role="button">
-        <a id="join-a" href="{{ signup_url }}">join</a>
-      </button>
-    </div>
   </form>
   
+  <!-- local join -->
+  <div class="d-flex justify-content-center custom-mb">
+    <button class="btn text-white btn-lg fs-5 px-5 auth-btn" style="background-color: #ac2bac;" role="button">
+      <a id="join-a" href="{{ signup_url }}">join</a>
+    </button>
+  </div>
  
 </div>
 {% endblock content %}
