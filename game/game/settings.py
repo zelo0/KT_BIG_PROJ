@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'mainapp',
     'core',
     'rest_framework',
     'django.contrib.admin',
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
 ]
 
 """ django-allauth """
+
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 SITE_ID = 1

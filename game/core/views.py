@@ -8,3 +8,4 @@ def index(request):
 def recommend(request):
   products = Beautyproduct.objects.all()
   return render(request, 'core/recommend.html', {'products': products})
+

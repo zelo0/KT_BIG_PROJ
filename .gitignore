@@ -2,3 +2,4 @@
 game/**/__pycache__
 game/db.sqlite3
 **/migrations
+.cache
