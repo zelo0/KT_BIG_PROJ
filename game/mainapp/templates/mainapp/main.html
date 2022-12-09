@@ -13,6 +13,9 @@
         this.load.image('namespace', "{% static '/resource/ui/main/namespace.png'%}")
         this.load.image('status', "{% static '/resource/ui/main/status.png'%}")
         this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
+        this.load.image('panel', "{% static '/resource/ui/background.jpg'%}")
+        this.load.image('toggle', "{% static '/resource/ui/box.png'%}")
+        this.load.image('checkmark', "{% static '/resource/ui/checkmark.png'%}")
 
         this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
       }
@@ -22,22 +25,42 @@
         this.sound.play("title_music",{
           loop:true
         })
-
-        var group = this.add.group()
-
+  
         this.add.image(150,300,'background')
-        var setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
-        group.create(150,130,'status').setScale(0.3).setInteractive({cursor:'pointer'})
-        group.create(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
-        group.create(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
-        group.create(240,530,'start').setScale(0.3).setInteractive({cursor:'pointer'})
-        group.create(255,440,'store').setScale(0.3).setInteractive({cursor:'pointer'})
-        group.create(175,465,'skills').setScale(0.3).setInteractive({cursor:'pointer'})
-        group.create(145,545,'analysis').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(150,130,'status').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(240,530,'start').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(255,440,'store').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(175,465,'skills').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(145,545,'analysis').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(150,30,'namespace').setScale(0.3)
+        var setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
+        var panel = this.add.image(150,300,'panel').setScale(0.7)
+        var toggle = this.add.image(70, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
+        var checkmark = this.add.image(70,150,'checkmark').setScale(0.5)
+        panel.alpha = 0.7
+
+        var text = this.add.text(
+          toggle.x+30,
+          toggle.y-7,
+          'Sound',
+          {
+            color:'black',
+            fontSize:18,
+          }
+        )
+
+        this.input.setTopOnly(true)
 
         this.input.on('gameobjectover', function(pointer, gameObject){
-            gameObject.setTint(0x50bcdf)
+          var link = gameObject.texture.key
+            if (String(link)=='toggle'){
+              gameObject.setTint(0xe0e0e0)
+            }
+            else {
+              gameObject.setTint(0x50bcdf)
+            }
         })
 
         this.input.on('gameobjectout', function(pointer, gameObject){
@@ -46,9 +69,27 @@
 
         this.input.on('gameobjectdown', function(pointer, gameObject){
             var link = gameObject.texture.key
-            link = 'http://localhost:8000/mainapp/' + String(link)
-            location.replace(link)
+            if (String(link) == 'setting'){
+
+            }
+            else if(String(link) == 'toggle'){
+              this.toggleSound()
+            }
+            else{
+              link = 'http://localhost:8000/mainapp/' + String(link)
+              location.replace(link)
+            }
+            
         })
+
+        function toggleSound(){
+          let isMute = !this.checkmark.visible
+
+          isMute = !isMute
+
+          this.scene.sound.mute = isMute
+          this.checkmark.visible = !isMute
+        }
 
       }
       
