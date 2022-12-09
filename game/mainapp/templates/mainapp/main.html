@@ -1,11 +1,78 @@
+{% extends "base.html" %}
 {%load static%}
+{% block script %}
+<script>
+      function preload(){
+        this.load.image('dic', "{% static '/uiux/ui/main/백과사전.png'%}")
+        this.load.image('analysis', "{% static '/uiux/ui/main/분석.png'%}")
+        this.load.image('store', "{% static '/uiux/ui/main/상점.png'%}")
+        this.load.image('setting', "{% static '/uiux/ui/main/설정.png'%}")
+        this.load.image('skills', "{% static '/uiux/ui/main/스킬.png'%}")
+        this.load.image('start', "{% static '/uiux/ui/main/게임시작.png'%}")
+        this.load.image('achievement', "{% static '/uiux/ui/main/업적.png'%}")
+        this.load.image('namespace', "{% static '/uiux/ui/main/namespace.png'%}")
+        this.load.image('status', "{% static '/uiux/ui/main/status.png'%}")
+        this.load.image('background', "{% static '/uiux/ui/background.jpg'%}")
+      }
+      
+      function create(){
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <script src="{% static "js/main.js" %}" type="module"></script>
-    </head>
-    <body>
-        <div>mainpage</div>
-    </body>
-</html>
+        var group = this.add.group()
+
+        this.add.image(150,300,'background')
+        group.create(270,30,'setting').setScale(0.3).setInteractive({cursor:'pointer'})
+        group.create(150,130,'status').setScale(0.3).setInteractive({cursor:'pointer'})
+        group.create(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
+        group.create(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
+        group.create(240,530,'start').setScale(0.3).setInteractive({cursor:'pointer'})
+        group.create(255,440,'store').setScale(0.3).setInteractive({cursor:'pointer'})
+        group.create(175,465,'skills').setScale(0.3).setInteractive({cursor:'pointer'})
+        group.create(145,545,'analysis').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(150,30,'namespace').setScale(0.3)
+
+        this.input.on('gameobjectover', function(pointer, gameObject){
+            gameObject.setTint(0x50bcdf)
+        })
+
+        this.input.on('gameobjectout', function(pointer, gameObject){
+            gameObject.clearTint()
+        })
+
+        this.input.on('gameobjectdown', function(pointer, gameObject){
+            var link = gameObject.texture.key
+            link = 'http://localhost:8000/mainapp/' + String(link)
+            location.replace(link)
+        })
+
+      }
+      
+      function update(){
+        
+      }
+      
+      var config = {
+        type: Phaser.AUTO,
+        width: 300,
+        height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                debug: false,
+                gravity: {
+                    y: 0
+                }
+            }
+        },
+        backgroundColor: '#2d2d2d',
+        scene: {
+          preload: preload,
+          create: create,
+          update:update,
+        },
+        scale: {
+            mode: Phaser.Scale.ScaleModes.FIT
+        }
+      }
+      var game =  new Phaser.Game(config)
+</script>
+{% endblock script %}
