@@ -1,3 +1,4 @@
+.cache
 */media
 game/**/__pycache__
 game/db.sqlite3
