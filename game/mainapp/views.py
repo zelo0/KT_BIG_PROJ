@@ -12,3 +12,9 @@ def dic(request):
 
 def achievement(request):
   return render(request, 'mainapp/achievement.html')
+
+def character(request):
+  return render(request, 'mainapp/character.html')
+
+def skills(request):
+  return render(request, 'mainapp/skills.html')

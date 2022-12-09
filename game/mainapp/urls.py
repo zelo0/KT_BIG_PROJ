@@ -7,4 +7,7 @@ urlpatterns = [
     path('store', views.store),
     path('dic', views.dic),
     path('achievement', views.achievement),
+
+    path('character', views.character),
+    path('skills', views.skills),
 ]

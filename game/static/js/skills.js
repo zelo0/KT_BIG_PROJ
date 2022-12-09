@@ -1,3 +1,5 @@
+import Phaser from 'phaser'
+
 var config = {
     width: 200,
     height: 600,

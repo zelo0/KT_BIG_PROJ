@@ -1,32 +1,5 @@
 import Phaser from 'phaser'
 
-
-const config = {
-    type: Phaser.AUTO,
-    width: 600,
-    height: 600,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            debug: false,
-            gravity: {
-                y: 0
-            }
-        }
-    },
-    backgroundColor: '#38ab5b',
-    scene: {
-      preload: preload,
-      create: create,
-      update:update,
-    },
-    scale: {
-        mode: Phaser.Scale.ScaleModes.FIT
-    }
-  }
-  var game =  new Phaser.Game(config)
-
-
   
 function preload ()
 {
@@ -325,3 +298,30 @@ function update ()
     currentobj.setTint(colour);           //tint section
     
 }
+
+
+
+// const config = {
+//     type: Phaser.AUTO,
+//     width: 600,
+//     height: 600,
+//     physics: {
+//         default: 'arcade',
+//         arcade: {
+//             debug: false,
+//             gravity: {
+//                 y: 0
+//             }
+//         }
+//     },
+//     backgroundColor: '#38ab5b',
+//     scene: {
+//       preload: preload,
+//       create: create,
+//       update:update,
+//     },
+//     scale: {
+//         mode: Phaser.Scale.ScaleModes.FIT
+//     }
+//   }
+//   var game =  new Phaser.Game(config)
