@@ -27,28 +27,19 @@
     <div class="fw-bold">아래의 제품들을 추천드려요</div>
 
     <ul class="list-group list-group-light">
-      <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center hover-overlay">
+      {% for product in products  %}
+      <li class="list-group-item list-group-item-warning list-group-item-action d-flex justify-content-between align-items-center hover-overlay px-2">
           <div class="d-flex align-items-center">
-            <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="product-image" style="width: 45px; height: 45px"
+            <img src="{{product.image}}" alt="product-image" style="width: 45px; height: 45px"
               class="rounded-circle" />
             <div class="ms-3">
-              <p class="fw-bold mb-1">제품명</p>
-              <p class="text-muted mb-0">브랜드명</p>
+              <p class="fw-bold mb-1">{{product.name}}</p>
+              <p class="text-muted mb-0">{{product.brand.name}}</p>
             </div>
           </div>
-          <span class="badge rounded-pill badge-success">얼굴 부위</span>
+          <span class="badge rounded-pill badge-success">{{product.effect}}</span>
       </li>
-      <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-          <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px"
-            class="rounded-circle" />
-          <div class="ms-3">
-            <p class="fw-bold mb-1">제품명</p>
-            <p class="text-muted mb-0">브랜드명</p>
-          </div>
-        </div>
-        <span class="badge rounded-pill badge-success">얼굴 부위</span>
-      </li>
+      {% endfor %}
     </ul>
   </div>
 </div>
