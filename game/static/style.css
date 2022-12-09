@@ -120,7 +120,7 @@ ul {
   list-style: none;
 }
 a {
-  color: inherit;
+  color: inherit !important;
   text-decoration: none;
 }
 blockquote,
