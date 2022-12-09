@@ -17,7 +17,7 @@
         this.load.image('toggle', "{% static '/resource/ui/box.png'%}")
         this.load.image('checkmark', "{% static '/resource/ui/checkmark.png'%}")
 
-        this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
+        var title_music = this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
       }
       
       function create(){
@@ -73,7 +73,7 @@
 
             }
             else if(String(link) == 'toggle'){
-              this.toggleSound()
+              
             }
             else{
               link = 'http://localhost:8000/mainapp/' + String(link)
@@ -81,16 +81,6 @@
             }
             
         })
-
-        function toggleSound(){
-          let isMute = !this.checkmark.visible
-
-          isMute = !isMute
-
-          this.scene.sound.mute = isMute
-          this.checkmark.visible = !isMute
-        }
-
       }
       
       function update(){
