@@ -3,24 +3,30 @@
 {% block script %}
 <script>
       function preload(){
-        this.load.image('dic', "{% static '/uiux/ui/main/백과사전.png'%}")
-        this.load.image('analysis', "{% static '/uiux/ui/main/분석.png'%}")
-        this.load.image('store', "{% static '/uiux/ui/main/상점.png'%}")
-        this.load.image('setting', "{% static '/uiux/ui/main/설정.png'%}")
-        this.load.image('skills', "{% static '/uiux/ui/main/스킬.png'%}")
-        this.load.image('start', "{% static '/uiux/ui/main/게임시작.png'%}")
-        this.load.image('achievement', "{% static '/uiux/ui/main/업적.png'%}")
-        this.load.image('namespace', "{% static '/uiux/ui/main/namespace.png'%}")
-        this.load.image('status', "{% static '/uiux/ui/main/status.png'%}")
-        this.load.image('background', "{% static '/uiux/ui/background.jpg'%}")
+        this.load.image('dic', "{% static '/resource/ui/main/백과사전.png'%}")
+        this.load.image('analysis', "{% static '/resource/ui/main/분석.png'%}")
+        this.load.image('store', "{% static '/resource/ui/main/상점.png'%}")
+        this.load.image('setting', "{% static '/resource/ui/gear.png'%}")
+        this.load.image('skills', "{% static '/resource/ui/main/스킬.png'%}")
+        this.load.image('start', "{% static '/resource/ui/main/게임시작.png'%}")
+        this.load.image('achievement', "{% static '/resource/ui/main/업적.png'%}")
+        this.load.image('namespace', "{% static '/resource/ui/main/namespace.png'%}")
+        this.load.image('status', "{% static '/resource/ui/main/status.png'%}")
+        this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
+
+        this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
       }
       
       function create(){
 
+        this.sound.play("title_music",{
+          loop:true
+        })
+
         var group = this.add.group()
 
         this.add.image(150,300,'background')
-        group.create(270,30,'setting').setScale(0.3).setInteractive({cursor:'pointer'})
+        var setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
         group.create(150,130,'status').setScale(0.3).setInteractive({cursor:'pointer'})
         group.create(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
         group.create(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
