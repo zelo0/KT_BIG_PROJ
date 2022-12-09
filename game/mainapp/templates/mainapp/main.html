@@ -20,7 +20,6 @@
         var group = this.add.group()
 
         this.add.image(150,300,'background')
-        this.add.image(150,30,'namespace').setScale(0.3)
         group.create(270,30,'setting').setScale(0.3).setInteractive({cursor:'pointer'})
         group.create(150,130,'status').setScale(0.3).setInteractive({cursor:'pointer'})
         group.create(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
@@ -29,6 +28,7 @@
         group.create(255,440,'store').setScale(0.3).setInteractive({cursor:'pointer'})
         group.create(175,465,'skills').setScale(0.3).setInteractive({cursor:'pointer'})
         group.create(145,545,'analysis').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(150,30,'namespace').setScale(0.3)
 
         this.input.on('gameobjectover', function(pointer, gameObject){
             gameObject.setTint(0x50bcdf)
