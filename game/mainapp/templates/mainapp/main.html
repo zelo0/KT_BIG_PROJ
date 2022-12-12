@@ -2,11 +2,7 @@
 {%load static%}
 {% block script %}
 <script>
-      var temp = -1;
-      fetch('http://localhost:8000/core/api/user')
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-      
+    var temp = -1;
       function preload(){
         this.load.image('dic', "{% static '/resource/ui/main/백과사전.png'%}")
         this.load.image('analysis', "{% static '/resource/ui/main/분석.png'%}")
@@ -42,6 +38,25 @@
         let toggle = this.add.image(-150, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
         let checkmark = this.add.image(-150,150,'checkmark').setScale(0.5)
         panel.alpha = 0.7
+
+        this.username = this.add.text(
+          130,
+          23,
+          "",
+          {
+            color:'black',
+            fontSize:20,
+          }
+        )
+
+        fetch('http://localhost:8000/core/api/user')
+          .then(res=>res.json())
+          .then((data)=>{
+           let name = String(data.username)
+           this.username.setText(name)
+            console.log(name)
+
+           })
 
         let text = this.add.text(
           -150,
@@ -102,8 +117,6 @@
           }
         })
         this.input.setTopOnly(true)
-
-        
       }
 
       function update(){
@@ -128,9 +141,9 @@
           create: create,
           update:update,
         },
-        //scale: {
-        //    mode: Phaser.Scale.ScaleModes.FIT
-        //}
+        scale: {
+            mode: Phaser.Scale.ScaleModes.FIT
+        }
       }
       let game =  new Phaser.Game(config)
 </script>
