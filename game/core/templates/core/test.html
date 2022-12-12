@@ -48,5 +48,10 @@
 
     emitter.startFollow(logo);
   }
+
+  fetch('http://localhost:8000/core/api/user')
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+
 </script>
 {% endblock script %}
