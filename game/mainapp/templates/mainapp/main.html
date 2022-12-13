@@ -19,8 +19,44 @@
 
         this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
       }
+
+      function createButton(text){  
+        return this.add.text(
+          50,
+          50,
+          text,
+          {
+            color:'black',
+            fontSize:18,
+          }
+        );
+        return this.add.label({
+          background: this.add.rectangle(0, 0, 100, 50, {
+            bl: 0,
+            br: 0
+          }, 0x654321),
+          text: this.add.text(0, 0, text, {
+            fontSize: '12pt'
+          }),
+          space: {
+            left: 10,
+            right: 10,
+            top:10,
+            bottom:10
+          }
+        });
+      }
       
       function create(){
+
+        const _this = this
+
+        fetch('http://localhost:8000/core/api/user')
+        .then((response) => response.json())
+        .then((data) => {
+          createButton.call(_this, data.username)
+          console.log(data)
+        });
 
         this.sound.play("title_music",{
           loop:true
