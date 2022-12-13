@@ -5,18 +5,23 @@
   function preload ()
   {
       //bgs
-      this.load.image('bg', "{% static '/resource/ui/character/ui/배경화면.png'%}")
+      this.load.image('bg', "{% static '/resource//ui/background.jpg'%}")
+      this.load.image('bg1', "{% static '/resource/ui//bg1.png'%}")
   
       //bodies
-      this.load.image('body', "{% static '/resource/ui/character/body/char_front.png'%}")
+      this.load.image('body', "{% static '/resource/ui/character/character/body.png'%}")
+      this.load.image('helmet', "{% static '/resource/ui/character/character/Hat-Helmet.png'%}")
+      this.load.image('head', "{% static '/resource/ui/character/character/Head.png'%}")
+      this.load.image('leftleg', "{% static '/resource/ui/character/character/Leg.png'%}")
+      this.load.image('rightleg', "{% static '/resource/ui/character/character/Leg.png'%}")
+      this.load.image('shield', "{% static '/resource/ui/character/character/Shield.png'%}")
+      this.load.image('sword', "{% static '/resource/ui/character/character/Weapon-Sword.png'%}")
   
       //hairs
-      this.load.image('hair1', "{% static '/resource/ui/character/custome/hairs/hair1.png'%}")
-      this.load.image('hair2', "{% static '/resource/ui/character/custome/hairs/hair2.png'%}")
+      
   
       //tops
-      this.load.image('top1', "{% static '/resource/ui/character/custome/tops/top1.png'%}")
-      this.load.image('top2', "{% static '/resource/ui/character/custome/tops/top2.png'%}")
+      
   
       //bottoms
       //추후추가
@@ -29,41 +34,79 @@
   
       //weapons
       //추후추가
-  
+    
   
       //UI
-      this.load.image('hairtxt', "{% static '/resource/ui/character/ui/헤어버튼.png'%}")
-      this.load.image('toptxt', "{% static '/resource/ui/character/ui/상의버튼.png'%}");
-      this.load.image('bottomtxt', "{% static '/resource/ui/character/ui/하의버튼.png'%}");
-      this.load.image('shoestxt', "{% static '/resource/ui/character/ui/신발버튼.png'%}");
-      this.load.image('weapontxt', "{% static '/resource/ui/character/ui/무기버튼.png'%}");
-      this.load.image('leftArrow', "{% static '/resource/ui/character/ui/왼쪽버튼.png'%}");
-      this.load.image('rightArrow', "{% static '/resource/ui/character/ui/오른쪽버튼.png'%}");
+      this.load.image('back', "{% static '/resource/ui/back.png'%}");
+      this.load.image('faceui', "{% static '/resource/ui/character/ui/얼굴밝기조절.png'%}");
+      this.load.image('hairui', "{% static '/resource/ui/character/ui/헤어스타일.png'%}");
+      this.load.image('colourui', "{% static '/resource/ui/character/ui/헤어컬러.png'%}");
+      this.load.image('topui', "{% static '/resource/ui/character/ui/상의.png'%}");
+      this.load.image('bottomui', "{% static '/resource/ui/character/ui/하의.png'%}");
+      this.load.image('setui', "{% static '/resource/ui/character/ui/세트.png'%}");
+      this.load.image('accessoryui', "{% static '/resource/ui/character/ui/액세사리.png'%}");
+      this.load.image('shoesui', "{% static '/resource/ui/character/ui/신발.png'%}");
+      this.load.image('selectui', "{% static '/resource/ui/character/ui/확정.png'%}");
   
   }
   
   
   function create ()
   {
+      player = this.physics.add.staticGroup();
+      ui = this.physics.add.staticGroup();
   
-      tiles = this.physics.add.staticGroup();
-      arrows = this.physics.add.staticGroup();
-      smalltiles = this.physics.add.staticGroup();
-      text = this.physics.add.staticGroup();
-  
-      this.add.image(500,300,'bg');
+      this.add.image(150,300,'bg');
+      this.add.image(100,300,'bg1').setScale(0.3);
+      back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
+
+        back.on('pointerover', function(event){
+            this.setTint(0x50bcdf)
+        })
+        back.on('pointerout', function(event){
+            this.clearTint()
+        })
+        back.on('pointerdown', function(event){
+            location.replace('http://localhost:8000/mainapp/main')
+        })
+        
+     //UI options
+     faceui = ui.create(100,100, 'faceui').setInteractive();
+     hairui = ui.create(250,150, 'hairui').setInteractive();
+     colourui = ui.create(250,190, 'colourui').setInteractive();
+     topui = ui.create(250,230, 'topui').setInteractive();
+     bottomui = ui.create(250,270, 'bottomui').setInteractive();
+     setui = ui.create(250,310, 'setui').setInteractive();
+     accessoryui = ui.create(250,350, 'accessoryui').setInteractive();
+     shoesui = ui.create(250,390, 'shoesui').setInteractive();
+     selectui = ui.create(250,520, 'selectui').setScale(0.7).setInteractive();
 
       //player
-      player = this.add.image(200, 300, 'body').setScale(0.4).setInteractive();
-  
-      //UI options
-      hairtxt = text.create(500, 220, 'hairtxt').setScale(0.1).setInteractive();
-      toptxt = text.create(500, 270, 'toptxt').setScale(0.1).setInteractive();
-      bottomtxt = text.create(500, 320, 'bottomtxt').setScale(0.1).setInteractive();
-      shoestxt = text.create(500, 370, 'shoestxt').setScale(0.1).setInteractive();
-      weapontxt = text.create(500, 420, 'weapontxt').setScale(0.1).setInteractive();
-      leftArrow = arrows.create(650,290, 'leftarrow').setScale(0.1).setInteractive();
-      rightArrow = arrows.create(950,290, 'rightarrow').setScale(0.1).setInteractive();
+      x = 100;
+      y = 300;
+      leftleg = this.add.sprite(x-10, y+30, 'leftleg');
+      rightleg = this.add.sprite(x+10, y+30, 'rightleg');
+      body = this.add.sprite(x, y, 'body');
+      head = this.add.sprite(x, y-50, 'head');
+      //head.anchor.set(0, 1);
+      helmet = this.add.sprite(x, y-70, 'helmet');
+      //helmet.anchor.set(0, 1);
+      shield = this.add.sprite(x-50, y, 'shield');
+      //shield.anchor.set(0, 0.05);
+      sword = this.add.sprite(x+40, y-10, 'sword');
+      //sword.anchor.set(0, 0.05);
+      sword.angle += 30;
+      this.player.add(leftleg);
+      this.player.add(rightleg);
+      this.player.add(body);
+      this.player.add(head);
+      this.player.add(helmet);
+      this.player.add(shield);
+      this.player.add(sword);
+
+      var swordTween = this.add.tween(sword).to({angle: 15}, 1400, Phaser.Easing.Linear.None, true, 0, -1, true);
+
+
 
   
   
@@ -318,29 +361,29 @@
   
   
   
-  const config = {
-      type: Phaser.AUTO,
-      width: 1000,
-      height: 500,
-      physics: {
-          default: 'arcade',
-          arcade: {
-              debug: false,
-              gravity: {
-                  y: 0
-              }
-          }
-      },
-      backgroundColor: '#fefbf0',
-      scene: {
-        preload: preload,
-        create: create,
-        update:update,
-      },
-      scale: {
-          mode: Phaser.Scale.ScaleModes.FIT
-      }
+  var config = {
+    type: Phaser.AUTO,
+    width: 300,
+    height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false,
+            gravity: {
+                y: 0
+            }
+        }
+    },
+    backgroundColor: '#2d2d2d',
+    scene: {
+      preload: preload,
+      create: create,
+      update:update,
+    },
+    scale: {
+        mode: Phaser.Scale.ScaleModes.FIT
     }
-    var game =  new Phaser.Game(config)
+  }
+  var game =  new Phaser.Game(config)
 </script>
 {% endblock script %}
