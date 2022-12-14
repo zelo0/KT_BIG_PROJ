@@ -3,12 +3,100 @@
 {% block script %} 
 <script>
     function preload(){
+        this.load.audio('store_music', "{% static '/resource/bgm/store_music.mp3'%}")
+
         this.load.image('back', "{% static '/resource/ui/back.png'%}")
         this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
+        this.load.image('count', "{% static '/resource/ui/store/count.png'%}")
+        this.load.image('store', "{% static '/resource/ui/store/store_template.png'%}")
+        this.load.image('scroll', "{% static '/resource/ui/store/scroll.png'%}")
+        this.load.image('arr', "{% static '/resource/ui/store/arr_template.png'%}")
+        this.load.image('left_button', "{% static '/resource/ui/store/left_button.png'%}")
+        this.load.image('right_button', "{% static '/resource/ui/store/right_button.png'%}")
+        this.load.image('scrollbar', "{% static '/resource/ui/store/scrollbar2.png'%}")
     }
     function create(){
+        this.bgm = this.sound.add("store_music", {loop:true, volume:0.1})
+        this.bgm.play()
+
         this.add.image(150,300,'background')
         var back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(175,40,'count').setScale(0.35).setInteractive({cursor:'pointer'})
+        this.add.image(150,170,'store').setScale(0.345)
+        this.add.image(150,240,'scroll').setScale(0.345)
+        //this.add.image(12,240,'left_button').setScale(0.345).setInteractive({cursor:'pointer'})
+        //this.add.image(285,240,'right_button').setScale(0.345).setInteractive({cursor:'pointer'})
+        var scrollbar = this.add.image(55,240,'scrollbar').setScale(0.34).setInteractive({cursor:'pointer', draggable: true})
+        var arr1 = this.add.image(60,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
+        var arr2 = this.add.image(150,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
+        var arr3 = this.add.image(240,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
+        var arr4 = this.add.image(330,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
+        var arr5 = this.add.image(420,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
+
+        this.input.on('drag', function(pointer, gameObject, dragX, dragY){
+            let link = gameObject.texture.key
+            if(String(link) =='scrollbar'){
+                if(dragX>=240){
+                    gameObject.x = 240
+                }
+                else if(dragX<=55){
+                    gameObject.x = 55
+                }
+                else{
+                    gameObject.x = dragX
+                    arr1.x = 120-dragX
+                    arr2.x = 210-dragX
+                    arr3.x = 300-dragX
+                    arr4.x = 390-dragX
+                    arr5.x = 480-dragX
+                }
+            }
+        })
+
+        /*
+        this.input.on('gameobjectdown', function(pointer, gameObject){
+            let link = gameObject.texture.key
+            if(String(link) =='left_button'){
+                
+                if(scrollbar.x<=80){
+                    scrollbar.setX(80)
+                }
+                else{
+                    scrollbar.setX(scrollbar.x-20)
+                    arr1.setX(arr1.x+25)
+                    arr2.setX(arr2.x+25)
+                    arr3.setX(arr3.x+25)
+                    arr4.setX(arr4.x+25)
+                    arr5.setX(arr5.x+25)
+                    arr6.setX(arr6.x+25)
+
+                }
+            }
+            else if(String(link) =='right_button'){
+                
+                if(scrollbar.x>=220){
+                    scrollbar.setX(220)
+                }
+                else{
+                    scrollbar.setX(scrollbar.x+20)
+                    arr1.setX(arr1.x-25)
+                    arr2.setX(arr2.x-25)
+                    arr3.setX(arr3.x-25)
+                    arr4.setX(arr4.x-25)
+                    arr5.setX(arr5.x-25)
+                    arr6.setX(arr6.x-25)
+                }
+            }
+        })
+        */
+       
+
+        if(localStorage.getItem('bgm')=='true'){
+            this.bgm = this.sound.play("store_music", {loop:true})
+        }
+        else if(localStorage.getItem('bgm')=='false'){
+            game.sound.mute = true
+        }
 
         back.on('pointerover', function(event){
             this.setTint(0x50bcdf)
