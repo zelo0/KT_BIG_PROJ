@@ -60,9 +60,12 @@
   }
   
   
+
+
   function create ()
   {
       player = this.physics.add.staticGroup();
+      btn = this.physics.add.staticGroup();
       ui = this.physics.add.staticGroup();
       hairs = this.physics.add.staticGroup();
       tops = this.physics.add.staticGroup();
@@ -70,6 +73,7 @@
       this.add.image(150,300,'bg');
       this.add.image(100,300,'bg1').setScale(0.3);
       this.add.image(150,550,'box');
+
       back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
 
         back.on('pointerover', function(event){
@@ -85,19 +89,25 @@
 
 
 
-     //UI options
-     faceui = ui.create(100,100, 'faceui').setInteractive();
-     hairui = ui.create(250,150, 'hairui').setInteractive();
-     colourui = ui.create(250,190, 'colourui').setInteractive();
-     topui = ui.create(250,230, 'topui').setInteractive();
-     bottomui = ui.create(250,270, 'bottomui').setInteractive();
-     setui = ui.create(250,310, 'setui').setInteractive();
-     accessoryui = ui.create(250,350, 'accessoryui').setInteractive();
-     shoesui = ui.create(250,390, 'shoesui').setInteractive();
-     selectui = ui.create(250,450, 'selectui').setScale(0.9).setInteractive();
+     //BTN 
+     faceui = btn.create(100,100, 'faceui').setInteractive();
+     hairui = btn.create(250,150, 'hairui').setInteractive();
+     colourui = btn.create(250,190, 'colourui').setInteractive();
+     topui = btn.create(250,230, 'topui').setInteractive();
+     bottomui = btn.create(250,270, 'bottomui').setInteractive();
+     setui = btn.create(250,310, 'setui').setInteractive();
+     accessoryui = btn.create(250,350, 'accessoryui').setInteractive();
+     shoesui = btn.create(250,390, 'shoesui').setInteractive();
+     selectui = btn.create(250,450, 'selectui').setScale(0.9).setInteractive();
+
+
+
+  
+  
+
 
      
-      //hairs
+      //아이템창
       box_x = 40
       box1 = ui.create(box_x,545, 'box1').setScale(0.8).setInteractive();
       box2 = ui.create(box_x+80,545, 'box1').setScale(0.8).setInteractive();
@@ -105,6 +115,7 @@
       box4 = ui.create(box_x+240,545, 'box1').setScale(0.8).setInteractive();
       box5 = ui.create(box_x+320,545, 'box1').setScale(0.8).setInteractive();
 
+      //헤어 미리보기
       hair1 = ui.create(box1.x,box1.y, 'hair1').setScale(0.7).setInteractive();
       hair2 = ui.create(box2.x,box2.y, 'hair2').setScale(0.7).setInteractive();
       hair3 = ui.create(box3.x,box3.y, 'hair3').setScale(0.7).setInteractive();
@@ -156,22 +167,59 @@
             repeat: -1
         });
 
+       
+      
+      colourui.on('pointerup', function(){selection=0;});
+      hairui.on('pointerup', function (){selection=1;});
+      topui.on('pointerup', function (){selection=2;});
+      bottomui.on('pointerup', function (){selection=3;});
+      setui.on('pointerup', function (){selection=4;});
+      accessoryui.on('pointerup', function (){selection=5;});
+      shoesui.on('pointerup', function (){selection=6;});
+      selectui.on('pointerup', function (){selection=7;});
 
-      
-      colourui.on('pointerup', function() {this.setTint(0x50bcdf)});
-      
+         
+var btnui = [colourui, hairui, topui, bottomui, setui, accessoryui, shoesui];
+var selection = 1;
 
-      
-      
+  
+  function selected(icon, array){
+    for(var i = 0; i < array.length; i++){
+        if(array[i] != icon){
+            array[i].clearTint()
+        }
+        if(array[i] == icon){
+            array[i].setTint(0xff0000);
+        }
+    }
+}
+
+    function menuOptions(selection){
+    
+
+    if(selection==0){
+        currentobj = color;
+        selected(colourui, btnui);
+    }
+    if(selection==1){
+        selected(hairui, btnui);
+    } 
+}
+
 
   }
   //end create
   
 
+
+
+
+
+
   //Game Main
   function update ()
   { 
-    hairui.on('pointerup', function (event){this.setTint(0x50bcdf);});
+    menuOptions(selection);  
   }
   
   
