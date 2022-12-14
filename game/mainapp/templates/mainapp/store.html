@@ -53,6 +53,25 @@
             }
         })
 
+        this.money = this.add.text(
+          125,
+          31,
+          "",
+          {
+            color:'black',
+            fontSize:20,
+          }
+        )
+
+        fetch('http://localhost:8000/core/api/user')
+          .then(res=>res.json())
+          .then((data)=>{
+            console.log(data)
+            let money = String(data.money)
+            this.money.setText(money)
+            console.log(money)
+           })
+
         /*
         this.input.on('gameobjectdown', function(pointer, gameObject){
             let link = gameObject.texture.key
