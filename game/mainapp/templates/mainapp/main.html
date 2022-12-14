@@ -5,11 +5,11 @@
     var temp = -1;
       function preload(){
         this.load.image('dic', "{% static '/resource/ui/main/dic.png'%}")
-        this.load.image('analysis', "{% static '/resource/ui/main/analysis.png'%}")
-        this.load.image('store', "{% static '/resource/ui/main/store.png'%}")
+        this.load.image('analysis', "{% static '/resource/ui/main/analysis2.png'%}")
+        this.load.image('store', "{% static '/resource/ui/main/store2.png'%}")
         this.load.image('setting', "{% static '/resource/ui/gear.png'%}")
-        this.load.image('skills', "{% static '/resource/ui/main/skills.png'%}")
-        this.load.image('start', "{% static '/resource/ui/main/start.png'%}")
+        this.load.image('skills', "{% static '/resource/ui/main/skills2.png'%}")
+        this.load.image('start', "{% static '/resource/ui/main/start2.png'%}")
         this.load.image('achievement', "{% static '/resource/ui/main/achievement.png'%}")
         this.load.image('namespace', "{% static '/resource/ui/main/namespace.png'%}")
         this.load.image('character', "{% static '/resource/ui/main/status.png'%}")
@@ -26,10 +26,10 @@
         this.add.image(150,130,'character').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(240,530,'start').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(255,440,'store').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(175,465,'skills').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(145,545,'analysis').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(240,530,'start').setInteractive({cursor:'pointer'})
+        this.add.image(255,430,'store').setInteractive({cursor:'pointer'})
+        this.add.image(170,455,'skills').setInteractive({cursor:'pointer'})
+        this.add.image(140,540,'analysis').setInteractive({cursor:'pointer'})
         this.add.image(150,30,'namespace').setScale(0.3)
         let setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
         let panel = this.add.image(-150,300,'panel').setScale(0.7)
@@ -66,10 +66,14 @@
         fetch('http://localhost:8000/core/api/user')
           .then(res=>res.json())
           .then((data)=>{
-           let name = String(data.username)
-           this.username.setText(name)
-            console.log(name)
+            console.log(data)
+            let name = String(data.username)
+            this.username.setText(name)
 
+            this.load.image('profile', data.profile_image)
+            this.add.image(30,30,'profile')
+            console.log(data.profile_image)
+            console.log(name)
            })
 
         let text = this.add.text(
@@ -165,6 +169,10 @@
         },
         scale: {
             mode: Phaser.Scale.ScaleModes.FIT
+        },
+        pixelArt: false,
+        render:{
+          antialias: true
         }
       }
       let game =  new Phaser.Game(config)
