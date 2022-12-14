@@ -4,28 +4,26 @@
 <script>
     var temp = -1;
       function preload(){
-        this.load.image('dic', "{% static '/resource/ui/main/백과사전.png'%}")
-        this.load.image('analysis', "{% static '/resource/ui/main/분석.png'%}")
-        this.load.image('store', "{% static '/resource/ui/main/상점.png'%}")
+        this.load.image('dic', "{% static '/resource/ui/main/dic.png'%}")
+        this.load.image('analysis', "{% static '/resource/ui/main/analysis.png'%}")
+        this.load.image('store', "{% static '/resource/ui/main/store.png'%}")
         this.load.image('setting', "{% static '/resource/ui/gear.png'%}")
-        this.load.image('skills', "{% static '/resource/ui/main/스킬.png'%}")
-        this.load.image('start', "{% static '/resource/ui/main/게임시작.png'%}")
-        this.load.image('achievement', "{% static '/resource/ui/main/업적.png'%}")
+        this.load.image('skills', "{% static '/resource/ui/main/skills.png'%}")
+        this.load.image('start', "{% static '/resource/ui/main/start.png'%}")
+        this.load.image('achievement', "{% static '/resource/ui/main/achievement.png'%}")
         this.load.image('namespace', "{% static '/resource/ui/main/namespace.png'%}")
-        this.load.image('status', "{% static '/resource/ui/main/status.png'%}")
+        this.load.image('character', "{% static '/resource/ui/main/status.png'%}")
         this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
         this.load.image('panel', "{% static '/resource/ui/background.jpg'%}")
         this.load.image('toggle', "{% static '/resource/ui/box.png'%}")
         this.load.image('checkmark', "{% static '/resource/ui/checkmark.png'%}")
-
         this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
       }
       
-      function create(){
+      function create(){ 
         this.bgm = this.sound.play("title_music", {loop:true})
-  
         this.add.image(150,300,'background')
-        this.add.image(150,130,'status').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(150,130,'character').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(240,530,'start').setScale(0.3).setInteractive({cursor:'pointer'})
@@ -38,10 +36,26 @@
         let toggle = this.add.image(-150, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
         let checkmark = this.add.image(-150,150,'checkmark').setScale(0.5)
         panel.alpha = 0.7
+        
+        if(localStorage.getItem('bgm')==null){
+          console.log(localStorage.getItem('bgm'))
+          this.bgm = this.sound.play("title_music", {loop:true})
+          localStorage.setItem("bgm", 'true')
+          console.log(localStorage.getItem('bgm'))
+        }
+        else if(localStorage.getItem('bgm')=='true'){
+          this.bgm = this.sound.play("title_music", {loop:true})
+          checkmark.visible = true
+          console.log(localStorage.getItem('bgm'))
+        }
+        else if(localStorage.getItem('bgm')=='false'){
+          game.sound.mute = true
+          checkmark.visible = false
+        }
 
         this.username = this.add.text(
-          130,
-          23,
+          125,
+          22,
           "",
           {
             color:'black',
@@ -89,11 +103,19 @@
           console.log(link)
           if(String(link) =='toggle'){
             toggle.clearTint()
-            
             var active = checkmark.visible
             active = !active
             game.sound.mute = !active
             checkmark.visible = active
+
+            if(localStorage.getItem('bgm')=='true'){
+              localStorage.setItem("bgm", 'false')
+            }
+            else if(localStorage.getItem('bgm')=='false'){
+              localStorage.setItem("bgm", 'true')
+            }
+
+           
           }
           else if(String(link) =='setting'){
             if(temp==1){
