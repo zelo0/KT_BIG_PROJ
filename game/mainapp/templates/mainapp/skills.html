@@ -41,6 +41,7 @@
         })
 
         eyeui = ui.create(65,520, 'eyeui').setScale(0.35).setInteractive();
+        eyeui.setTint(0x50bcdf);
         noseui = ui.create(150,520, 'noseui').setScale(0.35).setInteractive();
         mouthui = ui.create(235,520, 'mouthui').setScale(0.35).setInteractive();
 
@@ -51,12 +52,33 @@
         skill5 = skills.create(150,430, 'skill5').setScale(0.7).setInteractive();
         skill6 = skills.create(220,430, 'skill6').setScale(0.7).setInteractive();
 
-        Rect = this.add.image(80,350,'Rect').setScale(0.9);
+        Rect = this.add.image(1000, 1000, 'Rect').setScale(0.9);
 
-
+        eyeui.on('pointerup', function() {
+            noseui.clearTint();
+            mouthui.clearTint();
+            this.setTint(0x50bcdf);});
+        noseui.on('pointerup', function() {
+            eyeui.clearTint();
+            mouthui.clearTint();
+            this.setTint(0x50bcdf)});
+        mouthui.on('pointerup', function() {
+            eyeui.clearTint();
+            noseui.clearTint();
+            this.setTint(0x50bcdf)});
 
     }
+
+    
+
+
     function update(){
+        skill1.on('pointerup', function (event){Rect.setPosition(skill1.x, skill1.y);});
+        skill2.on('pointerup', function (event){Rect.setPosition(skill2.x, skill2.y);});
+        skill3.on('pointerup', function (event){Rect.setPosition(skill3.x, skill3.y);});
+        skill4.on('pointerup', function (event){Rect.setPosition(skill4.x, skill4.y);});
+        skill5.on('pointerup', function (event){Rect.setPosition(skill5.x, skill5.y);});
+        skill6.on('pointerup', function (event){Rect.setPosition(skill6.x, skill6.y);});
 
     }
 
