@@ -5,9 +5,9 @@
     function preload(){
         this.load.audio('store_music', "{% static '/resource/bgm/store_music.mp3'%}")
 
-        this.load.image('back', "{% static '/resource/ui/back.png'%}")
+        this.load.image('back', "{% static '/resource/ui/back2.png'%}")
         this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
-        this.load.image('count', "{% static '/resource/ui/store/count.png'%}")
+        this.load.image('count', "{% static '/resource/ui/store/count2.png'%}")
         this.load.image('store', "{% static '/resource/ui/store/store_template.png'%}")
         this.load.image('scroll', "{% static '/resource/ui/store/scroll.png'%}")
         this.load.image('arr', "{% static '/resource/ui/store/arr_template.png'%}")
@@ -20,8 +20,8 @@
         this.bgm.play()
 
         this.add.image(150,300,'background')
-        var back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(175,40,'count').setScale(0.35).setInteractive({cursor:'pointer'})
+        var back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'})
+        this.add.image(175,40,'count').setInteractive({cursor:'pointer'})
         this.add.image(150,170,'store').setScale(0.345)
         this.add.image(150,240,'scroll').setScale(0.345)
         //this.add.image(12,240,'left_button').setScale(0.345).setInteractive({cursor:'pointer'})
@@ -55,11 +55,11 @@
 
         this.money = this.add.text(
           125,
-          31,
+          28,
           "",
           {
             color:'black',
-            fontSize:20,
+            font:'550 23px Poppins',
           }
         )
 
@@ -152,6 +152,10 @@
         },
         scale: {
             mode: Phaser.Scale.ScaleModes.FIT
+        },
+        pixelArt: false,
+        render:{
+          antialias: true
         }
       }
       var game =  new Phaser.Game(config)
