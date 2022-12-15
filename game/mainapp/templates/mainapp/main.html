@@ -2,12 +2,12 @@
 {%load static%}
 {% block script %}
 <script>
-    var temp = -1;
+    let temp1 = -1;
+    let temp2 = -1;
       function preload(){
         this.load.image('dic', "{% static '/resource/ui/main/dic.png'%}")
         this.load.image('analysis', "{% static '/resource/ui/main/analysis2.png'%}")
         this.load.image('store', "{% static '/resource/ui/main/store2.png'%}")
-        //this.load.image('setting', "{% static '/resource/ui/gear.png'%}")
         this.load.image('skills', "{% static '/resource/ui/main/skills2.png'%}")
         this.load.image('start', "{% static '/resource/ui/main/start2.png'%}")
         this.load.image('achievement', "{% static '/resource/ui/main/achievement.png'%}")
@@ -15,13 +15,14 @@
         this.load.image('character', "{% static '/resource/ui/main/status.png'%}")
         this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
         this.load.image('panel', "{% static '/resource/ui/background.jpg'%}")
-        this.load.image('toggle', "{% static '/resource/ui/box.png'%}")
-        this.load.image('checkmark', "{% static '/resource/ui/checkmark.png'%}")
         this.load.image('sound_on', "{% static '/resource/ui/main/musicOn.png'%}")
         this.load.image('sound_off', "{% static '/resource/ui/main/musicOff.png'%}")
-        //this.load.image('profile_image', "{% static '/images/profile_image4.png'%}")
         this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
         this.load.image('profile_image', "http://localhost:8000/media/profile/profile_image.png")
+
+        //this.load.image('setting', "{% static '/resource/ui/gear.png'%}")
+        //this.load.image('toggle', "{% static '/resource/ui/box.png'%}")
+        //this.load.image('checkmark', "{% static '/resource/ui/checkmark.png'%}")
       }
       
       function create(){ 
@@ -31,20 +32,24 @@
         let circle = this.add.circle(35,35,25)
         this.add.image(150,130,'character').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
+        let achievement = this.add.image(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(240,530,'start').setInteractive({cursor:'pointer'})
         this.add.image(255,430,'store').setInteractive({cursor:'pointer'})
         this.add.image(170,455,'skills').setInteractive({cursor:'pointer'})
         this.add.image(140,540,'analysis').setInteractive({cursor:'pointer'})
         this.add.image(150,30,'namespace').setScale(0.3)
-        //let setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
         let sound_off = this.add.image(270,30,'sound_off').setInteractive({cursor:'pointer'})
         let sound_on = this.add.image(270,30,'sound_on').setInteractive({cursor:'pointer'})
-        let panel = this.add.image(-150,300,'panel').setScale(0.7)
-        let toggle = this.add.image(-150, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
-        let checkmark = this.add.image(-150,150,'checkmark').setScale(0.5)
+        let panel1 = this.add.image(-150,300,'panel').setScale(0.7).setInteractive({cursor:'pointer'})
+        let panel2 = this.add.image(-150,300,'panel').setScale(0.7).setInteractive({cursor:'pointer'})
+
+        //let toggle = this.add.image(-150, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
+        //let setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
+        //let checkmark = this.add.image(-150,150,'checkmark').setScale(0.5)
+        
         circle.setStrokeStyle(2,0x868686)
-        panel.alpha = 0.7
+        panel1.alpha = 0.7
+        panel2.alpha = 0.7
         
         if(localStorage.getItem('bgm')==null){
           console.log(localStorage.getItem('bgm'))
@@ -85,26 +90,14 @@
             console.log(name)
            })
 
-        let text = this.add.text(
-          -150,
-          toggle.y-7,
-          'Sound',
-          {
-            color:'black',
-            fontSize:18,
-          }
-        )
-
         this.input.on('gameobjectover', function(pointer, gameObject){
           let link = gameObject.texture.key
 
-          if(String(link) =='toggle'){
+          if(String(link) =='profile_image'){
             console.log(link)
-            toggle.setTint(0xe0e0e0)
           }
-          else if(String(link) =='profile_image'){
+          else if(String(link) =='panel'){
             console.log(link)
-            toggle.setTint(0xFFFFFF)
           }
           else{
             gameObject.setTint(0x50bcdf)
@@ -146,20 +139,36 @@
             sound_off.visible = false
             localStorage.setItem("bgm", 'true')
           }
-          else if(String(link) =='setting'){
-            if(temp==1){
-              panel.setX(-150)
-              toggle.setX(-150)
-              checkmark.setX(-150)
-              text.setX(-150)
-              temp=-1
+          else if(String(link) =='dic'){
+            if(temp2==1){
+              panel2.setX(-150)
+              temp2=-1
+              panel1.setX(150)
+              temp1=1
+            }
+            else if(temp1==1){
+              panel1.setX(-150)
+              temp1=-1
             }
             else{
-              panel.setX(150)
-              toggle.setX(70)
-              checkmark.setX(70)
-              text.setX(100)
-              temp=1
+              panel1.setX(150)
+              temp1=1
+            }
+          }
+          else if(String(link) =='achievement'){
+            if(temp1==1){
+              panel1.setX(-150)
+              temp1=-1
+              panel2.setX(150)
+              temp2=1
+            }
+            else if(temp2==1){
+              panel2.setX(-150)
+              temp2=-1
+            }
+            else{
+              panel2.setX(150)
+              temp2=1
             }
           }
           else{
@@ -167,6 +176,7 @@
             location.replace(link)
           }
         })
+
         this.input.setTopOnly(true)
       }
 
