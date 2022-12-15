@@ -73,7 +73,7 @@
   
       this.add.image(150,300,'bg');
       this.add.image(100,300,'bg1').setScale(0.3);
-      this.add.image(150,550,'box');
+      box = this.add.image(150,550,'box').setInteractive({cursor:'pointer', draggable: true});
 
       back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
 
@@ -127,10 +127,10 @@
 
       //상의 미리보기
       minitop1 = tops.create(box1.x,box1.y, 'top1').setScale(0.7).setInteractive();
-      minitop2 = tops.create(box1.x,box1.y, 'top2').setScale(0.7).setInteractive();
-      minitop3 = tops.create(box1.x,box1.y, 'top3').setScale(0.7).setInteractive();
-      minitop4 = tops.create(box1.x,box1.y, 'top4').setScale(0.7).setInteractive();
-      minitop5 = tops.create(box1.x,box1.y, 'top5').setScale(0.7).setInteractive();
+      minitop2 = tops.create(box2.x,box2.y, 'top2').setScale(0.7).setInteractive();
+      minitop3 = tops.create(box3.x,box3.y, 'top3').setScale(0.7).setInteractive();
+      minitop4 = tops.create(box4.x,box4.y, 'top4').setScale(0.7).setInteractive();
+      minitop5 = tops.create(box5.x,box5.y, 'top5').setScale(0.7).setInteractive();
       var minitop = [minitop1, minitop2, minitop3, minitop4, minitop5];
 
       minitop1.visible = false
@@ -140,8 +140,6 @@
       minitop5.visible = false
 
 
-
-    
       //player
       x = 100;
       y = 300;
@@ -154,11 +152,7 @@
       sword = this.add.sprite(x+40, y-10, 'sword');
       sword.angle += 30;
 
-      hair1 = this.add.sprite(x, y-70, 'hair1');
-      hair2 = this.add.sprite(x, y-70, 'hair2');
 
-      hair1.visible = false
-      hair2.visible = false
 
     helmettween = this.tweens.add({
         targets: helmet,
@@ -168,21 +162,6 @@
         repeat: -1
     });
 
-    helmettween = this.tweens.add({
-        targets: hair1,
-        y: 225,
-        paused: false,
-        yoyo: true,
-        repeat: -1
-    });
-
-    helmettween = this.tweens.add({
-        targets: hair2,
-        y: 225,
-        paused: false,
-        yoyo: true,
-        repeat: -1
-    });
 
     headtween = this.tweens.add({
         targets: head,
@@ -211,9 +190,6 @@
 
 
 
-
-       
-
     this.input.on('gameobjectdown', function(pointer, gameObject){
 
         //클릭하면 버튼 색깔 바뀜
@@ -226,12 +202,31 @@
                 btnui[i].clearTint();
             }
         }
+
+        if(gameObject==minihair1){helmet.setTexture('hair1')}
+        if(gameObject==minihair2){helmet.setTexture('hair2')}
+        if(gameObject==minihair3){helmet.setTexture('hair3')}
+        if(gameObject==minihair4){helmet.setTexture('hair4')}
+        if(gameObject==minihair5){helmet.setTexture('hair5')}
+        if(gameObject==minitop1){body.setTexture('top1')};
+        if(gameObject==minitop2){body.setTexture('top2')}
+        if(gameObject==minitop3){body.setTexture('top3')}
+        if(gameObject==minitop4){body.setTexture('top4')}
+        if(gameObject==minitop5){body.setTexture('top5')}
+
     })
 
+    //아이템창 드래그
+    {% comment %} box.on('drag', function (pointer, gameObject, dragX, dragY) {
 
+        box1.x = 40 + dragX;
+        box2.x = 120 + dragX;
+        box3.x = 200 + dragX;
+        box4.x = 240 + dragX;
+        box5.x = 280 + dragX;
+    })  {% endcomment %}
 
     
-
     function menuOptions(num){
     
     if(num==0){ };
@@ -260,18 +255,18 @@
     if(num==7){};
     }
 
-    this.input.on('gameobjectdown', function(pointer, gameObject){
-
-        //클릭하면 버튼 색깔 바뀜
-        for(var i = 0; i < minihair.length; i++){
-            if(minihair[i] == gameObject){
-                minihair[i].visible = true
+    function selection(icon, array){
+        for(var i=0;i<array.length;i++){
+            if(icon==array[i]){
+                array[i].visible = true
+                console.log(array[i])
             }
             else{
-                minihair[i].visible = false
+                array[i].visible = false
             }
         }
-    })
+
+    }
 
 
 }
