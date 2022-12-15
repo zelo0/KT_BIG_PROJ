@@ -67,6 +67,7 @@
       player = this.physics.add.staticGroup();
       btn = this.physics.add.staticGroup();
       ui = this.physics.add.staticGroup();
+      box = this.physics.add.staticGroup();
       hairs = this.physics.add.staticGroup();
       tops = this.physics.add.staticGroup();
   
@@ -99,12 +100,7 @@
      accessoryui = btn.create(250,350, 'accessoryui').setInteractive();
      shoesui = btn.create(250,390, 'shoesui').setInteractive();
      selectui = btn.create(250,450, 'selectui').setScale(0.9).setInteractive();
-
-
-
-  
-  
-
+     var btnui = [faceui, hairui, colourui, topui, bottomui, setui, accessoryui, shoesui];
 
      
       //아이템창
@@ -116,11 +112,34 @@
       box5 = ui.create(box_x+320,545, 'box1').setScale(0.8).setInteractive();
 
       //헤어 미리보기
-      hair1 = ui.create(box1.x,box1.y, 'hair1').setScale(0.7).setInteractive();
-      hair2 = ui.create(box2.x,box2.y, 'hair2').setScale(0.7).setInteractive();
-      hair3 = ui.create(box3.x,box3.y, 'hair3').setScale(0.7).setInteractive();
-      hair4 = ui.create(box4.x,box4.y, 'hair4').setScale(0.7).setInteractive();
-      hair5 = ui.create(box5.x,box5.y, 'hair5').setScale(0.7).setInteractive();
+      minihair1 = hairs.create(box1.x,box1.y, 'hair1').setScale(0.7).setInteractive();
+      minihair2 = hairs.create(box2.x,box2.y, 'hair2').setScale(0.7).setInteractive();
+      minihair3 = hairs.create(box3.x,box3.y, 'hair3').setScale(0.7).setInteractive();
+      minihair4 = hairs.create(box4.x,box4.y, 'hair4').setScale(0.7).setInteractive();
+      minihair5 = hairs.create(box5.x,box5.y, 'hair5').setScale(0.7).setInteractive();
+      var minihair = [minihair1, minihair2, minihair3, minihair4, minihair5];
+
+      minihair1.visible = false
+      minihair2.visible = false
+      minihair3.visible = false
+      minihair4.visible = false
+      minihair5.visible = false
+
+      //상의 미리보기
+      minitop1 = tops.create(box1.x,box1.y, 'top1').setScale(0.7).setInteractive();
+      minitop2 = tops.create(box1.x,box1.y, 'top2').setScale(0.7).setInteractive();
+      minitop3 = tops.create(box1.x,box1.y, 'top3').setScale(0.7).setInteractive();
+      minitop4 = tops.create(box1.x,box1.y, 'top4').setScale(0.7).setInteractive();
+      minitop5 = tops.create(box1.x,box1.y, 'top5').setScale(0.7).setInteractive();
+      var minitop = [minitop1, minitop2, minitop3, minitop4, minitop5];
+
+      minitop1.visible = false
+      minitop2.visible = false
+      minitop3.visible = false
+      minitop4.visible = false
+      minitop5.visible = false
+
+
 
     
       //player
@@ -135,7 +154,13 @@
       sword = this.add.sprite(x+40, y-10, 'sword');
       sword.angle += 30;
 
-      helmettween = this.tweens.add({
+      hair1 = this.add.sprite(x, y-70, 'hair1');
+      hair2 = this.add.sprite(x, y-70, 'hair2');
+
+      hair1.visible = false
+      hair2.visible = false
+
+    helmettween = this.tweens.add({
         targets: helmet,
         y: 225,
         paused: false,
@@ -143,71 +168,114 @@
         repeat: -1
     });
 
-        headtween = this.tweens.add({
-            targets: head,
-            y: 245,
-            paused: false,
-            yoyo: true,
-            repeat: -1
-        });
-
-      swordtween = this.tweens.add({
-        targets: sword,
-        angle: 40,
+    helmettween = this.tweens.add({
+        targets: hair1,
+        y: 225,
         paused: false,
         yoyo: true,
         repeat: -1
     });
 
-        shieldtween = this.tweens.add({
-            targets: shield,
-            y: 290,
-            paused: false,
-            yoyo: true,
-            repeat: -1
-        });
+    helmettween = this.tweens.add({
+        targets: hair2,
+        y: 225,
+        paused: false,
+        yoyo: true,
+        repeat: -1
+    });
+
+    headtween = this.tweens.add({
+        targets: head,
+        y: 245,
+        paused: false,
+        yoyo: true,
+        repeat: -1
+    });
+
+    swordtween = this.tweens.add({
+    targets: sword,
+    angle: 40,
+    paused: false,
+    yoyo: true,
+    repeat: -1
+    });
+
+    shieldtween = this.tweens.add({
+        targets: shield,
+        y: 290,
+        paused: false,
+        yoyo: true,
+        repeat: -1
+    });
+
+
+
+
 
        
-      
-      colourui.on('pointerup', function(){selection=0;});
-      hairui.on('pointerup', function (){selection=1;});
-      topui.on('pointerup', function (){selection=2;});
-      bottomui.on('pointerup', function (){selection=3;});
-      setui.on('pointerup', function (){selection=4;});
-      accessoryui.on('pointerup', function (){selection=5;});
-      shoesui.on('pointerup', function (){selection=6;});
-      selectui.on('pointerup', function (){selection=7;});
 
-         
-var btnui = [colourui, hairui, topui, bottomui, setui, accessoryui, shoesui];
-var selection = 1;
+    this.input.on('gameobjectdown', function(pointer, gameObject){
 
-  
-  function selected(icon, array){
-    for(var i = 0; i < array.length; i++){
-        if(array[i] != icon){
-            array[i].clearTint()
+        //클릭하면 버튼 색깔 바뀜
+        for(var i = 0; i < btnui.length; i++){
+            if(btnui[i] == gameObject){
+                btnui[i].setTint(0x50bcdf);
+                menuOptions(i);
+            }
+            else{
+                btnui[i].clearTint();
+            }
         }
-        if(array[i] == icon){
-            array[i].setTint(0xff0000);
-        }
-    }
-}
+    })
 
-    function menuOptions(selection){
+
+
     
 
-    if(selection==0){
-        currentobj = color;
-        selected(colourui, btnui);
+    function menuOptions(num){
+    
+    if(num==0){ };
+    if(num==1){
+        for(var i=0;i<minihair.length;i++){
+            minihair[i].visible = true
+        }
+        for(var i=0;i<minitop.length;i++){
+            minitop[i].visible = false
+        }
+    };
+    if(num==2){
+
+    };
+    if(num==3){
+        for(var i=0;i<minihair.length;i++){
+            minihair[i].visible = false
+        }
+        for(var i=0;i<minitop.length;i++){
+            minitop[i].visible = true
+        }
+    };
+    if(num==4){};
+    if(num==5){};
+    if(num==6){};
+    if(num==7){};
     }
-    if(selection==1){
-        selected(hairui, btnui);
-    } 
+
+    this.input.on('gameobjectdown', function(pointer, gameObject){
+
+        //클릭하면 버튼 색깔 바뀜
+        for(var i = 0; i < minihair.length; i++){
+            if(minihair[i] == gameObject){
+                minihair[i].visible = true
+            }
+            else{
+                minihair[i].visible = false
+            }
+        }
+    })
+
+
 }
 
-
-  }
   //end create
   
 
@@ -219,7 +287,7 @@ var selection = 1;
   //Game Main
   function update ()
   { 
-    menuOptions(selection);  
+    
   }
   
   
