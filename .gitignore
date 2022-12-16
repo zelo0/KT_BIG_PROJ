@@ -7,4 +7,5 @@ game/db.sqlite3
 **/.cache
 test.html
 test.js
+store.html
 main.html
