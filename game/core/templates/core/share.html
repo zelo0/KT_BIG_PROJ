@@ -1,6 +1,61 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block script %}
+<script src={% static 'js/window.js' %}></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script>
+    
+
+    /**
+     * Sample JavaScript code for youtube.channels.list
+     * See instructions for running APIs Explorer code samples locally:
+     * https://developers.google.com/explorer-help/code-samples#javascript
+     */
+  
+    function authenticate() {
+      return gapi.auth2.getAuthInstance()
+          .signIn({scope: "https://www.googleapis.com/auth/youtube"})
+          .then(function() { console.log("Sign-in successful"); },
+                function(err) { console.error("Error signing in", err); });
+    }
+    function loadClient() {
+      gapi.client.setApiKey("AIzaSyDY6FZd_XJBe4mepNMx19U7EB3wG6206HM");
+      return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+          .then(function() { console.log("GAPI client loaded for API"); },
+                function(err) { console.error("Error loading GAPI client for API", err); });
+    }
+    // Make sure the client is loaded and sign-in is complete before calling this method.
+    function execute(video_reader) {
+     
+  
+      return gapi.client.request({
+        "path": "https://www.googleapis.com/upload/youtube/v3/videos",
+        "method": "POST",
+        "params": {
+          "part": [
+            "snippet,contentDetails"
+          ],
+        },
+        "headers": {
+            'contentType': 'video/mp4'
+        },
+        "body": video_reader
+      })
+          .then(function(response) {
+                  // Handle the results here (response.result has the parsed body).
+                  console.log("Response", response);
+                },
+                function(err) { console.error("Execute error", err); });
+    }
+    
+    gapi.load("client:auth2", function() {
+      gapi.auth2.init({
+            client_id: "129129283051-rrs1ojhj6582k8lkd1pmdgp9b5idt0rl.apps.googleusercontent.com",
+            plugin_name: 'hello' // 있어야 popup_close 에러 안 납니다
+        });
+    });
+</script>
+
 <script>
 
 'use strict'
@@ -29,8 +84,10 @@ class Demo extends Phaser.Scene {
     }
 
     create() {
-        var image = this.add.rexTransitionImage(400, 300, 'classroom')
-            .setScale(0.5)
+        let _game = this.sys.game
+
+        var image = this.add.rexTransitionImage(window_width / 2, window_height / 2, 'classroom')
+            .setScale(0.4)
             .on('complete', function () {
                 console.log('complete')
             })
@@ -74,6 +131,26 @@ class Demo extends Phaser.Scene {
         buttons
             .on('button.click', function (button, index, pointer, event) {
                 console.log(`Click button-${button.text}`);
+                if (button.text == 'youtube') {
+                    _game.renderer.snapshot(async function(image) {
+                        
+                        
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            // binary data
+                            console.log(e.target.result);
+                        };
+                        blob = new Blob('{% static 'test.mp4' %}');
+                        console.log(blob)
+                        await authenticate();
+               
+                    });
+                    return;
+                } else if (button.text == 'instagram') {
+
+                } else {
+                    
+                }
             })
     }
 
@@ -120,7 +197,7 @@ var SlideInLeft = function (transitionImage, key, frame) {
 
 var createButton = function (scene, key) {
   return scene.rexUI.add.label({
-      background: scene.rexUI.add.roundRectangle(0, 0, 100, 0, 50, COLOR_LIGHT, 0.8),
+      background: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 50, COLOR_LIGHT, 0.8),
       text: scene.add.text(0, 0, key, {
           fontSize: 18,
           fontFamily: 'Arial'
@@ -137,8 +214,8 @@ var createButton = function (scene, key) {
 
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: window_width,
+    height: window_height,
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -152,4 +229,3 @@ var game = new Phaser.Game(config);
 </script>
 
 {% endblock script %}
-
