@@ -8,6 +8,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
+
 class User(AbstractUser):
     last_logout = models.DateTimeField(blank=True, null=True)
     time_per_day = models.IntegerField(default=0)
