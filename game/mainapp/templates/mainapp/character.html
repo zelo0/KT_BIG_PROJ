@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{%load static%}
+{% block script %}
+<script>
+  function preload ()
+  {
+      //bgs
+      this.load.image('bg', "{% static '/resource//ui/background.jpg'%}")
+      this.load.image('bg1', "{% static '/resource/ui//bg1.png'%}")
+  
+      //bodies
+      this.load.image('body', "{% static '/resource/ui/character/character/body.png'%}")
+      this.load.image('helmet', "{% static '/resource/ui/character/character/Hat-Helmet.png'%}")
+      this.load.image('head', "{% static '/resource/ui/character/character/Head.png'%}")
+      this.load.image('leg', "{% static '/resource/ui/character/character/Leg.png'%}")
+      this.load.image('shield', "{% static '/resource/ui/character/character/Shield.png'%}")
+      this.load.image('sword', "{% static '/resource/ui/character/character/Weapon-Sword.png'%}")
+  
+      //hairs
+      this.load.image('hair1', "{% static '/resource/ui/character/custome/hairs/hair01.png'%}")
+      this.load.image('hair2', "{% static '/resource/ui/character/custome/hairs/hair02.png'%}")
+      this.load.image('hair3', "{% static '/resource/ui/character/custome/hairs/hair3.png'%}")
+      this.load.image('hair4', "{% static '/resource/ui/character/custome/hairs/hair4.png'%}")
+      this.load.image('hair5', "{% static '/resource/ui/character/custome/hairs/hair5.png'%}")
+  
+      //tops
+      this.load.image('top1', "{% static '/resource/ui/character/custome/tops/top1.png'%}")
+      this.load.image('top2', "{% static '/resource/ui/character/custome/tops/top2.png'%}")
+      this.load.image('top3', "{% static '/resource/ui/character/custome/tops/top3.png'%}")
+      this.load.image('top4', "{% static '/resource/ui/character/custome/tops/top4.png'%}")
+      this.load.image('top5', "{% static '/resource/ui/character/custome/tops/top5.png'%}")
+  
+      //bottoms
+      //추후추가
+
+  
+      //shoes
+      //추후추가
+
+  
+  
+      //weapons
+      //추후추가
+    
+  
+      //UI
+      this.load.image('back', "{% static '/resource/ui/back.png'%}");
+      this.load.image('box', "{% static '/resource/ui/character/ui/box.png'%}");
+      this.load.image('box1', "{% static '/resource/ui/character/ui/box1.png'%}");
+      this.load.image('faceui', "{% static '/resource/ui/character/ui/얼굴밝기조절.png'%}");
+      this.load.image('hairui', "{% static '/resource/ui/character/ui/헤어스타일.png'%}");
+      this.load.image('colourui', "{% static '/resource/ui/character/ui/헤어컬러.png'%}");
+      this.load.image('topui', "{% static '/resource/ui/character/ui/상의.png'%}");
+      this.load.image('bottomui', "{% static '/resource/ui/character/ui/하의.png'%}");
+      this.load.image('setui', "{% static '/resource/ui/character/ui/세트.png'%}");
+      this.load.image('accessoryui', "{% static '/resource/ui/character/ui/액세사리.png'%}");
+      this.load.image('shoesui', "{% static '/resource/ui/character/ui/신발.png'%}");
+      this.load.image('selectui', "{% static '/resource/ui/character/ui/확정.png'%}");
+  
+  }
+  
+  
+  function create ()
+  {
+      player = this.physics.add.staticGroup();
+      ui = this.physics.add.staticGroup();
+      hairs = this.physics.add.staticGroup();
+      tops = this.physics.add.staticGroup();
+  
+      this.add.image(150,300,'bg');
+      this.add.image(100,300,'bg1').setScale(0.3);
+      this.add.image(150,550,'box');
+      back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
+
+        back.on('pointerover', function(event){
+            this.setTint(0x50bcdf)
+        })
+        back.on('pointerout', function(event){
+            this.clearTint()
+        })
+        back.on('pointerdown', function(event){
+            location.replace('http://localhost:8000/mainapp/main')
+        })
+
+
+
+
+     //UI options
+     faceui = ui.create(100,100, 'faceui').setInteractive();
+     hairui = ui.create(250,150, 'hairui').setInteractive();
+     colourui = ui.create(250,190, 'colourui').setInteractive();
+     topui = ui.create(250,230, 'topui').setInteractive();
+     bottomui = ui.create(250,270, 'bottomui').setInteractive();
+     setui = ui.create(250,310, 'setui').setInteractive();
+     accessoryui = ui.create(250,350, 'accessoryui').setInteractive();
+     shoesui = ui.create(250,390, 'shoesui').setInteractive();
+     selectui = ui.create(250,450, 'selectui').setScale(0.9).setInteractive();
+
+     
+      //hairs
+      box_x = 40
+      box1 = ui.create(box_x,545, 'box1').setScale(0.8).setInteractive();
+      box2 = ui.create(box_x+80,545, 'box1').setScale(0.8).setInteractive();
+      box3 = ui.create(box_x+160,545, 'box1').setScale(0.8).setInteractive();
+      box4 = ui.create(box_x+240,545, 'box1').setScale(0.8).setInteractive();
+      box5 = ui.create(box_x+320,545, 'box1').setScale(0.8).setInteractive();
+
+      hair1 = ui.create(box1.x,box1.y, 'hair1').setScale(0.7).setInteractive();
+      hair2 = ui.create(box2.x,box2.y, 'hair2').setScale(0.7).setInteractive();
+      hair3 = ui.create(box3.x,box3.y, 'hair3').setScale(0.7).setInteractive();
+      hair4 = ui.create(box4.x,box4.y, 'hair4').setScale(0.7).setInteractive();
+      hair5 = ui.create(box5.x,box5.y, 'hair5').setScale(0.7).setInteractive();
+
+    
+      //player
+      x = 100;
+      y = 300;
+      leftleg = this.add.sprite(x-10, y+30, 'leg');
+      rightleg = this.add.sprite(x+10, y+30, 'leg');
+      body = this.add.sprite(x, y, 'body');
+      head = this.add.sprite(x, y-50, 'head');
+      helmet = this.add.sprite(x, y-70, 'helmet');
+      shield = this.add.sprite(x-50, y, 'shield');
+      sword = this.add.sprite(x+40, y-10, 'sword');
+      sword.angle += 30;
+
+      helmettween = this.tweens.add({
+        targets: helmet,
+        y: 225,
+        paused: false,
+        yoyo: true,
+        repeat: -1
+    });
+
+        headtween = this.tweens.add({
+            targets: head,
+            y: 245,
+            paused: false,
+            yoyo: true,
+            repeat: -1
+        });
+
+      swordtween = this.tweens.add({
+        targets: sword,
+        angle: 40,
+        paused: false,
+        yoyo: true,
+        repeat: -1
+    });
+
+        shieldtween = this.tweens.add({
+            targets: shield,
+            y: 290,
+            paused: false,
+            yoyo: true,
+            repeat: -1
+        });
+
+
+      
+      colourui.on('pointerup', function() {this.setTint(0x50bcdf)});
+      
+
+      
+      
+
+  }
+  //end create
+  
+
+  //Game Main
+  function update ()
+  { 
+    hairui.on('pointerup', function (event){this.setTint(0x50bcdf);});
+  }
+  
+  
+  
+  var config = {
+    type: Phaser.AUTO,
+    width: 300,
+    height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false,
+            gravity: {
+                y: 0
+            }
+        }
+    },
+    backgroundColor: '#2d2d2d',
+    scene: {
+      preload: preload,
+      create: create,
+      update:update,
+    },
+    scale: {
+        mode: Phaser.Scale.ScaleModes.FIT
+    }
+  }
+  var game =  new Phaser.Game(config)
+</script>
+{% endblock script %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{%load static%}
+{% block script %} 
+<script>
+    function preload(){
+
+        //skills
+        this.load.image('skill1', "{% static '/resource/ui/skills/skills/skill1.png'%}")
+        this.load.image('skill2', "{% static '/resource/ui/skills/skills/skill2.png'%}")
+        this.load.image('skill3', "{% static '/resource/ui/skills/skills/skill3.png'%}")
+        this.load.image('skill4', "{% static '/resource/ui/skills/skills/skill4.png'%}")
+        this.load.image('skill5', "{% static '/resource/ui/skills/skills/skill5.png'%}")
+        this.load.image('skill6', "{% static '/resource/ui/skills/skills/skill6.png'%}")
+
+        //ui
+        this.load.image('back', "{% static '/resource/ui/back.png'%}")
+        this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
+        this.load.image('bg2', "{% static '/resource/ui/bg2.png'%}")
+        this.load.image('eyeui', "{% static '/resource/ui/skills/ui/눈.png'%}")
+        this.load.image('noseui', "{% static '/resource/ui/skills/ui/코.png'%}")
+        this.load.image('mouthui', "{% static '/resource/ui/skills/ui/입.png'%}")
+        this.load.image('Rect', "{% static '/resource/ui/skills/ui/Rect.png'%}")
+
+    }
+    function create(){
+        skills = this.physics.add.staticGroup();
+        ui = this.physics.add.staticGroup();
+
+        this.add.image(150,300,'background')
+        this.add.image(150,300,'bg2').setScale(0.35);
+        back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
+
+        back.on('pointerover', function(event){
+            this.setTint(0x50bcdf)
+        })
+        back.on('pointerout', function(event){
+            this.clearTint()
+        })
+        back.on('pointerdown', function(event){
+            location.replace('http://localhost:8000/mainapp/main')
+        })
+
+        eyeui = ui.create(65,520, 'eyeui').setScale(0.35).setInteractive();
+        eyeui.setTint(0x50bcdf);
+        noseui = ui.create(150,520, 'noseui').setScale(0.35).setInteractive();
+        mouthui = ui.create(235,520, 'mouthui').setScale(0.35).setInteractive();
+
+        skill1 = skills.create(80,350, 'skill1').setScale(0.7).setInteractive();
+        skill2 = skills.create(150,350, 'skill2').setScale(0.7).setInteractive();
+        skill3 = skills.create(220,350, 'skill3').setScale(0.7).setInteractive();
+        skill4 = skills.create(80,430, 'skill4').setScale(0.7).setInteractive();
+        skill5 = skills.create(150,430, 'skill5').setScale(0.7).setInteractive();
+        skill6 = skills.create(220,430, 'skill6').setScale(0.7).setInteractive();
+
+        Rect = this.add.image(1000, 1000, 'Rect').setScale(0.9);
+
+        eyeui.on('pointerup', function() {
+            noseui.clearTint();
+            mouthui.clearTint();
+            this.setTint(0x50bcdf);});
+        noseui.on('pointerup', function() {
+            eyeui.clearTint();
+            mouthui.clearTint();
+            this.setTint(0x50bcdf)});
+        mouthui.on('pointerup', function() {
+            eyeui.clearTint();
+            noseui.clearTint();
+            this.setTint(0x50bcdf)});
+
+    }
+
+    
+
+
+    function update(){
+        skill1.on('pointerup', function (event){Rect.setPosition(skill1.x, skill1.y);});
+        skill2.on('pointerup', function (event){Rect.setPosition(skill2.x, skill2.y);});
+        skill3.on('pointerup', function (event){Rect.setPosition(skill3.x, skill3.y);});
+        skill4.on('pointerup', function (event){Rect.setPosition(skill4.x, skill4.y);});
+        skill5.on('pointerup', function (event){Rect.setPosition(skill5.x, skill5.y);});
+        skill6.on('pointerup', function (event){Rect.setPosition(skill6.x, skill6.y);});
+
+    }
+
+    var config = {
+        type: Phaser.AUTO,
+        width: 300,
+        height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                debug: false,
+                gravity: {
+                    y: 0
+                }
+            }
+        },
+        backgroundColor: '#2d2d2d',
+        scene: {
+          preload: preload,
+          create: create,
+          update:update,
+        },
+        scale: {
+            mode: Phaser.Scale.ScaleModes.FIT
+        }
+      }
+      var game =  new Phaser.Game(config)
+</script>
+{% endblock script %}
