@@ -44,7 +44,7 @@
     
   
       //UI
-      this.load.image('back', "{% static '/resource/ui/back.png'%}");
+      this.load.image('back', "{% static '/resource/ui/back2.png'%}");
       this.load.image('box', "{% static '/resource/ui/character/ui/box.png'%}");
       this.load.image('box1', "{% static '/resource/ui/character/ui/box1.png'%}");
       this.load.image('faceui', "{% static '/resource/ui/character/ui/얼굴밝기조절.png'%}");
@@ -67,14 +67,18 @@
       player = this.physics.add.staticGroup();
       btn = this.physics.add.staticGroup();
       ui = this.physics.add.staticGroup();
+      box = this.physics.add.staticGroup();
       hairs = this.physics.add.staticGroup();
       tops = this.physics.add.staticGroup();
+
+        skills = this.physics.add.staticGroup();
+        ui = this.physics.add.staticGroup();
+
   
       this.add.image(150,300,'bg');
       this.add.image(100,300,'bg1').setScale(0.3);
-      this.add.image(150,550,'box');
-
-      back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
+      box = this.add.image(150,550,'box').setInteractive({cursor:'pointer', draggable: true});
+      back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'});
 
         back.on('pointerover', function(event){
             this.setTint(0x50bcdf)
@@ -99,12 +103,7 @@
      accessoryui = btn.create(250,350, 'accessoryui').setInteractive();
      shoesui = btn.create(250,390, 'shoesui').setInteractive();
      selectui = btn.create(250,450, 'selectui').setScale(0.9).setInteractive();
-
-
-
-  
-  
-
+     btnui = [faceui, hairui, colourui, topui, bottomui, setui, accessoryui, shoesui];
 
      
       //아이템창
@@ -116,13 +115,34 @@
       box5 = ui.create(box_x+320,545, 'box1').setScale(0.8).setInteractive();
 
       //헤어 미리보기
-      hair1 = ui.create(box1.x,box1.y, 'hair1').setScale(0.7).setInteractive();
-      hair2 = ui.create(box2.x,box2.y, 'hair2').setScale(0.7).setInteractive();
-      hair3 = ui.create(box3.x,box3.y, 'hair3').setScale(0.7).setInteractive();
-      hair4 = ui.create(box4.x,box4.y, 'hair4').setScale(0.7).setInteractive();
-      hair5 = ui.create(box5.x,box5.y, 'hair5').setScale(0.7).setInteractive();
+      minihair1 = hairs.create(box1.x,box1.y, 'hair1').setScale(0.7).setInteractive();
+      minihair2 = hairs.create(box2.x,box2.y, 'hair2').setScale(0.7).setInteractive();
+      minihair3 = hairs.create(box3.x,box3.y, 'hair3').setScale(0.7).setInteractive();
+      minihair4 = hairs.create(box4.x,box4.y, 'hair4').setScale(0.7).setInteractive();
+      minihair5 = hairs.create(box5.x,box5.y, 'hair5').setScale(0.7).setInteractive();
+      minihair = [minihair1, minihair2, minihair3, minihair4, minihair5];
 
-    
+      minihair1.visible = false
+      minihair2.visible = false
+      minihair3.visible = false
+      minihair4.visible = false
+      minihair5.visible = false
+
+      //상의 미리보기
+      minitop1 = tops.create(box1.x,box1.y, 'top1').setScale(0.7).setInteractive();
+      minitop2 = tops.create(box2.x,box2.y, 'top2').setScale(0.7).setInteractive();
+      minitop3 = tops.create(box3.x,box3.y, 'top3').setScale(0.7).setInteractive();
+      minitop4 = tops.create(box4.x,box4.y, 'top4').setScale(0.7).setInteractive();
+      minitop5 = tops.create(box5.x,box5.y, 'top5').setScale(0.7).setInteractive();
+      var minitop = [minitop1, minitop2, minitop3, minitop4, minitop5];
+
+      minitop1.visible = false
+      minitop2.visible = false
+      minitop3.visible = false
+      minitop4.visible = false
+      minitop5.visible = false
+
+
       //player
       x = 100;
       y = 300;
@@ -135,7 +155,9 @@
       sword = this.add.sprite(x+40, y-10, 'sword');
       sword.angle += 30;
 
-      helmettween = this.tweens.add({
+
+
+    helmettween = this.tweens.add({
         targets: helmet,
         y: 225,
         paused: false,
@@ -143,71 +165,121 @@
         repeat: -1
     });
 
-        headtween = this.tweens.add({
-            targets: head,
-            y: 245,
-            paused: false,
-            yoyo: true,
-            repeat: -1
-        });
 
-      swordtween = this.tweens.add({
-        targets: sword,
-        angle: 40,
+    headtween = this.tweens.add({
+        targets: head,
+        y: 245,
         paused: false,
         yoyo: true,
         repeat: -1
     });
 
-        shieldtween = this.tweens.add({
-            targets: shield,
-            y: 290,
-            paused: false,
-            yoyo: true,
-            repeat: -1
-        });
+    swordtween = this.tweens.add({
+    targets: sword,
+    angle: 40,
+    paused: false,
+    yoyo: true,
+    repeat: -1
+    });
 
-       
-      
-      colourui.on('pointerup', function(){selection=0;});
-      hairui.on('pointerup', function (){selection=1;});
-      topui.on('pointerup', function (){selection=2;});
-      bottomui.on('pointerup', function (){selection=3;});
-      setui.on('pointerup', function (){selection=4;});
-      accessoryui.on('pointerup', function (){selection=5;});
-      shoesui.on('pointerup', function (){selection=6;});
-      selectui.on('pointerup', function (){selection=7;});
+    shieldtween = this.tweens.add({
+        targets: shield,
+        y: 290,
+        paused: false,
+        yoyo: true,
+        repeat: -1
+    });
 
-         
-var btnui = [colourui, hairui, topui, bottomui, setui, accessoryui, shoesui];
-var selection = 1;
 
-  
-  function selected(icon, array){
-    for(var i = 0; i < array.length; i++){
-        if(array[i] != icon){
-            array[i].clearTint()
+
+    this.input.on('gameobjectdown', function(pointer, gameObject){
+
+        if(gameObject==faceui){choicetype(faceui, btnui); menuOptions(0);}
+        if(gameObject==hairui){choicetype(hairui, btnui); menuOptions(1);}
+        if(gameObject==colourui){choicetype(colourui, btnui); menuOptions(2);}
+        if(gameObject==topui){choicetype(topui, btnui); menuOptions(3);}
+        if(gameObject==bottomui){choicetype(bottomui, btnui); menuOptions(4);}
+        if(gameObject==setui){choicetype(setui, btnui); menuOptions(5);}
+        if(gameObject==accessoryui){choicetype(accessoryui, btnui); menuOptions(6);}
+        if(gameObject==shoesui){choicetype(shoesui, btnui); menuOptions(7);}
+
+        if(gameObject==minihair1){helmet.setTexture('hair1')}
+        if(gameObject==minihair2){helmet.setTexture('hair2')}
+        if(gameObject==minihair3){helmet.setTexture('hair3')}
+        if(gameObject==minihair4){helmet.setTexture('hair4')}
+        if(gameObject==minihair5){helmet.setTexture('hair5')}
+        if(gameObject==minitop1){body.setTexture('top1')};
+        if(gameObject==minitop2){body.setTexture('top2')}
+        if(gameObject==minitop3){body.setTexture('top3')}
+        if(gameObject==minitop4){body.setTexture('top4')}
+        if(gameObject==minitop5){body.setTexture('top5')}
+
+    })
+
+    //아이템창 드래그
+    {% comment %} box.on('drag', function (pointer, gameObject, dragX, dragY) {
+
+        box1.x = 40 + dragX;
+        box2.x = 120 + dragX;
+        box3.x = 200 + dragX;
+        box4.x = 240 + dragX;
+        box5.x = 280 + dragX;
+    })  {% endcomment %}
+
+    function choicetype(icon, array){
+        for(var i=0;i<array.length;i++){
+            icon.setTint(0x50bcdf);
+            if(icon!=array[i]){
+                array[i].clearTint();
+            }
         }
-        if(array[i] == icon){
-            array[i].setTint(0xff0000);
-        }
-    }
-}
-
-    function menuOptions(selection){
-    
-
-    if(selection==0){
-        currentobj = color;
-        selected(colourui, btnui);
-    }
-    if(selection==1){
-        selected(hairui, btnui);
     } 
+
+    
+    function menuOptions(num){
+    
+    if(num==0){ };
+    if(num==1){
+        for(var i=0;i<minihair.length;i++){
+            minihair[i].visible = true
+        }
+        for(var i=0;i<minitop.length;i++){
+            minitop[i].visible = false
+        }
+    };
+    if(num==2){
+
+    };
+    if(num==3){
+        for(var i=0;i<minihair.length;i++){
+            minihair[i].visible = false
+        }
+        for(var i=0;i<minitop.length;i++){
+            minitop[i].visible = true
+        }
+    };
+    if(num==4){};
+    if(num==5){};
+    if(num==6){};
+    if(num==7){};
+    }
+
+    function selection(icon, array){
+        for(var i=0;i<array.length;i++){
+            if(icon==array[i]){
+                array[i].visible = true
+                console.log(array[i])
+            }
+            else{
+                array[i].visible = false
+            }
+        }
+
+    }
+
+
 }
 
-
-  }
   //end create
   
 
@@ -219,7 +291,7 @@ var selection = 1;
   //Game Main
   function update ()
   { 
-    menuOptions(selection);  
+    
   }
   
   
