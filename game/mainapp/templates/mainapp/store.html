@@ -2,57 +2,113 @@
 {%load static%}
 {% block script %} 
 <script>
+    const COLOR_PRIMARY = 0xF5F5F5;
+    const COLOR_LIGHT = 0xD0CCCC;
+    const COLOR_DARK = 0x260e04;
+    var state = 'hair'
+
+    var createPanel = function (scene, data, state) {
+        var sizer = scene.rexUI.add.sizer({
+            orientation: 'y',
+            space: { item: 10 }
+        })
+            .add(
+                createTable(scene, data, state, 3), // child
+                { expand: true }
+            ) 
+        return sizer;
+    }
+
+    var createTable = function (scene, data, key, columns) {
+        var capKey = key.charAt(0).toUpperCase() + key.slice(1);
+        var title = scene.rexUI.add.label({
+            orientation: 'x',
+            text: scene.add.text(0, 0, capKey, {color:'black'}),
+        });
+    
+        var items = data[key];
+        var rows = Math.ceil(items.length / columns);
+        var table = scene.rexUI.add.gridSizer({
+            column: columns,
+            row: rows,
+    
+            rowProportions: 1,
+            space: { column: 10, row: 10 },
+            name: key  // Search this name to get table back
+        });
+    
+        var item, r, c;
+        var iconSize = 70;
+        for (var i = 0, cnt = items.length; i < cnt; i++) {
+            item = items[i];
+            r = i % columns;
+            c = (i - r) / columns;
+            table.add(
+                createIcon(scene, item, iconSize, iconSize),
+                r,
+                c,
+                'top',
+                0,
+                true
+            );
+        }
+    
+        return scene.rexUI.add.sizer({
+            orientation: 'y',
+            space: { left: 15, right: 10, top: 10, bottom: 10, item: 10 }
+        })
+            .addBackground(
+                scene.rexUI.add.roundRectangle(0, 0, 0, 0, 0, undefined).setStrokeStyle(2, COLOR_LIGHT, 1)
+            )
+            .add(
+                title, // child
+                0, // proportion
+                'left', // align
+                0, // paddingConfig
+                true // expand
+            )
+            .add(table, // child
+                1, // proportion
+                'center', // align
+                0, // paddingConfig
+                true // expand
+            );
+    }
+    
+    var createIcon = function (scene, item, iconWidth, iconHeight) {
+        var label = scene.rexUI.add.label({
+            orientation: 'y',
+            icon: scene.rexUI.add.roundRectangle(0, 0, iconWidth, iconHeight, 5, COLOR_LIGHT),
+            text: scene.add.text(0, 0, item.name, {color:'black'}),
+    
+            space: { top: 10, icon: 10}
+        });
+    
+        return label;
+    };
+
     function preload(){
+        this.load.scenePlugin({
+            key: 'rexuiplugin',
+            url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
+            sceneKey: 'rexUI'
+        })
         this.load.audio('store_music', "{% static '/resource/bgm/store_music.mp3'%}")
 
         this.load.image('back', "{% static '/resource/ui/back2.png'%}")
         this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
         this.load.image('count', "{% static '/resource/ui/store/count2.png'%}")
-        this.load.image('store', "{% static '/resource/ui/store/store_template.png'%}")
-        this.load.image('scroll', "{% static '/resource/ui/store/scroll.png'%}")
-        this.load.image('arr', "{% static '/resource/ui/store/arr_template.png'%}")
-        this.load.image('left_button', "{% static '/resource/ui/store/left_button.png'%}")
-        this.load.image('right_button', "{% static '/resource/ui/store/right_button.png'%}")
-        this.load.image('scrollbar', "{% static '/resource/ui/store/scrollbar2.png'%}")
     }
     function create(){
         this.bgm = this.sound.add("store_music", {loop:true, volume:0.1})
         this.bgm.play()
-
         this.add.image(150,300,'background')
         var back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'})
         this.add.image(175,40,'count').setInteractive({cursor:'pointer'})
-        this.add.image(150,170,'store').setScale(0.345)
-        this.add.image(150,240,'scroll').setScale(0.345)
-        //this.add.image(12,240,'left_button').setScale(0.345).setInteractive({cursor:'pointer'})
-        //this.add.image(285,240,'right_button').setScale(0.345).setInteractive({cursor:'pointer'})
-        var scrollbar = this.add.image(55,240,'scrollbar').setScale(0.34).setInteractive({cursor:'pointer', draggable: true})
-        var arr1 = this.add.image(60,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
-        var arr2 = this.add.image(150,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
-        var arr3 = this.add.image(240,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
-        var arr4 = this.add.image(330,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
-        var arr5 = this.add.image(420,185, 'arr').setScale(0.3).setInteractive({cursor:'pointer'})
-
-        this.input.on('drag', function(pointer, gameObject, dragX, dragY){
-            let link = gameObject.texture.key
-            if(String(link) =='scrollbar'){
-                if(dragX>=240){
-                    gameObject.x = 240
-                }
-                else if(dragX<=55){
-                    gameObject.x = 55
-                }
-                else{
-                    gameObject.x = dragX
-                    arr1.x = 120-dragX
-                    arr2.x = 210-dragX
-                    arr3.x = 300-dragX
-                    arr4.x = 390-dragX
-                    arr5.x = 480-dragX
-                }
-            }
-        })
-
+        var button = this.add.rectangle(90,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(70, 77, 'hair', {color:'black'})
+        var button2 = this.add.rectangle(170,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(153, 77, 'top', {color:'black'})
         this.money = this.add.text(
           125,
           28,
@@ -70,45 +126,7 @@
             let money = String(data.money)
             this.money.setText(money)
             console.log(money)
-           })
-
-        /*
-        this.input.on('gameobjectdown', function(pointer, gameObject){
-            let link = gameObject.texture.key
-            if(String(link) =='left_button'){
-                
-                if(scrollbar.x<=80){
-                    scrollbar.setX(80)
-                }
-                else{
-                    scrollbar.setX(scrollbar.x-20)
-                    arr1.setX(arr1.x+25)
-                    arr2.setX(arr2.x+25)
-                    arr3.setX(arr3.x+25)
-                    arr4.setX(arr4.x+25)
-                    arr5.setX(arr5.x+25)
-                    arr6.setX(arr6.x+25)
-
-                }
-            }
-            else if(String(link) =='right_button'){
-                
-                if(scrollbar.x>=220){
-                    scrollbar.setX(220)
-                }
-                else{
-                    scrollbar.setX(scrollbar.x+20)
-                    arr1.setX(arr1.x-25)
-                    arr2.setX(arr2.x-25)
-                    arr3.setX(arr3.x-25)
-                    arr4.setX(arr4.x-25)
-                    arr5.setX(arr5.x-25)
-                    arr6.setX(arr6.x-25)
-                }
-            }
         })
-        */
-       
 
         if(localStorage.getItem('bgm')=='true'){
             this.bgm = this.sound.play("store_music", {loop:true})
@@ -126,32 +144,127 @@
         back.on('pointerdown', function(event){
             location.replace('http://localhost:8000/mainapp/main')
         })
-    }
+
+        var data = {
+            hair: [
+                { name: 'A' },
+                { name: 'B' },
+                { name: 'C' },
+                { name: 'D' },
+                { name: 'E' },
+                { name: 'F' },
+                { name: 'G' },
+                { name: 'H' },
+                { name: 'I' },
+                { name: 'J' },
+                { name: 'K' },
+                { name: 'L' },
+                { name: 'M' },
+            ],
+            top: [
+                { name: 'A' },
+                { name: 'B' },
+                { name: 'C' },
+                { name: 'D' },
+                { name: 'E' },
+                { name: 'F' },
+                { name: 'G' },
+                { name: 'H' },
+                { name: 'I' },
+                { name: 'J' },
+                { name: 'K' },
+                { name: 'L' },
+                { name: 'M' },
+            ],
+        }
+
+        var panel_config ={
+            x: 150,
+            y: 400,
+            width: 280,
+            height: 600,
+            scrollMode: 0,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
+
+            panel: {
+                child: createPanel(this, data, state),
+                mask: {
+                    padding: 0,
+                    // layer: this.add.layer()
+                },
+            },
+      
+            // scroller: true,
+            scroller: {
+                // pointerOutRelease: false
+            },
+      
+            mouseWheelScroller: {
+                focus: false,
+                speed: 0.1
+            },
+
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10,
+                panel: 10,
+                // slider: { left: 30, right: 30 },
+            }
+        }
+        var hairPanel = this.rexUI.add.scrollablePanel(panel_config).layout()
+
+        button.on('pointerdown', function(event){
+            if(hairPanel.visible == true){
+                console.log(hairPanel.visible)
+                hairPanel.visible=false
+            }
+            else{
+                console.log(hairPanel.visible)
+                hairPanel.visible=true
+            }
+        })
+
+        /*
+        hairPanel.setChildrenInteractive({
+            targets: [
+                hairPanel.getByName('hair', true)
+            ]
+        })
+            .on('child.click', function (child) {
+                var category = child.getParentSizer().name;
+                console.log(category)
+                console.log(child.text)
+            })
+  
+        hairPanel.getElement('scroller')
+        .on('dragstart', function () {
+            console.log('scroller.dragstart')
+        })
+        .on('dragend', function () {
+            console.log('scroller.dragend')
+        })
+        */
+   }
+    
     function update(){
 
     }
 
-    var config = {
+    let config = {
         type: Phaser.AUTO,
-        width: 300,
-        height: 600,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                debug: false,
-                gravity: {
-                    y: 0
-                }
-            }
-        },
-        backgroundColor: '#2d2d2d',
         scene: {
           preload: preload,
           create: create,
           update:update,
         },
         scale: {
-            mode: Phaser.Scale.ScaleModes.FIT
+            mode: Phaser.Scale.ScaleModes.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+            width: 300,
+            height: 600,
         },
         pixelArt: false,
         render:{
