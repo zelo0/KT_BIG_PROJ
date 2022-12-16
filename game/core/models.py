@@ -58,6 +58,27 @@ class Coupon(models.Model):
         db_table = 'coupon'
 
 
+<<<<<<< HEAD
+
+class MonsterAbility(models.Model):
+    id = models.AutoField(primary_key=True)
+    abilityName = models.CharField(max_length=255)
+    abilityType = models.CharField(max_length=255)
+    class Meta:
+        db_table = 'monster_ability'
+    def __str__(self):
+        return self.abilityName        
+        
+class Monster(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    hp = models.IntegerField()
+    skills = models.ForeignKey(MonsterAbility, models.CASCADE)
+    mob_type = models.CharField(max_length=255, blank=True, null=True)
+    class Meta:
+        db_table = 'monster'
+
+=======
 class FacePoint(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, models.CASCADE)
@@ -184,3 +205,4 @@ class FacePoint(models.Model):
     y_59 = models.FloatField()
     x_60 = models.FloatField()
     y_60 = models.FloatField()
+>>>>>>> 5fda7972e03cfc6b69fb84cb7ce92ee26f6fa6d7
