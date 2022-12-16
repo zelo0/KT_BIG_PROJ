@@ -2,6 +2,7 @@
 {%load static%}
 {% block script %}
 <script>
+    var temp = -1;
       function preload(){
         this.load.image('dic', "{% static '/resource/ui/main/백과사전.png'%}")
         this.load.image('analysis', "{% static '/resource/ui/main/분석.png'%}")
@@ -19,12 +20,36 @@
 
         this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
       }
+
+      function createButton(text){  
+        return this.add.text(
+          50,
+          50,
+          text,
+          {
+            color:'black',
+            fontSize:18,
+          }
+        );
+        return this.add.label({
+          background: this.add.rectangle(0, 0, 100, 50, {
+            bl: 0,
+            br: 0
+          }, 0x654321),
+          text: this.add.text(0, 0, text, {
+            fontSize: '12pt'
+          }),
+          space: {
+            left: 10,
+            right: 10,
+            top:10,
+            bottom:10
+          }
+        });
+      }
       
       function create(){
-
-        this.sound.play("title_music",{
-          loop:true
-        })
+        this.bgm = this.sound.play("title_music", {loop:true})
   
         this.add.image(150,300,'background')
         this.add.image(150,130,'status').setScale(0.3).setInteractive({cursor:'pointer'})
@@ -35,14 +60,33 @@
         this.add.image(175,465,'skills').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(145,545,'analysis').setScale(0.3).setInteractive({cursor:'pointer'})
         this.add.image(150,30,'namespace').setScale(0.3)
-        var setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
-        var panel = this.add.image(150,300,'panel').setScale(0.7)
-        var toggle = this.add.image(70, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
-        var checkmark = this.add.image(70,150,'checkmark').setScale(0.5)
+        let setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
+        let panel = this.add.image(-150,300,'panel').setScale(0.7)
+        let toggle = this.add.image(-150, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
+        let checkmark = this.add.image(-150,150,'checkmark').setScale(0.5)
         panel.alpha = 0.7
 
-        var text = this.add.text(
-          toggle.x+30,
+        this.username = this.add.text(
+          130,
+          23,
+          "",
+          {
+            color:'black',
+            fontSize:20,
+          }
+        )
+
+        fetch('http://localhost:8000/core/api/user')
+          .then(res=>res.json())
+          .then((data)=>{
+           let name = String(data.username)
+           this.username.setText(name)
+            console.log(name)
+
+           })
+
+        let text = this.add.text(
+          -150,
           toggle.y-7,
           'Sound',
           {
@@ -51,53 +95,61 @@
           }
         )
 
-        this.input.setTopOnly(true)
-
         this.input.on('gameobjectover', function(pointer, gameObject){
-          var link = gameObject.texture.key
-            if (String(link)=='toggle'){
-              gameObject.setTint(0xe0e0e0)
-            }
-            else {
-              gameObject.setTint(0x50bcdf)
-            }
+          let link = gameObject.texture.key
+
+          if(String(link) =='toggle'){
+            console.log(link)
+            toggle.setTint(0xe0e0e0)
+          }
+          else{
+            gameObject.setTint(0x50bcdf)
+          }
         })
 
         this.input.on('gameobjectout', function(pointer, gameObject){
-            gameObject.clearTint()
+          gameObject.clearTint()
         })
-
+        
         this.input.on('gameobjectdown', function(pointer, gameObject){
-            var link = gameObject.texture.key
-            if (String(link) == 'setting'){
-
-            }
-            else if(String(link) == 'toggle'){
-              this.toggleSound()
+          let link = gameObject.texture.key
+          console.log(link)
+          if(String(link) =='toggle'){
+            toggle.clearTint()
+            
+            var active = checkmark.visible
+            active = !active
+            game.sound.mute = !active
+            checkmark.visible = active
+          }
+          else if(String(link) =='setting'){
+            if(temp==1){
+              panel.setX(-150)
+              toggle.setX(-150)
+              checkmark.setX(-150)
+              text.setX(-150)
+              temp=-1
             }
             else{
-              link = 'http://localhost:8000/mainapp/' + String(link)
-              location.replace(link)
+              panel.setX(150)
+              toggle.setX(70)
+              checkmark.setX(70)
+              text.setX(100)
+              temp=1
             }
-            
+          }
+          else{
+            link = 'http://localhost:8000/mainapp/' + String(link)
+            location.replace(link)
+          }
         })
-
-        function toggleSound(){
-          let isMute = !this.checkmark.visible
-
-          isMute = !isMute
-
-          this.scene.sound.mute = isMute
-          this.checkmark.visible = !isMute
-        }
-
+        this.input.setTopOnly(true)
       }
-      
+
       function update(){
-        
       }
       
-      var config = {
+      let config = {
         type: Phaser.AUTO,
         width: 300,
         height: 600,
@@ -120,6 +172,6 @@
             mode: Phaser.Scale.ScaleModes.FIT
         }
       }
-      var game =  new Phaser.Game(config)
+      let game =  new Phaser.Game(config)
 </script>
 {% endblock script %}

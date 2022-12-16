@@ -12,6 +12,9 @@ def recommend(request):
   products = Beautyproduct.objects.all()
   return render(request, 'core/recommend.html', {'products': products})
 
+def share(request):
+  return render(request, 'core/share.html')
+
 class CurrentUserAPI(APIView):
   def get(self, request):
     serializer = CurrentUserSerializer(request.user, context={'request': request})
