@@ -5,7 +5,6 @@
     const COLOR_PRIMARY = 0xF5F5F5;
     const COLOR_LIGHT = 0xD0CCCC;
     const COLOR_DARK = 0x260e04;
-    var state = 'hair'
 
     var createPanel = function (scene, data, state) {
         var sizer = scene.rexUI.add.sizer({
@@ -105,10 +104,10 @@
         this.add.image(150,300,'background')
         var back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'})
         this.add.image(175,40,'count').setInteractive({cursor:'pointer'})
-        var button = this.add.rectangle(90,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
+        var hair_button = this.add.rectangle(90,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
         this.add.text(70, 77, 'hair', {color:'black'})
-        var button2 = this.add.rectangle(170,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
-        this.add.text(153, 77, 'top', {color:'black'})
+        var top_button = this.add.rectangle(210,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(193, 77, 'top', {color:'black'})
         this.money = this.add.text(
           125,
           28,
@@ -145,6 +144,17 @@
             location.replace('http://localhost:8000/mainapp/main')
         })
 
+        fetch('http://localhost:8000/mainapp/api/shop',{
+            headers: {
+                Accept: "application/json",
+              },
+              method: "GET",
+        })
+          .then(res=>res.json())
+          .then((data)=>{
+            console.log(data)
+        })
+
         var data = {
             hair: [
                 { name: 'A' },
@@ -162,23 +172,23 @@
                 { name: 'M' },
             ],
             top: [
-                { name: 'A' },
-                { name: 'B' },
-                { name: 'C' },
-                { name: 'D' },
-                { name: 'E' },
-                { name: 'F' },
+                { name: 'M' },
+                { name: 'L' },
+                { name: 'K' },
+                { name: 'J' },
+                { name: 'I' },
+                { name: 'H' },
                 { name: 'G' },
                 { name: 'H' },
-                { name: 'I' },
-                { name: 'J' },
-                { name: 'K' },
-                { name: 'L' },
-                { name: 'M' },
+                { name: 'E' },
+                { name: 'D' },
+                { name: 'C' },
+                { name: 'B' },
+                { name: 'A' },
             ],
         }
-
-        var panel_config ={
+        
+        var hairPanel = this.rexUI.add.scrollablePanel({
             x: 150,
             y: 400,
             width: 280,
@@ -188,7 +198,7 @@
             background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
 
             panel: {
-                child: createPanel(this, data, state),
+                child: createPanel(this, data, 'hair'),
                 mask: {
                     padding: 0,
                     // layer: this.add.layer()
@@ -213,17 +223,74 @@
                 panel: 10,
                 // slider: { left: 30, right: 30 },
             }
-        }
-        var hairPanel = this.rexUI.add.scrollablePanel(panel_config).layout()
+        }).layout()
 
-        button.on('pointerdown', function(event){
-            if(hairPanel.visible == true){
+        var topPanel = this.rexUI.add.scrollablePanel({
+            x: 150,
+            y: 400,
+            width: 280,
+            height: 600,
+            scrollMode: 0,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
+
+            panel: {
+                child: createPanel(this, data, 'top'),
+                mask: {
+                    padding: 0,
+                    // layer: this.add.layer()
+                },
+            },
+      
+            // scroller: true,
+            scroller: {
+                // pointerOutRelease: false
+            },
+      
+            mouseWheelScroller: {
+                focus: false,
+                speed: 0.1
+            },
+
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10,
+                panel: 10,
+                // slider: { left: 30, right: 30 },
+            }
+        }).layout()
+
+        topPanel.visible=false
+
+        hair_button.on('pointerdown', function(event){
+            if(topPanel.visible==true){
+                topPanel.visible=false
+                hairPanel.visible=true
+            }
+            else if(hairPanel.visible == true){
                 console.log(hairPanel.visible)
                 hairPanel.visible=false
             }
             else{
                 console.log(hairPanel.visible)
                 hairPanel.visible=true
+            }
+        })
+
+        top_button.on('pointerdown', function(event){
+            if(hairPanel.visible==true){
+                hairPanel.visible=false
+                topPanel.visible=true
+            }
+            else if(topPanel.visible == true){
+                console.log(topPanel.visible)
+                topPanel.visible=false
+            }
+            else{
+                console.log(topPanel.visible)
+                topPanel.visible=true
             }
         })
 
