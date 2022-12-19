@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-j6^p2!sn7dh6aq&)c2#tur=-k5j&-^!z_j@-5*_^jd(_5bzasd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "face-game.onrender.com"
+]
 
 
 # Application definition
