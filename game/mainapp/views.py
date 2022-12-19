@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from .models import *
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import ShopSerializer
 
 # Create your views here.
 def main(request):
@@ -18,3 +22,8 @@ def character(request):
 
 def skills(request):
   return render(request, 'mainapp/skills.html')
+
+class CurrentUserAPI(APIView):
+  def get(self, request):
+    serializer = ShopSerializer(request.user, context={'request': request})
+    return Response(serializer.data)
