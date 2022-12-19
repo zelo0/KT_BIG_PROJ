@@ -2,13 +2,137 @@
 {%load static%}
 {% block script %} 
 <script>
+    const COLOR_PRIMARY = 0xF5F5F5;
+    const COLOR_LIGHT = 0xD0CCCC;
+    const COLOR_DARK = 0x260e04;
+
+    var createPanel = function (scene, data, state) {
+        var sizer = scene.rexUI.add.sizer({
+            orientation: 'y',
+            space: { item: 10 }
+        })
+            .add(
+                createTable(scene, data, state, 3), // child
+                { expand: true }
+            ) 
+        return sizer;
+    }
+
+    var createTable = function (scene, data, key, columns) {
+        var capKey = key.charAt(0).toUpperCase() + key.slice(1);
+        var title = scene.rexUI.add.label({
+            orientation: 'x',
+            text: scene.add.text(0, 0, capKey, {color:'black'}),
+        });
+    
+        var items = data[key];
+        var rows = Math.ceil(items.length / columns);
+        var table = scene.rexUI.add.gridSizer({
+            column: columns,
+            row: rows,
+    
+            rowProportions: 1,
+            space: { column: 10, row: 10 },
+            name: key  // Search this name to get table back
+        });
+    
+        var item, r, c;
+        var iconSize = 70;
+        for (var i = 0, cnt = items.length; i < cnt; i++) {
+            item = items[i];
+            r = i % columns;
+            c = (i - r) / columns;
+            table.add(
+                createIcon(scene, item, iconSize, iconSize),
+                r,
+                c,
+                'top',
+                0,
+                true
+            );
+        }
+    
+        return scene.rexUI.add.sizer({
+            orientation: 'y',
+            space: { left: 15, right: 10, top: 10, bottom: 10, item: 10 }
+        })
+            .addBackground(
+                scene.rexUI.add.roundRectangle(0, 0, 0, 0, 0, undefined).setStrokeStyle(2, COLOR_LIGHT, 1)
+            )
+            .add(
+                title, // child
+                0, // proportion
+                'left', // align
+                0, // paddingConfig
+                true // expand
+            )
+            .add(table, // child
+                1, // proportion
+                'center', // align
+                0, // paddingConfig
+                true // expand
+            );
+    }
+    
+    var createIcon = function (scene, item, iconWidth, iconHeight) {
+        var label = scene.rexUI.add.label({
+            orientation: 'y',
+            icon: scene.rexUI.add.roundRectangle(0, 0, iconWidth, iconHeight, 5, COLOR_LIGHT),
+            text: scene.add.text(0, 0, item.name, {color:'black'}),
+    
+            space: { top: 10, icon: 10}
+        });
+    
+        return label;
+    };
+
     function preload(){
-        this.load.image('back', "{% static '/resource/ui/back.png'%}")
+        this.load.scenePlugin({
+            key: 'rexuiplugin',
+            url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
+            sceneKey: 'rexUI'
+        })
+        this.load.audio('store_music', "{% static '/resource/bgm/store_music.mp3'%}")
+
+        this.load.image('back', "{% static '/resource/ui/back2.png'%}")
         this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
+        this.load.image('count', "{% static '/resource/ui/store/count2.png'%}")
     }
     function create(){
+        this.bgm = this.sound.add("store_music", {loop:true, volume:0.1})
+        this.bgm.play()
         this.add.image(150,300,'background')
-        var back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
+        var back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'})
+        this.add.image(175,40,'count').setInteractive({cursor:'pointer'})
+        var hair_button = this.add.rectangle(90,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(70, 77, 'hair', {color:'black'})
+        var top_button = this.add.rectangle(210,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(193, 77, 'top', {color:'black'})
+        this.money = this.add.text(
+          125,
+          28,
+          "",
+          {
+            color:'black',
+            font:'550 23px Poppins',
+          }
+        )
+
+        fetch('http://localhost:8000/core/api/user')
+          .then(res=>res.json())
+          .then((data)=>{
+            console.log(data)
+            let money = String(data.money)
+            this.money.setText(money)
+            console.log(money)
+        })
+
+        if(localStorage.getItem('bgm')=='true'){
+            this.bgm = this.sound.play("store_music", {loop:true})
+        }
+        else if(localStorage.getItem('bgm')=='false'){
+            game.sound.mute = true
+        }
 
         back.on('pointerover', function(event){
             this.setTint(0x50bcdf)
@@ -19,32 +143,194 @@
         back.on('pointerdown', function(event){
             location.replace('http://localhost:8000/mainapp/main')
         })
-    }
+
+        fetch('http://localhost:8000/mainapp/api/shop')
+          .then(res=>res.json())
+          .then((data)=>{
+            console.log(data)
+        })
+
+        var data = {
+            hair: [
+                { name: 'A' },
+                { name: 'B' },
+                { name: 'C' },
+                { name: 'D' },
+                { name: 'E' },
+                { name: 'F' },
+                { name: 'G' },
+                { name: 'H' },
+                { name: 'I' },
+                { name: 'J' },
+                { name: 'K' },
+                { name: 'L' },
+                { name: 'M' },
+            ],
+            top: [
+                { name: 'M' },
+                { name: 'L' },
+                { name: 'K' },
+                { name: 'J' },
+                { name: 'I' },
+                { name: 'H' },
+                { name: 'G' },
+                { name: 'H' },
+                { name: 'E' },
+                { name: 'D' },
+                { name: 'C' },
+                { name: 'B' },
+                { name: 'A' },
+            ],
+        }
+        
+        var hairPanel = this.rexUI.add.scrollablePanel({
+            x: 150,
+            y: 400,
+            width: 280,
+            height: 600,
+            scrollMode: 0,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
+
+            panel: {
+                child: createPanel(this, data, 'hair'),
+                mask: {
+                    padding: 0,
+                    // layer: this.add.layer()
+                },
+            },
+      
+            // scroller: true,
+            scroller: {
+                // pointerOutRelease: false
+            },
+      
+            mouseWheelScroller: {
+                focus: false,
+                speed: 0.1
+            },
+
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10,
+                panel: 10,
+                // slider: { left: 30, right: 30 },
+            }
+        }).layout()
+
+        var topPanel = this.rexUI.add.scrollablePanel({
+            x: 150,
+            y: 400,
+            width: 280,
+            height: 600,
+            scrollMode: 0,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
+
+            panel: {
+                child: createPanel(this, data, 'top'),
+                mask: {
+                    padding: 0,
+                    // layer: this.add.layer()
+                },
+            },
+      
+            // scroller: true,
+            scroller: {
+                // pointerOutRelease: false
+            },
+      
+            mouseWheelScroller: {
+                focus: false,
+                speed: 0.1
+            },
+
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10,
+                panel: 10,
+                // slider: { left: 30, right: 30 },
+            }
+        }).layout()
+
+        topPanel.visible=false
+
+        hair_button.on('pointerdown', function(event){
+            if(topPanel.visible==true){
+                topPanel.visible=false
+                hairPanel.visible=true
+            }
+            else if(hairPanel.visible == true){
+                console.log(hairPanel.visible)
+                hairPanel.visible=false
+            }
+            else{
+                console.log(hairPanel.visible)
+                hairPanel.visible=true
+            }
+        })
+
+        top_button.on('pointerdown', function(event){
+            if(hairPanel.visible==true){
+                hairPanel.visible=false
+                topPanel.visible=true
+            }
+            else if(topPanel.visible == true){
+                console.log(topPanel.visible)
+                topPanel.visible=false
+            }
+            else{
+                console.log(topPanel.visible)
+                topPanel.visible=true
+            }
+        })
+
+        /*
+        hairPanel.setChildrenInteractive({
+            targets: [
+                hairPanel.getByName('hair', true)
+            ]
+        })
+            .on('child.click', function (child) {
+                var category = child.getParentSizer().name;
+                console.log(category)
+                console.log(child.text)
+            })
+  
+        hairPanel.getElement('scroller')
+        .on('dragstart', function () {
+            console.log('scroller.dragstart')
+        })
+        .on('dragend', function () {
+            console.log('scroller.dragend')
+        })
+        */
+   }
+    
     function update(){
 
     }
 
-    var config = {
+    let config = {
         type: Phaser.AUTO,
-        width: 300,
-        height: 600,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                debug: false,
-                gravity: {
-                    y: 0
-                }
-            }
-        },
-        backgroundColor: '#2d2d2d',
         scene: {
           preload: preload,
           create: create,
           update:update,
         },
         scale: {
-            mode: Phaser.Scale.ScaleModes.FIT
+            mode: Phaser.Scale.ScaleModes.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+            width: 300,
+            height: 600,
+        },
+        pixelArt: false,
+        render:{
+          antialias: true
         }
       }
       var game =  new Phaser.Game(config)

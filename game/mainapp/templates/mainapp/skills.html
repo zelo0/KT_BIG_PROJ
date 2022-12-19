@@ -13,7 +13,7 @@
         this.load.image('skill6', "{% static '/resource/ui/skills/skills/skill6.png'%}")
 
         //ui
-        this.load.image('back', "{% static '/resource/ui/back.png'%}")
+        this.load.image('back', "{% static '/resource/ui/back2.png'%}")
         this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
         this.load.image('bg2', "{% static '/resource/ui/bg2.png'%}")
         this.load.image('eyeui', "{% static '/resource/ui/skills/ui/눈.png'%}")
@@ -22,13 +22,17 @@
         this.load.image('Rect', "{% static '/resource/ui/skills/ui/Rect.png'%}")
 
     }
+
     function create(){
+
+
         skills = this.physics.add.staticGroup();
         ui = this.physics.add.staticGroup();
+        
 
-        this.add.image(150,300,'background')
+        this.add.image(150,300,'background');
         this.add.image(150,300,'bg2').setScale(0.35);
-        back = this.add.image(30,30,'back').setScale(0.3).setInteractive({cursor:'pointer'})
+        back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'});
 
         back.on('pointerover', function(event){
             this.setTint(0x50bcdf)
@@ -41,9 +45,9 @@
         })
 
         eyeui = ui.create(65,520, 'eyeui').setScale(0.35).setInteractive();
-        eyeui.setTint(0x50bcdf);
         noseui = ui.create(150,520, 'noseui').setScale(0.35).setInteractive();
         mouthui = ui.create(235,520, 'mouthui').setScale(0.35).setInteractive();
+        typeui = [eyeui, noseui, mouthui];
 
         skill1 = skills.create(80,350, 'skill1').setScale(0.7).setInteractive();
         skill2 = skills.create(150,350, 'skill2').setScale(0.7).setInteractive();
@@ -51,21 +55,39 @@
         skill4 = skills.create(80,430, 'skill4').setScale(0.7).setInteractive();
         skill5 = skills.create(150,430, 'skill5').setScale(0.7).setInteractive();
         skill6 = skills.create(220,430, 'skill6').setScale(0.7).setInteractive();
+        s = [skill1, skill2, skill3, skill4, skill5, skill6];
+        all = [s,s,s]
 
-        Rect = this.add.image(1000, 1000, 'Rect').setScale(0.9);
+        EyeSkill = this.add.image(80, 350, 'Rect').setScale(0.9);
+        NoseSkill = this.add.image(80, 350, 'Rect').setScale(0.9);
+        MouthSkill = this.add.image(80, 350, 'Rect').setScale(0.9);
 
-        eyeui.on('pointerup', function() {
-            noseui.clearTint();
-            mouthui.clearTint();
-            this.setTint(0x50bcdf);});
-        noseui.on('pointerup', function() {
-            eyeui.clearTint();
-            mouthui.clearTint();
-            this.setTint(0x50bcdf)});
-        mouthui.on('pointerup', function() {
-            eyeui.clearTint();
-            noseui.clearTint();
-            this.setTint(0x50bcdf)});
+        EyeSkill.visible = false
+        NoseSkill.visible = false
+        MouthSkill.visible = false
+
+        this.input.on('gameobjectdown', function(pointer, gameObject){
+            if(gameObject==eyeui){choicetype(eyeui, typeui)}
+            if(gameObject==noseui){choicetype(noseui, typeui)}
+            if(gameObject==mouthui){choicetype(mouthui, typeui)}
+        })
+
+
+        function choicetype(icon, array){
+            for(var i=0;i<array.length;i++){
+                icon.setTint(0x50bcdf);
+                if(icon!=array[i]){
+                    array[i].clearTint();
+                }
+            }
+        } 
+
+        function choiceskill(icon, array){
+            if (eyeui.isTinted == true){
+
+            }
+        }
+
 
     }
 
@@ -79,9 +101,9 @@
         skill4.on('pointerup', function (event){Rect.setPosition(skill4.x, skill4.y);});
         skill5.on('pointerup', function (event){Rect.setPosition(skill5.x, skill5.y);});
         skill6.on('pointerup', function (event){Rect.setPosition(skill6.x, skill6.y);});
-
     }
 
+ 
     var config = {
         type: Phaser.AUTO,
         width: 300,
