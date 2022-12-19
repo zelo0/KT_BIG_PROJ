@@ -3,7 +3,6 @@ from .models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import CurrentUserSerializer
-from youtube_upload.client import YoutubeUploader
 import os
 from django.conf import settings
 
