@@ -5,7 +5,6 @@
     const COLOR_PRIMARY = 0xF5F5F5;
     const COLOR_LIGHT = 0xD0CCCC;
     const COLOR_DARK = 0x260e04;
-    var state = 'hair'
 
     var createPanel = function (scene, data, state) {
         var sizer = scene.rexUI.add.sizer({
@@ -162,22 +161,22 @@
                 { name: 'M' },
             ],
             top: [
-                { name: 'A' },
-                { name: 'B' },
-                { name: 'C' },
-                { name: 'D' },
-                { name: 'E' },
-                { name: 'F' },
+                { name: 'M' },
+                { name: 'L' },
+                { name: 'K' },
+                { name: 'J' },
+                { name: 'I' },
+                { name: 'H' },
                 { name: 'G' },
                 { name: 'H' },
-                { name: 'I' },
-                { name: 'J' },
-                { name: 'K' },
-                { name: 'L' },
-                { name: 'M' },
+                { name: 'E' },
+                { name: 'D' },
+                { name: 'C' },
+                { name: 'B' },
+                { name: 'A' },
             ],
         }
-
+        
         var hairPanel = this.rexUI.add.scrollablePanel({
             x: 150,
             y: 400,
@@ -188,7 +187,7 @@
             background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
 
             panel: {
-                child: createPanel(this, data, 'top'),
+                child: createPanel(this, data, 'hair'),
                 mask: {
                     padding: 0,
                     // layer: this.add.layer()
@@ -215,7 +214,6 @@
             }
         }).layout()
 
-        
         var topPanel = this.rexUI.add.scrollablePanel({
             x: 150,
             y: 400,
