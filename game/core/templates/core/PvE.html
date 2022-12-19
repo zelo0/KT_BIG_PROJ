@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{%load static%}
+{% block script %}
+<script>
+      function preload(){
+        this.load.image('face', "{% static '/images/char_back.jpg'%}")
+        this.load.image('attk_button', "{% static '/images/attack.png'%}")
+        this.load.image('def_button', "{% static '/images/defence.png'%}")
+        this.load.image('enemy', "{% static '/images/mob.png'%}")
+        this.load.image('background', "{% static '/images/background.jpg'%}")
+        this.load.image('hp', "{% static '/images/hp.png'%}")
+      }
+      
+      function create(){
+
+        
+  
+        this.add.image(150,300,'background')
+        this.add.image(80,400,'face').setScale(0.08).setInteractive({cursor:'pointer'})
+        this.add.image(80,500,'attk_button').setScale(0.7).setInteractive({cursor:'pointer'})
+        this.add.image(200,500,'def_button').setScale(0.7).setInteractive({cursor:'pointer'})
+        this.add.image(250,50,'enemy').setScale(0.1).setInteractive({cursor:'pointer'})
+        this.add.image(250,80,'hp').setScale(0.07).setInteractive({cursor:'pointer'})
+        
+        //var setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
+       // var panel = this.add.image(150,300,'panel').setScale(0.7)
+        //var toggle = this.add.image(70, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
+        //var checkmark = this.add.image(70,150,'checkmark').setScale(0.5)
+        //panel.alpha = 0.7
+
+        /*var text = this.add.text(
+          toggle.x+30,
+          toggle.y-7,
+          'Sound',
+          {
+            color:'black',
+            fontSize:18,
+          }
+        )*/
+
+        this.input.setTopOnly(true)
+
+        this.input.on('gameobjectover', function(pointer, gameObject){
+          var link = gameObject.texture.key
+            if (String(link)=='toggle'){
+              gameObject.setTint(0xe0e0e0)
+            }
+            else {
+              gameObject.setTint(0x50bcdf)
+            }
+        })
+
+        this.input.on('gameobjectout', function(pointer, gameObject){
+            gameObject.clearTint()
+        })
+
+        this.input.on('gameobjectdown', function(pointer, gameObject){
+            var link = gameObject.texture.key
+            if (String(link) == 'setting'){
+
+            }
+            else if(String(link) == 'toggle'){
+              this.toggleSound()
+            }
+            else{
+              link = 'http://localhost:8000/core/' + String(link)
+              location.replace(link)
+            }
+            
+        })
+
+        function toggleSound(){
+          let isMute = !this.checkmark.visible
+
+          isMute = !isMute
+
+          this.scene.sound.mute = isMute
+          this.checkmark.visible = !isMute
+        }
+
+      }
+      
+      function update(){
+        
+      }
+      
+      var config = {
+        type: Phaser.AUTO,
+        width: 300,
+        height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                debug: false,
+                gravity: {
+                    y: 0
+                }
+            }
+        },
+        backgroundColor: '#2d2d2d',
+        scene: {
+          preload: preload,
+          create: create,
+          update:update,
+        },
+        scale: {
+            mode: Phaser.Scale.ScaleModes.FIT
+        }
+      }
+      var game =  new Phaser.Game(config)
+</script>
+{% endblock script %}
