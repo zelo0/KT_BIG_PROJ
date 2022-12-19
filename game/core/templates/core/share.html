@@ -154,7 +154,10 @@ class Demo extends Phaser.Scene {
                         const textFind = 'base64,'
                         const data = image.src.slice(image.src.indexOf(textFind) + textFind.length);
                         console.log(data)
-                        console.log(unescape(escape(window.atob(data))));
+                        const binary = unescape(escape(window.atob(data)))
+                        const file = new File(binary, 'share.png')
+                        console.log(file)
+                        console.log(binary);
                     })
                 }
             })

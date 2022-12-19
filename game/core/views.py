@@ -6,11 +6,6 @@ from .serializers import CurrentUserSerializer
 import os
 from django.conf import settings
 
-from oauth2client.tools import argparser
-from googleapiclient.errors import HttpError
-
-VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
-
 
 # Create your views here.
 def index(request):
