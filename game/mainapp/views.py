@@ -18,3 +18,6 @@ def character(request):
 
 def skills(request):
   return render(request, 'mainapp/skills.html')
+
+def result(request):
+  return render(request, 'mainapp/result.html')

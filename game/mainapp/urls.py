@@ -10,4 +10,5 @@ urlpatterns = [
 
     path('character', views.character),
     path('skills', views.skills),
+    path('result', views.result)
 ]
