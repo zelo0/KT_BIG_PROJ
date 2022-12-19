@@ -147,7 +147,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 
-    # # mysql
+    # mysql
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql', # mysql 엔진 설정
     #     'NAME': 'kt', # 데이터베이스 이름

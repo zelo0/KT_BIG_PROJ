@@ -24,7 +24,7 @@ class Item(models.Model):
 
 class Shop(models.Model):
   item = models.ForeignKey("Item", models.CASCADE)
-  pay = models.IntegerField()
+  pay = models.IntegerField(default=0)
   quantity = models.IntegerField(null=True, blank=True) # 생략 가능. 생략하면 무제한 판매 
 
   def __str__(self):
@@ -43,3 +43,4 @@ class Character(models.Model):
 
   def __str__(self):
     return self.user.username
+

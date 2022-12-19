@@ -57,6 +57,23 @@ class Coupon(models.Model):
     class Meta:
         db_table = 'coupon'
 
+class MonsterAbility(models.Model):
+    id = models.AutoField(primary_key=True)
+    abilityName = models.CharField(max_length=255)
+    abilityType = models.CharField(max_length=255)
+    class Meta:
+        db_table = 'monster_ability'
+    def __str__(self):
+        return self.abilityName        
+        
+class Monster(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    hp = models.IntegerField()
+    skills = models.ForeignKey(MonsterAbility, models.CASCADE)
+    mob_type = models.CharField(max_length=255, blank=True, null=True)
+    class Meta:
+        db_table = 'monster'
 
 class FacePoint(models.Model):
     id = models.AutoField(primary_key=True)
