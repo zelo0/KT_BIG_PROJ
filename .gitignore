@@ -5,7 +5,4 @@ game/db.sqlite3
 **/migrations
 **/migrations
 **/.cache
-test.html
 test.js
-store.html
-main.html

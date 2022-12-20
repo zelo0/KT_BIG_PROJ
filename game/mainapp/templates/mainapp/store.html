@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 {%load static%}
-{% block script %} 
+{% block script %}
+<script src={% static 'js/window.js' %}></script>
 <script>
     const COLOR_PRIMARY = 0xF5F5F5;
     const COLOR_LIGHT = 0xD0CCCC;
     const COLOR_DARK = 0x260e04;
+    let shopData
+    let itemData
+
+    function getKeyByValue(obj, value) {
+        return Object.keys(obj).find(key => obj[key] === value);
+    }
 
     var createPanel = function (scene, data, state) {
         var sizer = scene.rexUI.add.sizer({
@@ -12,7 +19,7 @@
             space: { item: 10 }
         })
             .add(
-                createTable(scene, data, state, 3), // child
+                createTable(scene, data, state, 4), // child
                 { expand: true }
             ) 
         return sizer;
@@ -93,23 +100,30 @@
             sceneKey: 'rexUI'
         })
         this.load.audio('store_music', "{% static '/resource/bgm/store_music.mp3'%}")
-
         this.load.image('back', "{% static '/resource/ui/back2.png'%}")
-        this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
         this.load.image('count', "{% static '/resource/ui/store/count2.png'%}")
     }
-    function create(){
+
+    async function create(){
         this.bgm = this.sound.add("store_music", {loop:true, volume:0.1})
         this.bgm.play()
-        this.add.image(150,300,'background')
         var back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'})
-        this.add.image(175,40,'count').setInteractive({cursor:'pointer'})
-        var hair_button = this.add.rectangle(90,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
-        this.add.text(70, 77, 'hair', {color:'black'})
-        var top_button = this.add.rectangle(210,85,50,25,0xD0CCCC).setInteractive({cursor:'pointer'})
-        this.add.text(193, 77, 'top', {color:'black'})
+        this.add.image(window_width/2+(window_width*0.04),40,'count').setInteractive({cursor:'pointer'})
+
+        var hairButton = this.add.rectangle(window_width/6,85,50,30,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(window_width/6-(window_width*0.045), 77, '머리', {color:'black', font:'16px Arial'})
+        var topButton = this.add.rectangle(window_width/6*2,85,50,30,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(window_width/6*2-(window_width*0.045), 77, '상의', {color:'black', font:'16px Arial'})
+        var bottomButton = this.add.rectangle(window_width/6*3,85,50,30,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(window_width/6*3-(window_width*0.045), 77, '하의', {color:'black', font:'16px Arial'})
+        var shoeButton = this.add.rectangle(window_width/6*4,85,50,30,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(window_width/6*4-(window_width*0.045), 77, '신발', {color:'black', font:'16px Arial'})
+        var weaponButton = this.add.rectangle(window_width/6*5,85,50,30,0xD0CCCC).setInteractive({cursor:'pointer'})
+        this.add.text(window_width/6*5-(window_width*0.045), 77, '무기', {color:'black', font:'16px Arial'})
+
+
         this.money = this.add.text(
-          125,
+          window_width/2-(window_width*0.04),
           28,
           "",
           {
@@ -124,7 +138,6 @@
             console.log(data)
             let money = String(data.money)
             this.money.setText(money)
-            console.log(money)
         })
 
         if(localStorage.getItem('bgm')=='true'){
@@ -144,55 +157,45 @@
             location.replace('http://localhost:8000/mainapp/main')
         })
 
-        fetch('http://localhost:8000/mainapp/api/shop',{
-            headers: {
-                Accept: "application/json",
-              },
-              method: "GET",
-        })
-          .then(res=>res.json())
-          .then((data)=>{
-            console.log(data)
+        await fetch('http://localhost:8000/mainapp/api/shop')
+            .then(res=>res.json())
+            .then((data)=>{shopData=data
         })
 
-        var data = {
-            hair: [
-                { name: 'A' },
-                { name: 'B' },
-                { name: 'C' },
-                { name: 'D' },
-                { name: 'E' },
-                { name: 'F' },
-                { name: 'G' },
-                { name: 'H' },
-                { name: 'I' },
-                { name: 'J' },
-                { name: 'K' },
-                { name: 'L' },
-                { name: 'M' },
-            ],
-            top: [
-                { name: 'M' },
-                { name: 'L' },
-                { name: 'K' },
-                { name: 'J' },
-                { name: 'I' },
-                { name: 'H' },
-                { name: 'G' },
-                { name: 'H' },
-                { name: 'E' },
-                { name: 'D' },
-                { name: 'C' },
-                { name: 'B' },
-                { name: 'A' },
-            ],
-        }
+        await fetch('http://localhost:8000/mainapp/api/item')
+            .then(res=>res.json())
+            .then((data)=>{itemData=data
+        })
+        var data={hair:[], top:[], bottom:[], shoe:[], weapon:[]}
         
+        for(i=0; i<itemData.length; i++){
+            const item = itemData[i]
+            const shop = shopData[i]
+            if(item.type=='머리'){
+                data['hair'].push({id:item.id, name:item.name , pay:shop.pay})
+            }
+            if(item.type=='상의'){
+                data['top'].push({id:item.id, name:item.name , pay:shop.pay})
+            }
+            if(item.type=='하의'){
+                data['bottom'].push({id:item.id, name:item.name , pay:shop.pay})
+            }
+            if(item.type=='신발'){
+                data['shoe'].push({id:item.id, name:item.name , pay:shop.pay})
+            }
+            if(item.type=='무기'){
+                data['weapon'].push({id:item.id, name:item.name , pay:shop.pay})
+            }
+        }
+        console.log(data)
+        console.log(itemData)
+        console.log(shopData)
+
         var hairPanel = this.rexUI.add.scrollablePanel({
-            x: 150,
-            y: 400,
-            width: 280,
-            height: 600,
+            x: window_width/2,
+            y: window_height/2,
+            width: window_width,
+            height: window_height*0.7,
             scrollMode: 0,
 
             background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
@@ -226,10 +229,10 @@
         }).layout()
 
         var topPanel = this.rexUI.add.scrollablePanel({
-            x: 150,
-            y: 400,
-            width: 280,
-            height: 600,
+            x: window_width/2,
+            y: window_height/2,
+            width: window_width,
+            height: window_height*0.7,
             scrollMode: 0,
 
             background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
@@ -264,12 +267,132 @@
 
         topPanel.visible=false
 
-        hair_button.on('pointerdown', function(event){
-            if(topPanel.visible==true){
-                topPanel.visible=false
-                hairPanel.visible=true
+        var bottomPanel = this.rexUI.add.scrollablePanel({
+            x: window_width/2,
+            y: window_height/2,
+            width: window_width,
+            height: window_height*0.7,
+            scrollMode: 0,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
+
+            panel: {
+                child: createPanel(this, data, 'bottom'),
+                mask: {
+                    padding: 0,
+                    // layer: this.add.layer()
+                },
+            },
+      
+            // scroller: true,
+            scroller: {
+                // pointerOutRelease: false
+            },
+      
+            mouseWheelScroller: {
+                focus: false,
+                speed: 0.1
+            },
+
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10,
+                panel: 10,
+                // slider: { left: 30, right: 30 },
             }
-            else if(hairPanel.visible == true){
+        }).layout()
+
+        bottomPanel.visible=false
+
+        var shoePanel = this.rexUI.add.scrollablePanel({
+            x: window_width/2,
+            y: window_height/2,
+            width: window_width,
+            height: window_height*0.7,
+            scrollMode: 0,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
+
+            panel: {
+                child: createPanel(this, data, 'shoe'),
+                mask: {
+                    padding: 0,
+                    // layer: this.add.layer()
+                },
+            },
+      
+            // scroller: true,
+            scroller: {
+                // pointerOutRelease: false
+            },
+      
+            mouseWheelScroller: {
+                focus: false,
+                speed: 0.1
+            },
+
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10,
+                panel: 10,
+                // slider: { left: 30, right: 30 },
+            }
+        }).layout()
+
+        shoePanel.visible=false
+
+        var weaponPanel = this.rexUI.add.scrollablePanel({
+            x: window_width/2,
+            y: window_height/2,
+            width: window_width,
+            height: window_height*0.7,
+            scrollMode: 0,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
+
+            panel: {
+                child: createPanel(this, data, 'weapon'),
+                mask: {
+                    padding: 0,
+                    // layer: this.add.layer()
+                },
+            },
+      
+            // scroller: true,
+            scroller: {
+                // pointerOutRelease: false
+            },
+      
+            mouseWheelScroller: {
+                focus: false,
+                speed: 0.1
+            },
+
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10,
+                panel: 10,
+                // slider: { left: 30, right: 30 },
+            }
+        }).layout()
+
+        weaponPanel.visible=false
+
+        hairButton.on('pointerdown', function(event){
+            if(hairPanel.visible == false){
+                topPanel.visible=false
+                bottomPanel.visible=false
+                shoePanel.visible=false
+                weaponPanel.visible=false
+
+            }
+            if(hairPanel.visible == true){
                 console.log(hairPanel.visible)
                 hairPanel.visible=false
             }
@@ -279,12 +402,15 @@
             }
         })
 
-        top_button.on('pointerdown', function(event){
-            if(hairPanel.visible==true){
+        topButton.on('pointerdown', function(event){
+            if(topPanel.visible==false){
                 hairPanel.visible=false
-                topPanel.visible=true
+                bottomPanel.visible=false
+                shoePanel.visible=false
+                weaponPanel.visible=false
+
             }
-            else if(topPanel.visible == true){
+            if(topPanel.visible == true){
                 console.log(topPanel.visible)
                 topPanel.visible=false
             }
@@ -294,26 +420,198 @@
             }
         })
 
-        /*
+        bottomButton.on('pointerdown', function(event){
+            if(bottomPanel.visible==false){
+                hairPanel.visible=false
+                topPanel.visible=false
+                shoePanel.visible=false
+                weaponPanel.visible=false
+
+            }
+            if(bottomPanel.visible == true){
+                console.log(bottomPanel.visible)
+                bottomPanel.visible=false
+            }
+            else{
+                console.log(bottomPanel.visible)
+                bottomPanel.visible=true
+            }
+        })
+
+        shoeButton.on('pointerdown', function(event){
+            if(shoePanel.visible==false){
+                hairPanel.visible=false
+                bottomPanel.visible=false
+                shoePanel.visible=false
+                weaponPanel.visible=false
+
+            }
+            if(shoePanel.visible == true){
+                console.log(shoePanel.visible)
+                shoePanel.visible=false
+            }
+            else{
+                console.log(shoePanel.visible)
+                shoePanel.visible=true
+            }
+        })
+
+        weaponButton.on('pointerdown', function(event){
+            if(weaponPanel.visible==false){
+                hairPanel.visible=false
+                topPanel.visible=false
+                bottomPanel.visible=false
+                shoePanel.visible=false
+
+            }
+            if(weaponPanel.visible == true){
+                console.log(weaponPanel.visible)
+                weaponPanel.visible=false
+            }
+            else{
+                console.log(weaponPanel.visible)
+                weaponPanel.visible=true
+            }
+        })
+
+        var productPanel = this.add.rectangle(window_width/2, 250, window_width*0.7, window_height*0.3, 0xbdbdbd).setInteractive({pointer:'cursor'})
+        productPanel.visible=false
+        var itemText = this.add.text(window_width/2-100, 180, "", {color:'black', font:'16px Arial'})
+        var payText = this.add.text(window_width/2-100, 210, "", {color:'black', font:'16px Arial'})
+
+        itemText.visible=false
+        payText.visible=false
+
         hairPanel.setChildrenInteractive({
             targets: [
                 hairPanel.getByName('hair', true)
             ]
         })
             .on('child.click', function (child) {
-                var category = child.getParentSizer().name;
-                console.log(category)
-                console.log(child.text)
+                var category = child.getParentSizer().name
+                let itemName
+                let itemPay
+                for(i=0; i<data[category].length; i++){
+                    if(data[category][i].name == child.text){
+                        console.log(child.text)
+                        console.log(data[category][i].pay)
+                        itemName = child.text
+                        itemPay = data[category][i].pay
+                    }
+                }
+                productPanel.visible=true
+                itemText.setText('아이템명 : '+itemName)
+                payText.setText('상품 가격 : '+itemPay)
+
+                itemText.visible=true
+                payText.visible=true
             })
-  
-        hairPanel.getElement('scroller')
-        .on('dragstart', function () {
-            console.log('scroller.dragstart')
+
+        topPanel.setChildrenInteractive({
+            targets: [
+                topPanel.getByName('top', true)
+            ]
         })
-        .on('dragend', function () {
-            console.log('scroller.dragend')
+            .on('child.click', function (child) {
+                var category = child.getParentSizer().name
+                let itemName
+                let itemPay
+                for(i=0; i<data[category].length; i++){
+                    if(data[category][i].name == child.text){
+                        console.log(child.text)
+                        console.log(data[category][i].pay)
+                        itemName = child.text
+                        itemPay = data[category][i].pay
+                    }
+                }
+                productPanel.visible=true
+                itemText.setText('아이템명 : '+itemName)
+                payText.setText('상품 가격 : '+itemPay)
+
+                itemText.visible=true
+                payText.visible=true
+            })
+
+        bottomPanel.setChildrenInteractive({
+            targets: [
+                bottomPanel.getByName('bottom', true)
+            ]
         })
-        */
+            .on('child.click', function (child) {
+                var category = child.getParentSizer().name
+                let itemName
+                let itemPay
+                for(i=0; i<data[category].length; i++){
+                    if(data[category][i].name == child.text){
+                        console.log(child.text)
+                        console.log(data[category][i].pay)
+                        itemName = child.text
+                        itemPay = data[category][i].pay
+                    }
+                }
+                productPanel.visible=true
+                itemText.setText('아이템명 : '+itemName)
+                payText.setText('상품 가격 : '+itemPay)
+
+                itemText.visible=true
+                payText.visible=true
+            })
+
+        shoePanel.setChildrenInteractive({
+            targets: [
+                shoePanel.getByName('shoe', true)
+            ]
+        })
+            .on('child.click', function (child) {
+                var category = child.getParentSizer().name
+                let itemName
+                let itemPay
+                for(i=0; i<data[category].length; i++){
+                    if(data[category][i].name == child.text){
+                        console.log(child.text)
+                        console.log(data[category][i].pay)
+                        itemName = child.text
+                        itemPay = data[category][i].pay
+                    }
+                }
+                productPanel.visible=true
+                itemText.setText('아이템명 : '+itemName)
+                payText.setText('상품 가격 : '+itemPay)
+
+                itemText.visible=true
+                payText.visible=true
+            })
+
+        weaponPanel.setChildrenInteractive({
+            targets: [
+                weaponPanel.getByName('weapon', true)
+            ]
+        })
+            .on('child.click', function (child) {
+                var category = child.getParentSizer().name
+                let itemName
+                let itemPay
+                for(i=0; i<data[category].length; i++){
+                    if(data[category][i].name == child.text){
+                        console.log(child.text)
+                        console.log(data[category][i].pay)
+                        itemName = child.text
+                        itemPay = data[category][i].pay
+                    }
+                }
+                productPanel.visible=true
+                itemText.setText('아이템명 : '+itemName)
+                payText.setText('상품 가격 : '+itemPay)
+
+                itemText.visible=true
+                payText.visible=true
+            })
+
+            productPanel.on('pointerdown', function(event){
+            productPanel.visible=false
+            itemText.visible=false
+            payText.visible=false
+        })
    }
     
     function update(){
@@ -322,21 +620,22 @@
 
     let config = {
         type: Phaser.AUTO,
+        width: window_width,
+        height: window_height,
+        backgroundColor:'#ffffff',
         scene: {
           preload: preload,
           create: create,
           update:update,
         },
         scale: {
-            mode: Phaser.Scale.ScaleModes.FIT,
+            mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH,
-            width: 300,
-            height: 600,
         },
         pixelArt: false,
         render:{
           antialias: true
-        }
+        },
       }
       var game =  new Phaser.Game(config)
 </script>
