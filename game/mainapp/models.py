@@ -23,7 +23,7 @@ class Item(models.Model):
 
 
 class Shop(models.Model):
-  item = models.ForeignKey("Item", models.CASCADE)
+  item = models.ForeignKey("Item", related_name='history', on_delete = models.CASCADE)
   pay = models.IntegerField()
   quantity = models.IntegerField(null=True, blank=True) # 생략 가능. 생략하면 무제한 판매 
 
