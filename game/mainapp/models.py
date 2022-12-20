@@ -3,16 +3,20 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Item(models.Model):
     class TypeChoices(models.TextChoices):
-        HEAD = "머리",
+        HELMET = "헬멧",
+        HAIR = "머리",
+        FACE = "얼굴",
         TOP = "상의",
         BOTTOM = "하의",
         SHOE = "신발",
-        WEAPON = "무기"
+        WEAPON = "무기",
+        SHIELD = "방패"
 
 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     type = models.CharField(choices=TypeChoices.choices, max_length=2)
+
     # level = models.IntegerField(default=1, validators=[
     #     MinValueValidator(1),
     #     MaxValueValidator(999)
@@ -20,6 +24,10 @@ class Item(models.Model):
 
     def __str__(self):
         return self.name
+
+class ItemImage(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
 
 
 class Shop(models.Model):

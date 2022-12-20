@@ -5,7 +5,7 @@
   function preload ()
   {
       //bgs
-      this.load.image('bg', "{% static '/resource//ui/background.jpg'%}")
+      this.load.image('bg', "{% static '/resource/ui/background.jpg'%}")
       this.load.image('bg1', "{% static '/resource/ui//bg1.png'%}")
   
       //bodies
@@ -113,6 +113,15 @@
       box3 = ui.create(box_x+160,545, 'box1').setScale(0.8).setInteractive();
       box4 = ui.create(box_x+240,545, 'box1').setScale(0.8).setInteractive();
       box5 = ui.create(box_x+320,545, 'box1').setScale(0.8).setInteractive();
+
+      box1.setScrollFactor(1);
+
+      this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
+
+        gameObject.x = dragX;
+        gameObject.y = dragY;
+
+      });
 
       //헤어 미리보기
       minihair1 = hairs.create(box1.x,box1.y, 'hair1').setScale(0.7).setInteractive();
