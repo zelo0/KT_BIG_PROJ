@@ -8,27 +8,48 @@
       this.load.image('bg', "{% static '/resource/ui/background.jpg'%}")
       this.load.image('bg1', "{% static '/resource/ui//bg1.png'%}")
   
-      //bodies
-      this.load.image('body', "{% static '/resource/ui/character/character/body.png'%}")
-      this.load.image('helmet', "{% static '/resource/ui/character/character/Hat-Helmet.png'%}")
-      this.load.image('head', "{% static '/resource/ui/character/character/Head.png'%}")
-      this.load.image('leg', "{% static '/resource/ui/character/character/Leg.png'%}")
-      this.load.image('shield', "{% static '/resource/ui/character/character/Shield.png'%}")
-      this.load.image('sword', "{% static '/resource/ui/character/character/Weapon-Sword.png'%}")
+      //player_head
+      this.load.image('hair', "http://localhost:8000/media/images/0HAIR.png")
+      this.load.image('face', "http://localhost:8000/media/images/0HEAD_EYES_OPEN.png")
+      this.load.image('helmet', "http://localhost:8000/media/images/1HELMET.png")
+      
+      //player_top
+      this.load.image('arm_a1', "http://localhost:8000/media/images/1ARM_A1.png")
+      this.load.image('arm_a2', "http://localhost:8000/media/images/1ARM_A2.png")
+      this.load.image('arm_a3', "http://localhost:8000/media/images/1ARM_A3.png")
+      this.load.image('arm_b1', "http://localhost:8000/media/images/1ARM_B1.png")
+      this.load.image('arm_b2', "http://localhost:8000/media/images/1ARM_B2.png")
+      this.load.image('arm_b3b', "http://localhost:8000/media/images/1ARM_B3B.png")
+      this.load.image('arm_b3f', "http://localhost:8000/media/images/1ARM_B3F.png")
+      this.load.image('shoulder_a', "http://localhost:8000/media/images/1SHOULDER_A.png")
+      this.load.image('shoulder_b', "http://localhost:8000/media/images/1SHOULDER_B.png")
+      this.load.image('body', "http://localhost:8000/media/images/1BODY.png")
+      this.load.image('hip', "http://localhost:8000/media/images/1HIP.png")
+      
+      //player_bottom
+      this.load.image('leg_a1', "http://localhost:8000/media/images/1LEG A1.png")
+      this.load.image('leg_a2', "http://localhost:8000/media/images/1LEG A2.png")
+      this.load.image('leg_b1', "http://localhost:8000/media/images/1LEG B1.png")
+      this.load.image('leg_b2', "http://localhost:8000/media/images/1LEG B2.png")
+
+      //player_shoes
+      this.load.image('leg_a3', "http://localhost:8000/media/images/1LEG A3.png")
+      this.load.image('leg_b3', "http://localhost:8000/media/images/1LEG B3.png")
+      
+      //player_weapon
+      this.load.image('weapon', "http://localhost:8000/media/images/1WEAPON.png")
+
+
+      //player_shield
+      this.load.image('shield', "http://localhost:8000/media/images/1SHIELD.png")
+
   
+
       //hairs
-      this.load.image('hair1', "{% static '/resource/ui/character/custome/hairs/hair01.png'%}")
-      this.load.image('hair2', "{% static '/resource/ui/character/custome/hairs/hair02.png'%}")
-      this.load.image('hair3', "{% static '/resource/ui/character/custome/hairs/hair3.png'%}")
-      this.load.image('hair4', "{% static '/resource/ui/character/custome/hairs/hair4.png'%}")
-      this.load.image('hair5', "{% static '/resource/ui/character/custome/hairs/hair5.png'%}")
+      this.load.image('hair1', "http://localhost:8000/media/images/1HAIR.png")
   
       //tops
-      this.load.image('top1', "{% static '/resource/ui/character/custome/tops/top1.png'%}")
-      this.load.image('top2', "{% static '/resource/ui/character/custome/tops/top2.png'%}")
-      this.load.image('top3', "{% static '/resource/ui/character/custome/tops/top3.png'%}")
-      this.load.image('top4', "{% static '/resource/ui/character/custome/tops/top4.png'%}")
-      this.load.image('top5', "{% static '/resource/ui/character/custome/tops/top5.png'%}")
+
   
       //bottoms
       //추후추가
@@ -45,17 +66,17 @@
   
       //UI
       this.load.image('back', "{% static '/resource/ui/back2.png'%}");
-      this.load.image('box', "{% static '/resource/ui/character/ui/box.png'%}");
-      this.load.image('box1', "{% static '/resource/ui/character/ui/box1.png'%}");
-      this.load.image('faceui', "{% static '/resource/ui/character/ui/얼굴밝기조절.png'%}");
-      this.load.image('hairui', "{% static '/resource/ui/character/ui/헤어스타일.png'%}");
-      this.load.image('colourui', "{% static '/resource/ui/character/ui/헤어컬러.png'%}");
-      this.load.image('topui', "{% static '/resource/ui/character/ui/상의.png'%}");
-      this.load.image('bottomui', "{% static '/resource/ui/character/ui/하의.png'%}");
-      this.load.image('setui', "{% static '/resource/ui/character/ui/세트.png'%}");
-      this.load.image('accessoryui', "{% static '/resource/ui/character/ui/액세사리.png'%}");
-      this.load.image('shoesui', "{% static '/resource/ui/character/ui/신발.png'%}");
-      this.load.image('selectui', "{% static '/resource/ui/character/ui/확정.png'%}");
+      this.load.image('box', "{% static '/resource/ui/character/box.png'%}");
+      this.load.image('box1', "{% static '/resource/ui/character/box1.png'%}");
+      this.load.image('faceui', "{% static '/resource/ui/character/얼굴밝기조절.png'%}");
+      this.load.image('hairui', "{% static '/resource/ui/character/헤어스타일.png'%}");
+      this.load.image('colourui', "{% static '/resource/ui/character/헤어컬러.png'%}");
+      this.load.image('topui', "{% static '/resource/ui/character/상의.png'%}");
+      this.load.image('bottomui', "{% static '/resource/ui/character/하의.png'%}");
+      this.load.image('setui', "{% static '/resource/ui/character/세트.png'%}");
+      this.load.image('accessoryui', "{% static '/resource/ui/character/액세사리.png'%}");
+      this.load.image('shoesui', "{% static '/resource/ui/character/신발.png'%}");
+      this.load.image('selectui', "{% static '/resource/ui/character/확정.png'%}");
   
   }
   
@@ -155,13 +176,14 @@
       //player
       x = 100;
       y = 300;
-      leftleg = this.add.sprite(x-10, y+30, 'leg');
-      rightleg = this.add.sprite(x+10, y+30, 'leg');
-      body = this.add.sprite(x, y, 'body');
-      head = this.add.sprite(x, y-50, 'head');
-      helmet = this.add.sprite(x, y-70, 'helmet');
-      shield = this.add.sprite(x-50, y, 'shield');
-      sword = this.add.sprite(x+40, y-10, 'sword');
+      //leftleg = this.add.sprite(x-10, y+30, 'leg').setScale(0.7);
+      //rightleg = this.add.sprite(x+10, y+30, 'leg').setScale(0.7);
+      //body = this.add.sprite(x, y, 'body').setScale(0.7);
+      face = this.add.sprite(x, y-50, 'face').setScale(0.7);
+      hair = this.add.sprite(x, y-60, 'hair').setScale(0.7);
+      helmet = this.add.sprite(x+2, y-65, 'helmet').setScale(0.7);
+      //shield = this.add.sprite(x-50, y, 'shield').setScale(0.7);
+      //weapon = this.add.sprite(x+40, y-10, 'weapon').setScale(0.7);
       sword.angle += 30;
 
 
