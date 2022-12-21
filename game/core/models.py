@@ -74,6 +74,24 @@ class Monster(models.Model):
     mob_type = models.CharField(max_length=255, blank=True, null=True)
     class Meta:
         db_table = 'monster'
+        
+class Achievement(models.Model):
+    id = models.AutoField(primary_key=True)
+    achieveName = models.CharField(max_length=255)
+    achieve = models.CharField(max_length=255)
+    achieveImage = models.ImageField(upload_to='acievement', default="default.png")
+    
+    owner = models.ManyToManyField(User, through='AchieveUser')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.achieveName
+    
+class AchieveUser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    achieve = models.ForeignKey(Achievement,on_delete=models.CASCADE)
+    achieveGet = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class FacePoint(models.Model):
     id = models.AutoField(primary_key=True)

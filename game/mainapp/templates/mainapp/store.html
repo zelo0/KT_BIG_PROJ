@@ -8,7 +8,8 @@
     const COLOR_DARK = 0x260e04;
     let shopData
     let itemData
-
+    let data={hair:[], top:[], bottom:[], shoe:[], weapon:[]}
+    
     function getKeyByValue(obj, value) {
         return Object.keys(obj).find(key => obj[key] === value);
     }
@@ -85,7 +86,7 @@
         var label = scene.rexUI.add.label({
             orientation: 'y',
             icon: scene.rexUI.add.roundRectangle(0, 0, iconWidth, iconHeight, 5, COLOR_LIGHT),
-            text: scene.add.text(0, 0, item.name, {color:'black'}),
+            text: scene.add.text(0, 0, item.name, {color:'black', font:'16px Arial'}),
     
             space: { top: 10, icon: 10}
         });
@@ -93,7 +94,7 @@
         return label;
     };
 
-    function preload(){
+    async function preload(){
         this.load.scenePlugin({
             key: 'rexuiplugin',
             url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
@@ -102,6 +103,42 @@
         this.load.audio('store_music', "{% static '/resource/bgm/store_music.mp3'%}")
         this.load.image('back', "{% static '/resource/ui/back2.png'%}")
         this.load.image('count', "{% static '/resource/ui/store/count2.png'%}")
+
+        await fetch('http://localhost:8000/mainapp/api/shop')
+            .then(res=>res.json())
+            .then((data)=>{shopData=data
+        })
+
+        await fetch('http://localhost:8000/mainapp/api/item')
+            .then(res=>res.json())
+            .then((data)=>{itemData=data
+        })
+        
+        for(i=0; i<itemData.length; i++){
+            const item = itemData[i]
+            const shop = shopData[i]
+            if(item.type=='머리'){
+                data['hair'].push({id:item.id, name:item.name , pay:shop.pay, img:item.images})
+            }
+            if(item.type=='상의'){
+                data['top'].push({id:item.id, name:item.name , pay:shop.pay})
+            }
+            if(item.type=='하의'){
+                data['bottom'].push({id:item.id, name:item.name , pay:shop.pay})
+            }
+            if(item.type=='신발'){
+                data['shoe'].push({id:item.id, name:item.name , pay:shop.pay})
+            }
+            if(item.type=='무기'){
+                data['weapon'].push({id:item.id, name:item.name , pay:shop.pay})
+            }
+        }
+        console.log(data.hair[0].img[0].image)
+        console.log(itemData)
+        //console.log(shopData)
+        for(i=0; i<data.hair.length; i++){
+            this.load.image(`헤어${i+1}`, data.hair[i].img[0].image)
+        }
     }
 
     async function create(){
@@ -120,7 +157,6 @@
         this.add.text(window_width/6*4-(window_width*0.045), 77, '신발', {color:'black', font:'16px Arial'})
         var weaponButton = this.add.rectangle(window_width/6*5,85,50,30,0xD0CCCC).setInteractive({cursor:'pointer'})
         this.add.text(window_width/6*5-(window_width*0.045), 77, '무기', {color:'black', font:'16px Arial'})
-
 
         this.money = this.add.text(
           window_width/2-(window_width*0.04),
@@ -157,39 +193,6 @@
             location.replace('http://localhost:8000/mainapp/main')
         })
 
-        await fetch('http://localhost:8000/mainapp/api/shop')
-            .then(res=>res.json())
-            .then((data)=>{shopData=data
-        })
-
-        await fetch('http://localhost:8000/mainapp/api/item')
-            .then(res=>res.json())
-            .then((data)=>{itemData=data
-        })
-        var data={hair:[], top:[], bottom:[], shoe:[], weapon:[]}
-        
-        for(i=0; i<itemData.length; i++){
-            const item = itemData[i]
-            const shop = shopData[i]
-            if(item.type=='머리'){
-                data['hair'].push({id:item.id, name:item.name , pay:shop.pay})
-            }
-            if(item.type=='상의'){
-                data['top'].push({id:item.id, name:item.name , pay:shop.pay})
-            }
-            if(item.type=='하의'){
-                data['bottom'].push({id:item.id, name:item.name , pay:shop.pay})
-            }
-            if(item.type=='신발'){
-                data['shoe'].push({id:item.id, name:item.name , pay:shop.pay})
-            }
-            if(item.type=='무기'){
-                data['weapon'].push({id:item.id, name:item.name , pay:shop.pay})
-            }
-        }
-        console.log(data)
-        console.log(itemData)
-        console.log(shopData)
 
         var hairPanel = this.rexUI.add.scrollablePanel({
             x: window_width/2,
@@ -474,12 +477,20 @@
             }
         })
 
-        var productPanel = this.add.rectangle(window_width/2, 250, window_width*0.7, window_height*0.3, 0xbdbdbd).setInteractive({pointer:'cursor'})
+        var productPanel = this.add.rectangle(window_width/2, 250, window_width*0.7, window_height*0.3, 0xffffff).setInteractive({pointer:'cursor'})
         productPanel.visible=false
-        var itemText = this.add.text(window_width/2-100, 180, "", {color:'black', font:'16px Arial'})
-        var payText = this.add.text(window_width/2-100, 210, "", {color:'black', font:'16px Arial'})
+        productPanel.setStrokeStyle(1, 0x4f4f4f)
+        
+        var purchaseButton = this.add.rectangle(window_width/2,300,50,30,0xD0CCCC).setInteractive({cursor:'pointer'})
+        var purchaseText = this.add.text(window_width/2-16,290,"구매", {color:'black', font:'16px Arial'})
+        purchaseButton.visible=false
+        purchaseText.visible=false
 
+        var itemText = this.add.text(window_width/2-5, 190, "", {color:'black', font:'16px Arial'})
+        var payText = this.add.text(window_width/2-5, 220, "", {color:'black', font:'16px Arial'})
+        var ItemImg = this.add.image(window_width/2-70, 210, "헤어1")
         itemText.visible=false
+        ItemImg.visible=false
         payText.visible=false
 
         hairPanel.setChildrenInteractive({
@@ -502,9 +513,12 @@
                 productPanel.visible=true
                 itemText.setText('아이템명 : '+itemName)
                 payText.setText('상품 가격 : '+itemPay)
-
+                ItemImg.setTexture(`${itemName}`)
+                purchaseButton.visible=true
+                purchaseText.visible=true
                 itemText.visible=true
                 payText.visible=true
+                ItemImg.visible=true
             })
 
         topPanel.setChildrenInteractive({
@@ -611,12 +625,14 @@
             productPanel.visible=false
             itemText.visible=false
             payText.visible=false
+            ItemImg.visible=false
+            purchaseButton.visible=false
+            purchaseText.visible=false
+            
         })
    }
     
-    function update(){
-
-    }
+    function update(){}
 
     let config = {
         type: Phaser.AUTO,
