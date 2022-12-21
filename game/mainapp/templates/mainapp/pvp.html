@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+<script src="{% static 'js/window.js' %}"></script>
+<script src="{% static 'js/font-size.js' %}"></script>
+<script src="{% static 'js/create-button.js' %}"></script>
+<script src="{% static 'js/range.js' %}"></script>
+
+{% comment %} 소켓 {% endcomment %}
+<script>
+    let roomName = "{{ room_name | escapejs }}";
+  
+    let chatSocket = new WebSocket(
+        `ws://${window.location.host}/ws/mainapp/${roomName}/`
+    );
+  
+   
+  
+    chatSocket.onclose = (e) => {
+        console.error('Chat socket closed unexpectedly');
+    };
+</script>
+
+{% comment %} game {% endcomment %}
+<script>
+    let night;
+    let boss;
+    
+    function preload()
+    {
+      this.load.scenePlugin('rexuiplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js', 'rexUI', 'rexUI');
+      this.load.spritesheet('night', "{% static 'assets/night/NightBorne.png' %}", { frameWidth: 80, frameHeight: 80 });
+      this.load.spritesheet('boss', "{% static 'assets/boss/demon.png' %}", { frameWidth: 288, frameHeight: 40 });
+      //this.load.spritesheet('attack_1', "{% static 'assets/wizard/Attack1.png' %}", { frameWidth: 231, frameHeight: 190 });
+      //this.load.spritesheet('idle', "{% static 'assets/wizard/Idle.png' %}", { frameWidth: 231, frameHeight: 190 });
+      this.load.image('home', "{% static 'images/home.png' %}");
+      this.load.image('product', "{% static 'images/product.png' %}");
+      this.load.image('retry', "{% static 'images/retry.png' %}");
+    }
+    
+    function create()
+    {
+        // night
+      this.anims.create({
+        key: 'night_idle',
+        frames: this.anims.generateFrameNumbers('night', { frames: range(0, 9) }),
+        frameRate: 8,
+        repeat: -1
+      });
+    
+      this.anims.create({
+        key: 'night_attack',
+        frames: this.anims.generateFrameNumbers('night', { frames: range(46, 58) }),
+        frameRate: 8,
+        repeat: 0
+      });
+
+      // boss
+      this.anims.create({
+        key: 'boss_idle',
+        frames: this.anims.generateFrameNumbers('boss', { frames: range(0, 6) }),
+        frameRate: 8,   
+        repeat: -1
+      });
+    
+      this.anims.create({
+        key: 'boss_attack',
+        frames: this.anims.generateFrameNumbers('boss', { frames: range(44, 59) }),
+        frameRate: 8,
+        repeat: 0
+      });
+    
+      this.anims.create({
+        key: 'boss_damaged',
+        frames: this.anims.generateFrameNumbers('boss', { frames: range(66, 71) }),
+        frameRate: 8,
+        repeat: 0
+      });
+    
+      // make characters
+      night = this.add.sprite(200, 370, 'night');
+      night.setScale(5);
+      night.play('night_idle');
+
+      
+      boss = this.add.sprite(200, 370, 'boss');
+      boss.setScale(10);
+      boss.play('boss_idle');
+
+      // make button
+      const buttons = this.rexUI.add.gridButtons({
+        x: 500,
+        y: 300,
+        buttons: [
+            [
+                createButton(this, 'home'),
+                createButton(this, 'product'),
+                createButton(this, 'retry')
+            ]
+        ],
+        space: {
+            column: 80
+        }
+      }).layout();
+
+
+      buttons.on('button.click', function (button, index, pointer, event) {
+        if (index == 0) {
+            chatSocket.send(JSON.stringify({
+                // type 필요
+                "type": "attack",
+                'message': "One player attacked"
+            }));
+        } else if (index == 1) {
+          window.location.href = '/mainapp/main'
+        } else {
+          // 게임 다시 하기
+        }
+      })
+    }
+    
+
+    let config = {
+        type: Phaser.WEBGL,
+        width: 800,
+        height: 600,
+        parent: 'phaser-example',
+        scene: {
+            preload: preload,
+            create: create
+        },
+        backgroundColor: '#f2f7ff',
+      };
+      
+      let game = new Phaser.Game(config);
+
+
+    chatSocket.onmessage = (e) => {
+        let data = JSON.parse(e.data);
+        const message = data['message'];
+        const type = data['type'];
+        console.log(data);
+        if (type == 'attack') {
+            console.log('attack trigger');
+            // attack 후 idle
+            night.play('night_attack').once('animationcomplete', () => {
+                night.play("night_idle");
+            });
+        }
+    };
+</script>
+
+
+{% endblock script %}
