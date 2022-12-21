@@ -2,6 +2,91 @@
 {%load static%}
 {% block script %} 
 <script>
+    const COLOR_PRIMARY = 0xF5F5F5;
+    const COLOR_LIGHT = 0xD0CCCC;
+    const COLOR_DARK = 0x260e04;
+
+    var createPanel = function (scene, data, state) {
+        var sizer = scene.rexUI.add.sizer({
+            orientation: 'y',
+            space: { item: 10 }
+        })
+            .add(
+                createTable(scene, data, state, 3), // child
+                { expand: true }
+            ) 
+        return sizer;
+    }
+
+    var createTable = function (scene, data, key, columns) {
+        var capKey = key.charAt(0).toUpperCase() + key.slice(1);
+        var title = scene.rexUI.add.label({
+            orientation: 'x',
+            text: scene.add.text(0, 0, capKey, {color:'black'}),
+        });
+    
+        var items = data[key];
+        var rows = Math.ceil(items.length / columns);
+        var table = scene.rexUI.add.gridSizer({
+            column: columns,
+            row: rows,
+    
+            rowProportions: 1,
+            space: { column: 10, row: 10 },
+            name: key  // Search this name to get table back
+        });
+    
+        var item, r, c;
+        var iconSize = 70;
+        for (var i = 0, cnt = items.length; i < cnt; i++) {
+            item = items[i];
+            r = i % columns;
+            c = (i - r) / columns;
+            table.add(
+                createIcon(scene, item, iconSize, iconSize),
+                r,
+                c,
+                'top',
+                0,
+                true
+            );
+        }
+    
+        return scene.rexUI.add.sizer({
+            orientation: 'y',
+            space: { left: 15, right: 10, top: 10, bottom: 10, item: 10 }
+        })
+            .addBackground(
+                scene.rexUI.add.roundRectangle(0, 0, 0, 0, 0, undefined).setStrokeStyle(2, COLOR_LIGHT, 1)
+            )
+            .add(
+                title, // child
+                0, // proportion
+                'left', // align
+                0, // paddingConfig
+                true // expand
+            )
+            .add(table, // child
+                1, // proportion
+                'center', // align
+                0, // paddingConfig
+                true // expand
+            );
+    }
+    
+    var createIcon = function (scene, item, iconWidth, iconHeight) {
+        var label = scene.rexUI.add.label({
+            orientation: 'y',
+            icon: scene.rexUI.add.roundRectangle(0, 0, iconWidth, iconHeight, 5, COLOR_LIGHT),
+            text: scene.add.text(0, 0, item.name, {color:'black'}),
+    
+            space: { top: 10, icon: 10}
+        });
+    
+        return label;
+    };
+
+
     function preload(){
 
         //skills
@@ -24,6 +109,21 @@
     }
 
     function create(){
+
+        var data = {
+            name: 'Rex',
+            skills: [
+                { name: 'A' },
+                { name: 'B' },
+                { name: 'C' },
+                { name: 'D' },
+                { name: 'E' },
+                { name: 'F' },
+            ],
+
+        };
+
+
 
 
         skills = this.physics.add.staticGroup();
@@ -72,6 +172,43 @@
             if(gameObject==mouthui){choicetype(mouthui, typeui)}
         })
 
+        var hairPanel = this.rexUI.add.scrollablePanel({
+            x: 150,
+            y: 400,
+            width: 280,
+            height: 600,
+            scrollMode: 0,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 0, 0xffffff),
+
+            panel: {
+                child: createPanel(this, data, 'hair'),
+                mask: {
+                    padding: 0,
+                    // layer: this.add.layer()
+                },
+            },
+      
+            // scroller: true,
+            scroller: {
+                // pointerOutRelease: false
+            },
+      
+            mouseWheelScroller: {
+                focus: false,
+                speed: 0.1
+            },
+
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10,
+                panel: 10,
+                // slider: { left: 30, right: 30 },
+            }
+        }).layout()
+
 
         function choicetype(icon, array){
             for(var i=0;i<array.length;i++){
@@ -87,6 +224,8 @@
 
             }
         }
+
+
 
 
     }
