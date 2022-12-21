@@ -13,6 +13,7 @@ class Item(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     type = models.CharField(choices=TypeChoices.choices, max_length=2)
+    img = models.CharField(max_length=255, default='')
     # level = models.IntegerField(default=1, validators=[
     #     MinValueValidator(1),
     #     MaxValueValidator(999)

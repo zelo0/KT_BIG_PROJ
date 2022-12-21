@@ -8,7 +8,7 @@
     const COLOR_DARK = 0x260e04;
     let shopData
     let itemData
-
+    
     function getKeyByValue(obj, value) {
         return Object.keys(obj).find(key => obj[key] === value);
     }
@@ -85,7 +85,7 @@
         var label = scene.rexUI.add.label({
             orientation: 'y',
             icon: scene.rexUI.add.roundRectangle(0, 0, iconWidth, iconHeight, 5, COLOR_LIGHT),
-            text: scene.add.text(0, 0, item.name, {color:'black'}),
+            text: scene.add.text(0, 0, item.name, {color:'black', font:'16px Arial'}),
     
             space: { top: 10, icon: 10}
         });
@@ -172,7 +172,7 @@
             const item = itemData[i]
             const shop = shopData[i]
             if(item.type=='머리'){
-                data['hair'].push({id:item.id, name:item.name , pay:shop.pay})
+                data['hair'].push({id:item.id, name:item.name , pay:shop.pay, img:item.img})
             }
             if(item.type=='상의'){
                 data['top'].push({id:item.id, name:item.name , pay:shop.pay})
@@ -474,13 +474,15 @@
             }
         })
 
-        var productPanel = this.add.rectangle(window_width/2, 250, window_width*0.7, window_height*0.3, 0xbdbdbd).setInteractive({pointer:'cursor'})
+        var productPanel = this.add.rectangle(window_width/2, 250, window_width*0.7, window_height*0.3, 0xffffff).setInteractive({pointer:'cursor'})
         productPanel.visible=false
+        productPanel.setStrokeStyle(1, 0x4f4f4f)
         var itemText = this.add.text(window_width/2-100, 180, "", {color:'black', font:'16px Arial'})
         var payText = this.add.text(window_width/2-100, 210, "", {color:'black', font:'16px Arial'})
 
         itemText.visible=false
         payText.visible=false
+        itemImg.visible=false
 
         hairPanel.setChildrenInteractive({
             targets: [
@@ -491,17 +493,21 @@
                 var category = child.getParentSizer().name
                 let itemName
                 let itemPay
+                let itemImg
                 for(i=0; i<data[category].length; i++){
                     if(data[category][i].name == child.text){
                         console.log(child.text)
                         console.log(data[category][i].pay)
                         itemName = child.text
                         itemPay = data[category][i].pay
+                        itemImg = data[category][i].img
                     }
                 }
                 productPanel.visible=true
                 itemText.setText('아이템명 : '+itemName)
                 payText.setText('상품 가격 : '+itemPay)
+                this.load.image('itemImg', itemImg)
+                var img1 = this.add.image(window_width/2, 250, 'itemImg')
 
                 itemText.visible=true
                 payText.visible=true
@@ -614,9 +620,7 @@
         })
    }
     
-    function update(){
-
-    }
+    function update(){}
 
     let config = {
         type: Phaser.AUTO,

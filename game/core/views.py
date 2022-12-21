@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import CurrentUserSerializer
+from .serializers import CurrentUserSerializer, AchievementSerializer, AchieveUserSerializer
 
 # Create your views here.
 def index(request):
@@ -20,4 +20,16 @@ def share(request):
 class CurrentUserAPI(APIView):
   def get(self, request):
     serializer = CurrentUserSerializer(request.user, context={'request': request})
+    return Response(serializer.data)
+  
+class AchievementAPI(APIView):
+  def get(self, request):
+    achieve_list = Achievement.objects.all()
+    serializer = AchievementSerializer(achieve_list, many=True)
+    return Response(serializer.data)
+  
+class AchieveUserAPI(APIView):
+  def get(self, request):
+    achieve_list = AchieveUser.objects.all()
+    serializer = AchieveUserSerializer(achieve_list, many=True)
     return Response(serializer.data)
