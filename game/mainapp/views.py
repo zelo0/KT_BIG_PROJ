@@ -30,3 +30,11 @@ class ShopAPI(APIView):
     shop_list = Shop.objects.prefetch_related('item').all()
     serializer = ShopSerializer(shop_list, many=True)
     return Response(serializer.data)
+
+def room(request):
+  return render(request, 'mainapp/room-share.html')
+
+def pvp(request, room_name):
+  return render(request, 'mainapp/pvp.html', {
+    'room_name': room_name
+  })

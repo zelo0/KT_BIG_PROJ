@@ -4,6 +4,7 @@
 {% block script %}
 <script src="{% static 'js/window.js' %}"></script>
 <script src="{% static 'js/font-size.js' %}"></script>
+<script src="{% static 'js/create-button.js' %}"></script>
 
 
 <script>
@@ -11,7 +12,6 @@
 const font_size = default_font_size * 1.5
 const exercise_text_start_height = 500
 const exercise_text_margin_height = 10
-const COLOR_LIGHT = 0x6b5ce0;
 const button_label_idx = {
   0: 'product',
   1: 'home',
@@ -27,14 +27,7 @@ function preload() {
   this.load.image('retry', "{% static 'images/retry.png' %}");
 };
 
-function createButton (scene, key) {
-  return scene.rexUI.add.label({
-      background: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 50, COLOR_LIGHT, 0.8),
-      icon: scene.add.image(0, 0, key),
-      iconSize: 40,
-      align: 'center'
-  });
-}
+
 
 function create() {
   // 텍스트 설정

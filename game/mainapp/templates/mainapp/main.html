@@ -53,7 +53,7 @@
         });
       }
       
-      function create(){ 
+      async function create(){ 
         //this.scale.displaySize.setAspectRatio( width/height )
         //this.scale.refresh()
 
@@ -115,15 +115,15 @@
           }
         )
 
-        fetch('http://localhost:8000/core/api/user')
+        await fetch('http://localhost:8000/core/api/user')
           .then(res=>res.json())
           .then((data)=>{
             console.log(data)
             let name = String(data.username)
             this.username.setText(name)
             console.log(name)
-           })
-        
+          })
+          
         // object에 마우스를 올려놨을때 작동하는 코드
         this.input.on('gameobjectover', function(pointer, gameObject){
           let link = gameObject.texture.key

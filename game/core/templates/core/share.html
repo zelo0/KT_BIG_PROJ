@@ -150,14 +150,11 @@ class Demo extends Phaser.Scene {
 
                 } else {
                     _game.renderer.snapshot(async function(image) {
-                        console.log(image.src);
-                        const textFind = 'base64,'
-                        const data = image.src.slice(image.src.indexOf(textFind) + textFind.length);
-                        console.log(data)
-                        const binary = unescape(escape(window.atob(data)))
-                        const file = new File(binary, 'share.png')
+                        // base64로 인코딩된 imageUrl을 파일로 변경
+                        const file = await fetch(image.src)
+                            .then(r => r.blob())
+                            .then(blobFile => new File([blobFile], "share", { type: "image/png" }))
                         console.log(file)
-                        console.log(binary);
                     })
                 }
             })

@@ -25,12 +25,19 @@ SECRET_KEY = 'django-insecure-j6^p2!sn7dh6aq&)c2#tur=-k5j&-^!z_j@-5*_^jd(_5bzasd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "face-game.onrender.com",
+    "127.0.0.1",
+    "localhost",
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # channels
+    'daphne',
+    # 
     'mainapp',
     'core',
     'rest_framework',
@@ -114,6 +121,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # whitenoise
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'game.urls'
@@ -134,7 +143,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'game.wsgi.application'
+# WSGI_APPLICATION = 'game.wsgi.application'
+ASGI_APPLICATION = 'game.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ["rediss://red-cegkhc02i3mkhvoakgh0:Z6M9PSoaNV0aOv0XR2y3CmJ8TpYGGGfQ@singapore-redis.render.com:6379"],
+        },
+    },
+}
 
 
 # Database
@@ -197,11 +215,17 @@ USE_L10N = True
 USE_TZ = True
 
 
+ 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'config', 'static')
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# for serving static files
+## whitenoise
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+## 배포 시 제거
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )

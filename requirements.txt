@@ -4,3 +4,7 @@ markdown
 django-filter
 kafka-python
 Pillow
+gunicorn
+WhiteNoise
+channels
+channels-redis
