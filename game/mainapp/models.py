@@ -16,7 +16,6 @@ class Item(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     type = models.CharField(choices=TypeChoices.choices, max_length=2)
-
     # level = models.IntegerField(default=1, validators=[
     #     MinValueValidator(1),
     #     MaxValueValidator(999)
@@ -51,17 +50,3 @@ class Character(models.Model):
 
   def __str__(self):
     return self.user.username
-  
-class HavingItem(models.Model):
-  id = models.AutoField(primary_key=True)
-  character = models.ForeignKey(Character, on_delete=models.CASCADE, null=True)
-  item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
-
-  
-
-class wearing(models.Model):
-  character = models.ForeignKey(Character, on_delete=models.CASCADE, null=True)
-  havingItem = models.ForeignKey(HavingItem, on_delete=models.CASCADE, null=True)
-
-  
-  
