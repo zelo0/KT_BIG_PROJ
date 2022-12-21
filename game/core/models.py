@@ -57,8 +57,6 @@ class Coupon(models.Model):
     class Meta:
         db_table = 'coupon'
 
-
-
 class MonsterAbility(models.Model):
     id = models.AutoField(primary_key=True)
     abilityName = models.CharField(max_length=255)

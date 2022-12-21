@@ -10,4 +10,9 @@ urlpatterns = [
 
     path('character', views.character),
     path('skills', views.skills),
+    path('result', views.result),
+    path('api/shop/', views.ShopAPI.as_view()),
+
+    path('room/', views.room),
+    path('room/<str:room_name>/', views.pvp)
 ]

@@ -3,6 +3,7 @@
 {% block script %}
 <script src={% static 'js/window.js' %}></script>
 <script src="https://apis.google.com/js/api.js"></script>
+
 <script>
     
 
@@ -108,7 +109,7 @@ class Demo extends Phaser.Scene {
 
         var expand = true;
         var buttons = this.rexUI.add.buttons({
-            x: 400, y: 510,
+            x: window_width/2, y: 510,
             width: 400,
             orientation: 'x',
 
@@ -126,7 +127,6 @@ class Demo extends Phaser.Scene {
             expand: expand
         })
         .layout()
-        .drawBounds(this.add.graphics(), 0xff0000)
 
         buttons
             .on('button.click', function (button, index, pointer, event) {
@@ -149,7 +149,13 @@ class Demo extends Phaser.Scene {
                 } else if (button.text == 'instagram') {
 
                 } else {
-                    
+                    _game.renderer.snapshot(async function(image) {
+                        // base64로 인코딩된 imageUrl을 파일로 변경
+                        const file = await fetch(image.src)
+                            .then(r => r.blob())
+                            .then(blobFile => new File([blobFile], "share", { type: "image/png" }))
+                        console.log(file)
+                    })
                 }
             })
     }

@@ -6,3 +6,4 @@ game/db.sqlite3
 **/migrations
 **/.cache
 test.js
+*_secrets.json

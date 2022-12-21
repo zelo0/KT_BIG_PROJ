@@ -2,23 +2,28 @@
 {%load static%}
 {% block script %}
 <script>
-    var temp = -1;
+    let dic_onoff = -1; // dic panel을 관리하기위한 전역변수
+    let achievement_onoff = -1; // achievement panel을 관리하기위한 전역변수
       function preload(){
-        this.load.image('dic', "{% static '/resource/ui/main/백과사전.png'%}")
-        this.load.image('analysis', "{% static '/resource/ui/main/분석.png'%}")
-        this.load.image('store', "{% static '/resource/ui/main/상점.png'%}")
-        this.load.image('setting', "{% static '/resource/ui/gear.png'%}")
-        this.load.image('skills', "{% static '/resource/ui/main/스킬.png'%}")
-        this.load.image('start', "{% static '/resource/ui/main/게임시작.png'%}")
-        this.load.image('achievement', "{% static '/resource/ui/main/업적.png'%}")
+        // resource load
+        this.load.image('dic', "{% static '/resource/ui/main/dic.png'%}")
+        this.load.image('analysis', "{% static '/resource/ui/main/analysis2.png'%}")
+        this.load.image('store', "{% static '/resource/ui/main/store2.png'%}")
+        this.load.image('skills', "{% static '/resource/ui/main/skills2.png'%}")
+        this.load.image('start', "{% static '/resource/ui/main/start2.png'%}")
+        this.load.image('achievement', "{% static '/resource/ui/main/achievement.png'%}")
         this.load.image('namespace', "{% static '/resource/ui/main/namespace.png'%}")
-        this.load.image('status', "{% static '/resource/ui/main/status.png'%}")
+        this.load.image('character', "{% static '/resource/ui/main/status.png'%}")
         this.load.image('background', "{% static '/resource/ui/background.jpg'%}")
         this.load.image('panel', "{% static '/resource/ui/background.jpg'%}")
-        this.load.image('toggle', "{% static '/resource/ui/box.png'%}")
-        this.load.image('checkmark', "{% static '/resource/ui/checkmark.png'%}")
-
+        this.load.image('sound_on', "{% static '/resource/ui/main/musicOn.png'%}")
+        this.load.image('sound_off', "{% static '/resource/ui/main/musicOff.png'%}")
         this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
+        this.load.image('profile_image', "http://localhost:8000/media/profile/profile_image.png")
+
+        //this.load.image('setting', "{% static '/resource/ui/gear.png'%}")
+        //this.load.image('toggle', "{% static '/resource/ui/box.png'%}")
+        //this.load.image('checkmark', "{% static '/resource/ui/checkmark.png'%}")
       }
 
       function createButton(text){  
@@ -48,101 +53,170 @@
         });
       }
       
-      function create(){
-        this.bgm = this.sound.play("title_music", {loop:true})
-  
-        this.add.image(150,300,'background')
-        this.add.image(150,130,'status').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(240,530,'start').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(255,440,'store').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(175,465,'skills').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(145,545,'analysis').setScale(0.3).setInteractive({cursor:'pointer'})
-        this.add.image(150,30,'namespace').setScale(0.3)
-        let setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
-        let panel = this.add.image(-150,300,'panel').setScale(0.7)
-        let toggle = this.add.image(-150, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
-        let checkmark = this.add.image(-150,150,'checkmark').setScale(0.5)
-        panel.alpha = 0.7
+      async function create(){ 
+        //this.scale.displaySize.setAspectRatio( width/height )
+        //this.scale.refresh()
 
+        //add resource
+        this.bgm = this.sound.play("title_music", {loop:true})
+        this.add.image(150,300,'background')
+        this.add.image(35,35,'profile_image').setInteractive({cursor:'pointer'})
+        let circle = this.add.circle(35,35,25)
+        this.add.image(150,130,'character').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(60,220,'dic').setScale(0.3).setInteractive({cursor:'pointer'})
+        let achievement = this.add.image(60,270,'achievement').setScale(0.3).setInteractive({cursor:'pointer'})
+        this.add.image(240,530,'start').setInteractive({cursor:'pointer'})
+        this.add.image(255,430,'store').setInteractive({cursor:'pointer'})
+        this.add.image(170,455,'skills').setInteractive({cursor:'pointer'})
+        this.add.image(140,540,'analysis').setInteractive({cursor:'pointer'})
+        this.add.image(150,30,'namespace').setScale(0.3)
+        let sound_off = this.add.image(270,30,'sound_off').setInteractive({cursor:'pointer'})
+        let sound_on = this.add.image(270,30,'sound_on').setInteractive({cursor:'pointer'})
+        let panel1 = this.add.image(-150,300,'panel').setScale(0.7).setInteractive({cursor:'pointer'})
+        let panel2 = this.add.image(-150,300,'panel').setScale(0.7).setInteractive({cursor:'pointer'})
+
+        //let toggle = this.add.image(-150, 150, 'toggle').setScale(0.3).setInteractive({cursor:'pointer'})
+        //let setting = this.add.image(270,30,'setting').setInteractive({cursor:'pointer'})
+        //let checkmark = this.add.image(-150,150,'checkmark').setScale(0.5)
+        
+        circle.setStrokeStyle(2,0x868686)
+        panel1.alpha = 0.7
+        panel2.alpha = 0.7
+        
+        // 새로고침, 페이지 이동, 재접속 등 환경이 변경되었을때 bgm의 상태를 유지하기 위하여 localstorage에 상태를 저장
+        if(localStorage.getItem('bgm')==null){ 
+          console.log(localStorage.getItem('bgm'))
+          this.bgm = this.sound.play("title_music", {loop:true})
+          sound_off.visible = false
+          sound_on.visible = true
+          localStorage.setItem("bgm", 'true')
+          console.log(localStorage.getItem('bgm'))
+        }
+        else if(localStorage.getItem('bgm')=='true'){ 
+          this.bgm = this.sound.play("title_music", {loop:true})
+          sound_off.visible = false
+          sound_on.visible = true
+          console.log(localStorage.getItem('bgm'))
+        }
+        else if(localStorage.getItem('bgm')=='false'){
+          game.sound.mute = true
+          sound_off.visible = true
+          sound_on.visible = false
+        }
+
+        // username을 DB에서 fetch를 통해 불러온다.
         this.username = this.add.text(
-          130,
-          23,
+          125,
+          20,
           "",
           {
             color:'black',
-            fontSize:20,
+            font:'550 20px Poppins',
           }
         )
 
-        fetch('http://localhost:8000/core/api/user')
+        await fetch('http://localhost:8000/core/api/user')
           .then(res=>res.json())
           .then((data)=>{
-           let name = String(data.username)
-           this.username.setText(name)
+            console.log(data)
+            let name = String(data.username)
+            this.username.setText(name)
             console.log(name)
-
-           })
-
-        let text = this.add.text(
-          -150,
-          toggle.y-7,
-          'Sound',
-          {
-            color:'black',
-            fontSize:18,
-          }
-        )
-
+          })
+          
+        // object에 마우스를 올려놨을때 작동하는 코드
         this.input.on('gameobjectover', function(pointer, gameObject){
           let link = gameObject.texture.key
 
-          if(String(link) =='toggle'){
+          if(String(link) =='profile_image'){
             console.log(link)
-            toggle.setTint(0xe0e0e0)
+          }
+          else if(String(link) =='panel'){
+            console.log(link)
           }
           else{
             gameObject.setTint(0x50bcdf)
           }
         })
 
+        // object에서 마우스가 벗어났을때 작동하는 코드
         this.input.on('gameobjectout', function(pointer, gameObject){
           gameObject.clearTint()
         })
         
+        // object를 클릭하였을때 작동하는 코드
         this.input.on('gameobjectdown', function(pointer, gameObject){
           let link = gameObject.texture.key
           console.log(link)
+          /*
           if(String(link) =='toggle'){
             toggle.clearTint()
-            
             var active = checkmark.visible
             active = !active
             game.sound.mute = !active
             checkmark.visible = active
+
+            if(localStorage.getItem('bgm')=='true'){
+              localStorage.setItem("bgm", 'false')
+            }
+            else if(localStorage.getItem('bgm')=='false'){
+              localStorage.setItem("bgm", 'true')
+            }           
           }
-          else if(String(link) =='setting'){
-            if(temp==1){
-              panel.setX(-150)
-              toggle.setX(-150)
-              checkmark.setX(-150)
-              text.setX(-150)
-              temp=-1
+          */
+          if(String(link)=='sound_on'){
+            game.sound.mute = true
+            sound_on.visible = false
+            sound_off.visible = true
+            localStorage.setItem("bgm", 'false')
+          }
+          else if(String(link)=='sound_off'){
+            game.sound.mute = false
+            sound_on.visible = true
+            sound_off.visible = false
+            localStorage.setItem("bgm", 'true')
+          }
+          else if(String(link) =='dic'){
+            if(achievement_onoff==1){
+              panel2.setX(-150)
+              achievement_onoff=-1
+              panel1.setX(150)
+              dic_onoff=1
+            }
+            else if(dic_onoff==1){
+              panel1.setX(-150)
+              dic_onoff=-1
             }
             else{
-              panel.setX(150)
-              toggle.setX(70)
-              checkmark.setX(70)
-              text.setX(100)
-              temp=1
+              panel1.setX(150)
+              dic_onoff=1
             }
+          }
+          else if(String(link) =='achievement'){
+            if(dic_onoff==1){
+              panel1.setX(-150)
+              dic_onoff=-1
+              panel2.setX(150)
+              achievement_onoff=1
+            }
+            else if(achievement_onoff==1){
+              panel2.setX(-150)
+              achievement_onoff=-1
+            }
+            else{
+              panel2.setX(150)
+              achievement_onoff=1
+            }
+          }
+          else if(String(link) =='profile_image'){
+
           }
           else{
             link = 'http://localhost:8000/mainapp/' + String(link)
             location.replace(link)
           }
         })
+
         this.input.setTopOnly(true)
       }
 
@@ -150,27 +224,33 @@
       }
       
       let config = {
-        type: Phaser.AUTO,
+        type: Phaser.CANVAS,
         width: 300,
         height: 600,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                debug: false,
-                gravity: {
-                    y: 0
-                }
-            }
-        },
-        backgroundColor: '#2d2d2d',
         scene: {
           preload: preload,
           create: create,
           update:update,
         },
         scale: {
-            mode: Phaser.Scale.ScaleModes.FIT
-        }
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+        },
+        pixelArt: false,
+        render:{
+          antialias: true
+        },
+        /*
+        plugins: {
+          global: [
+            {
+              key: "PhaserDebugGameScalePlugin",
+              plugin: PhaserDebugGameScalePlugin,
+              start: true
+            }
+          ]
+        },
+        */
       }
       let game =  new Phaser.Game(config)
 </script>
