@@ -2,6 +2,97 @@
 {%load static%}
 {% block script %}
 <script>
+    const COLOR_PRIMARY = 0xF5F5F5;
+    const COLOR_LIGHT = 0xD0CCCC;
+    const COLOR_DARK = 0x260e04;
+    let shopData
+    let itemData
+
+    function getKeyByValue(obj, value) {
+        return Object.keys(obj).find(key => obj[key] === value);
+    }
+
+    var createPanel = function (scene, data, state) {
+        var sizer = scene.rexUI.add.sizer({
+            orientation: 'y',
+            space: { item: 10 }
+        })
+            .add(
+                createTable(scene, data, state, 4), // child
+                { expand: true }
+            ) 
+        return sizer;
+    }
+
+    var createTable = function (scene, data, key, columns) {
+        var capKey = key.charAt(0).toUpperCase() + key.slice(1);
+        var title = scene.rexUI.add.label({
+            orientation: 'x',
+            text: scene.add.text(0, 0, capKey, {color:'black'}),
+        });
+    
+        var items = data[key];
+        var rows = Math.ceil(items.length / columns);
+        var table = scene.rexUI.add.gridSizer({
+            column: columns,
+            row: rows,
+    
+            rowProportions: 1,
+            space: { column: 10, row: 10 },
+            name: key  // Search this name to get table back
+        });
+    
+        var item, r, c;
+        var iconSize = 70;
+        for (var i = 0, cnt = items.length; i < cnt; i++) {
+            item = items[i];
+            r = i % columns;
+            c = (i - r) / columns;
+            table.add(
+                createIcon(scene, item, iconSize, iconSize),
+                r,
+                c,
+                'top',
+                0,
+                true
+            );
+        }
+    
+        return scene.rexUI.add.sizer({
+            orientation: 'y',
+            space: { left: 15, right: 10, top: 10, bottom: 10, item: 10 }
+        })
+            .addBackground(
+                scene.rexUI.add.roundRectangle(0, 0, 0, 0, 0, undefined).setStrokeStyle(2, COLOR_LIGHT, 1)
+            )
+            .add(
+                title, // child
+                0, // proportion
+                'left', // align
+                0, // paddingConfig
+                true // expand
+            )
+            .add(table, // child
+                1, // proportion
+                'center', // align
+                0, // paddingConfig
+                true // expand
+            );
+    }
+    
+    var createIcon = function (scene, item, iconWidth, iconHeight) {
+        var label = scene.rexUI.add.label({
+            orientation: 'y',
+            icon: scene.rexUI.add.roundRectangle(0, 0, iconWidth, iconHeight, 5, COLOR_LIGHT),
+            text: scene.add.text(0, 0, item.name, {color:'black'}),
+    
+            space: { top: 10, icon: 10}
+        });
+    
+        return label;
+    };
+
+
   function preload ()
   {
       //bgs
@@ -133,6 +224,9 @@
       this.load.image('weaponui', "{% static '/resource/ui/character/무기.png'%}");
       this.load.image('shieldui', "{% static '/resource/ui/character/방패.png'%}");
       this.load.image('selectui', "{% static '/resource/ui/character/확정.png'%}");
+
+
+      var data={helmet:[], hair:[], top:[], bottom:[], shoe:[], weapon:[], shield:[]}
   
   }
   
@@ -171,13 +265,13 @@
 
 
      //BTN 
-     helmetui = btn.create(250,150, 'helmetui').setScale(0.1).setInteractive();
-     hairui = btn.create(250,190, 'hairui').setScale(0.1).setInteractive();
-     topui = btn.create(250,230, 'topui').setScale(0.1).setInteractive();
-     bottomui = btn.create(250,270, 'bottomui').setScale(0.1).setInteractive();
-     shoesui = btn.create(250,310, 'shoesui').setScale(0.1).setInteractive();
-     weaponui = btn.create(250,350, 'weaponui').setScale(0.1).setInteractive();
-     shieldui = btn.create(250,390, 'shieldui').setScale(0.1).setInteractive();
+     helmetui = btn.create(250,150, 'helmetui').setScale(0.5).setInteractive();
+     hairui = btn.create(250,190, 'hairui').setScale(0.5).setInteractive();
+     topui = btn.create(250,230, 'topui').setScale(0.5).setInteractive();
+     bottomui = btn.create(250,270, 'bottomui').setScale(0.5).setInteractive();
+     shoesui = btn.create(250,310, 'shoesui').setScale(0.5).setInteractive();
+     weaponui = btn.create(250,350, 'weaponui').setScale(0.5).setInteractive();
+     shieldui = btn.create(250,390, 'shieldui').setScale(0.5).setInteractive();
      selectui = btn.create(250,450, 'selectui').setScale(0.9).setInteractive();
      btnui = [helmetui, hairui, topui, bottomui, shoesui, weaponui, shieldui];
 
