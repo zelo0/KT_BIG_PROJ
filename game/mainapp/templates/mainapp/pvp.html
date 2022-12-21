@@ -1,6 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block headScript %}
+  <script defer src="{% static 'js/face-api.min.js' %}"></script>
+  <script defer src="{% static 'js/face-camera.js' %}"></script>
+  {% comment %} {% include "mainapp/face-camera-wrapper.html" %} {% endcomment %}
+{% endblock headScript %}
+
+{% block content %}
+  {% comment %} <script src="testtest1.js"></script> {% endcomment %}
+  {% comment %} {% include "mainapp/face-camera-wrapper.html" %} {% endcomment %}
+  <video id="video" width="720" height="560" autoplay muted></video>
+{% endblock content %}
+
+
+
 {% block script %}
 <script src="{% static 'js/window.js' %}"></script>
 <script src="{% static 'js/font-size.js' %}"></script>
@@ -31,7 +45,7 @@
     {
       this.load.scenePlugin('rexuiplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js', 'rexUI', 'rexUI');
       this.load.spritesheet('night', "{% static 'assets/night/NightBorne.png' %}", { frameWidth: 80, frameHeight: 80 });
-      this.load.spritesheet('boss', "{% static 'assets/boss/demon.png' %}", { frameWidth: 288, frameHeight: 40 });
+      this.load.spritesheet('boss', "{% static 'assets/boss/demon.png' %}", { frameWidth: 288, frameHeight: 160 });
       //this.load.spritesheet('attack_1', "{% static 'assets/wizard/Attack1.png' %}", { frameWidth: 231, frameHeight: 190 });
       //this.load.spritesheet('idle', "{% static 'assets/wizard/Idle.png' %}", { frameWidth: 231, frameHeight: 190 });
       this.load.image('home', "{% static 'images/home.png' %}");
@@ -79,13 +93,12 @@
       });
     
       // make characters
-      night = this.add.sprite(200, 370, 'night');
-      night.setScale(5);
+      night = this.add.sprite(window_width / 10, 370, 'night');
+      night.setScale(3);
       night.play('night_idle');
 
-      
-      boss = this.add.sprite(200, 370, 'boss');
-      boss.setScale(10);
+      boss = this.add.sprite(window_width - 100, 200, 'boss');
+      boss.setScale(3);
       boss.play('boss_idle');
 
       // make button
@@ -117,14 +130,14 @@
         } else {
           // 게임 다시 하기
         }
-      })
+      });
     }
     
 
     let config = {
         type: Phaser.WEBGL,
-        width: 800,
-        height: 600,
+        width: window_width,
+        height: window_height,
         parent: 'phaser-example',
         scene: {
             preload: preload,
@@ -145,11 +158,17 @@
             console.log('attack trigger');
             // attack 후 idle
             night.play('night_attack').once('animationcomplete', () => {
+                boss.play('boss_damaged').once('animationcomplete', () => {
+                    boss.play('boss_idle');
+                });
                 night.play("night_idle");
             });
+            
         }
     };
 </script>
 
 
 {% endblock script %}
+
+
