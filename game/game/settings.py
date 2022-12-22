@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # 
     'mainapp',
     'core',
+    ###
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -164,21 +165,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-
-    # mysql
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql', # mysql 엔진 설정
-    #     'NAME': 'kt', # 데이터베이스 이름
-    #     'USER': 'cos', # 데이터베이스 연결시 사용할 유저 이름
-    #     'PASSWORD': 'cos1234', # 유저 패스워드
-    #     'HOST': '127.0.0.1',
-    #     'PORT': '3306',
-    #     'OPTIONS': {
-    #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-    #         'charset': 'utf8',
-    #         'use_unicode': True,
-    #     },
-    # }
 }
 
 
@@ -233,6 +219,8 @@ STATICFILES_DIRS = (
 # Media Files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# MODEL_ROOT = os.path.join(BASE_DIR, 'model', 'face_models')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

@@ -6,5 +6,7 @@ kafka-python
 Pillow
 gunicorn
 WhiteNoise
+daphne
 channels
 channels-redis
+redis
