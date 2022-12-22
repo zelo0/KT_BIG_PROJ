@@ -9,3 +9,4 @@ WhiteNoise
 daphne
 channels
 channels-redis
+redis

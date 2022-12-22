@@ -1,10 +1,14 @@
 import json
+import redis
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 
 class ChatConsumer(WebsocketConsumer):
+    # redis instance
+    r = redis.Redis("rediss://red-cegkhc02i3mkhvoakgh0:Z6M9PSoaNV0aOv0XR2y3CmJ8TpYGGGfQ@singapore-redis.render.com:6379")
+
     def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = "chat_%s" % self.room_name
@@ -15,6 +19,9 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         self.accept()
+        
+        # redis
+        
 
     def disconnect(self, close_code):
         # Leave room group

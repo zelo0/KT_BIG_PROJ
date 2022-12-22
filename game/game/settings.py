@@ -123,7 +123,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # whitenoise
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'game.urls'
@@ -208,13 +208,13 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'config', 'static')
 STATIC_URL = '/static/'
-## for serving static files
+# for serving static files
 ## whitenoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ## 배포 시 제거
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-# )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 # Media Files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
