@@ -3,6 +3,7 @@ from .models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ShopSerializer, ItemSerializer
+from core.models import User
 
 # Create your views here.
 def main(request):
@@ -34,3 +35,15 @@ class ItemAPI(APIView):
     Item_list = Item.objects.prefetch_related('history').all()
     serializer = ItemSerializer(Item_list, many=True)
     return Response(serializer.data)
+
+def storePost(request) :
+  if request.method=='POST':
+    post = HavingItem()
+    post.userID = request.POST['userID']
+    post.itemID = request.POST['itemID']
+    
+    userPost = User()
+    userPost.money = request.POST['money']
+    
+    post.save()
+    userPost.save()

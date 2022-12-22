@@ -50,3 +50,7 @@ class Character(models.Model):
 
   def __str__(self):
     return self.user.username
+  
+class HavingItem(models.Model) :
+  userID = models.ForeignKey('core.user', models.CASCADE)
+  itemID = models.ForeignKey('Item', models.CASCADE)
