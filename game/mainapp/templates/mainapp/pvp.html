@@ -1,22 +1,64 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block style %}
+<style>
+  {% comment %} body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } {% endcomment %}
+
+  {% comment %} canvas {
+    position: absolute;
+  } {% endcomment %}
+
+  body {
+    position: relative;
+    overflow: hidden;
+  }
+
+  video {
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #match-dimension {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+</style>
+{% endblock style %}
+
+
 {% block headScript %}
   <script defer src="{% static 'js/face-api.min.js' %}"></script>
   <script defer src="{% static 'js/face-camera.js' %}"></script>
+  <script src="{% static 'js/window.js' %}"></script>
   {% comment %} {% include "mainapp/face-camera-wrapper.html" %} {% endcomment %}
 {% endblock headScript %}
 
 {% block content %}
   {% comment %} <script src="testtest1.js"></script> {% endcomment %}
   {% comment %} {% include "mainapp/face-camera-wrapper.html" %} {% endcomment %}
-  <video id="video" width="720" height="560" autoplay muted></video>
+  <video id="video" width="100" height="200" autoplay muted></video>
+  {% comment %} 호출이 늦음 {% endcomment %}
+  <script>
+    let video_elem = document.querySelector('#video');
+    {% comment %} video_elem.style.width = window_width; {% endcomment %}
+  </script>
 {% endblock content %}
 
 
 
 {% block script %}
-<script src="{% static 'js/window.js' %}"></script>
 <script src="{% static 'js/font-size.js' %}"></script>
 <script src="{% static 'js/create-button.js' %}"></script>
 <script src="{% static 'js/range.js' %}"></script>
@@ -48,7 +90,7 @@
       this.load.spritesheet('boss', "{% static 'assets/boss/demon.png' %}", { frameWidth: 288, frameHeight: 160 });
       //this.load.spritesheet('attack_1', "{% static 'assets/wizard/Attack1.png' %}", { frameWidth: 231, frameHeight: 190 });
       //this.load.spritesheet('idle', "{% static 'assets/wizard/Idle.png' %}", { frameWidth: 231, frameHeight: 190 });
-      this.load.image('home', "{% static 'images/home.png' %}");
+      this.load.image('attack', "{% static 'images/attack.png' %}");
       this.load.image('product', "{% static 'images/product.png' %}");
       this.load.image('retry', "{% static 'images/retry.png' %}");
     }
@@ -103,13 +145,11 @@
 
       // make button
       const buttons = this.rexUI.add.gridButtons({
-        x: 500,
+        x: window_width/2,
         y: 300,
         buttons: [
             [
-                createButton(this, 'home'),
-                createButton(this, 'product'),
-                createButton(this, 'retry')
+                createButton(this, 'attack'),
             ]
         ],
         space: {

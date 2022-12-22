@@ -1,16 +1,14 @@
 {% load static %}
-
-{% block headScript %}
-  <script defer src="{% static 'js/face-api.min.js' %}"></script>
+<script defer src="{% static 'js/face-api.min.js' %}"></script>
 
 <script defer>
 const video = document.getElementById("video");
 
 Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri("{% static '/models' %}"),
-  faceapi.nets.faceLandmark68Net.loadFromUri("{% static '/models' %}"),
-  faceapi.nets.faceRecognitionNet.loadFromUri("{% static '/models' %}"),
-  faceapi.nets.faceExpressionNet.loadFromUri("{% static '/models' %}"),
+  faceapi.nets.tinyFaceDetector.loadFromUri("/static/models"),
+  faceapi.nets.faceLandmark68Net.loadFromUri("/static/models"),
+  faceapi.nets.faceRecognitionNet.loadFromUri("/static/models"),
+  faceapi.nets.faceExpressionNet.loadFromUri("/static/models"),
 ]).then(startVideo);
 
 function startVideo() {
@@ -58,4 +56,3 @@ video.addEventListener("play", () => {
 });
 
 </script>
-{% endblock headScript %}

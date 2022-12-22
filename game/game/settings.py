@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # 
     'mainapp',
     'core',
+    ###
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -233,6 +234,8 @@ STATICFILES_DIRS = (
 # Media Files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# MODEL_ROOT = os.path.join(BASE_DIR, 'model', 'face_models')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
