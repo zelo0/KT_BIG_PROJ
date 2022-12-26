@@ -21,9 +21,15 @@
 
   video {
     object-fit: cover;
+    
+  }
+
+  #video-container {
+    overflow: hidden;
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 30;
   }
 
   #match-dimension {
@@ -32,7 +38,10 @@
     left: 0;
   }
 </style>
-{% endblock style %} {% block headScript %}
+{% endblock style %} 
+
+
+{% block headScript %}
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <!-- json 파일 다루기 -->
 <script src="{% static 'js/opencv.js' %}"></script>
@@ -40,17 +49,22 @@
 <script defer src="{% static 'js/face-camera.js' %}"></script>
 <script src="{% static 'js/window.js' %}"></script>
 {% comment %} {% include "mainapp/face-camera-wrapper.html" %} {% endcomment %}
-{% endblock headScript %} {% block content %} {% comment %}
-<script src="testtest1.js"></script>
-{% endcomment %} {% comment %} {% include "mainapp/face-camera-wrapper.html" %}
-{% endcomment %}
-<video id="video" width="100" height="200" playsinline autoplay muted></video>
+{% endblock headScript %} 
+
+
+{% block content %} 
+<div id="video-container">
+  <video id="video" width="100" height="200" playsinline autoplay muted></video>
+</div>
 {% comment %} 호출이 늦음 {% endcomment %}
 <script>
   {% comment %} let video_elem = document.querySelector('#video'); {% endcomment %}
   {% comment %} video_elem.style.width = window_width; {% endcomment %}
 </script>
-{% endblock content %} {% block script %}
+{% endblock content %} 
+
+
+{% block script %}
 <script src="{% static 'js/font-size.js' %}"></script>
 <script src="{% static 'js/create-button.js' %}"></script>
 <script src="{% static 'js/range.js' %}"></script>
@@ -348,6 +362,7 @@
   // end of game
   setTimeout(() => {
     //video.removeEventListener("play");
+    night.stop();
     video.pause();
     boss.play("boss_die").once("animationcomplete", () => {
       const state = { 
