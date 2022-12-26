@@ -60,8 +60,12 @@
   let room_name = "{{ room_name | escapejs }}";
   let player_name = "{{ player_name | escapejs }}";
 
+  let wsStart = 'ws';
+  if (window.location.protocol == 'https:') {
+       wsStart = 'wss'
+  }
   let chatSocket = new WebSocket(
-    `ws://${window.location.host}/ws/mainapp/${room_name}/${player_name}/`
+    `${wsStart}://${window.location.host}/ws/mainapp/${room_name}/${player_name}/`
   );
 
   chatSocket.onclose = (e) => {
