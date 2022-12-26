@@ -21,15 +21,9 @@
 
   video {
     object-fit: cover;
-    
-  }
-
-  #video-container {
-    overflow: hidden;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 30;
   }
 
   #match-dimension {
@@ -53,9 +47,7 @@
 
 
 {% block content %} 
-<div id="video-container">
-  <video id="video" width="100" height="200" playsinline autoplay muted></video>
-</div>
+<video id="video" width="100" height="200" playsinline autoplay muted></video>
 {% comment %} 호출이 늦음 {% endcomment %}
 <script>
   {% comment %} let video_elem = document.querySelector('#video'); {% endcomment %}
