@@ -66,8 +66,8 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = "http://localhost:8000/core/"
-LOGOUT_REDIRECT_URL = "http://localhost:8000/accounts/login/"
+LOGIN_REDIRECT_URL = "/mainapp/main"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
