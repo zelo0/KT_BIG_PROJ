@@ -24,7 +24,14 @@ def skills(request):
   return render(request, 'mainapp/skills.html')
 
 def result(request):
-  return render(request, 'mainapp/result.html')
+  left_eye_cnt = request.GET.get('left_eye', 0)
+  right_eye_cnt = request.GET.get('right_eye', 0)
+  mouth_cnt = request.GET.get('mouth', 0)
+  return render(request, 'mainapp/result.html', {
+    'left_eye_cnt': left_eye_cnt,
+    'right_eye_cnt': right_eye_cnt,
+    'mouth_cnt': mouth_cnt
+  })
 class ShopAPI(APIView):
   def get(self, request):
     shop_list = Shop.objects.prefetch_related('item').all()
@@ -36,5 +43,6 @@ def room(request):
 
 def pvp(request, room_name):
   return render(request, 'mainapp/pvp.html', {
-    'room_name': room_name
+    'room_name': room_name,
+    'player_name': request.user.username
   })
