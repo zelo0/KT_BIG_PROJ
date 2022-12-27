@@ -1,3 +1,13 @@
+function move_mouth(da) {
+
+  let tmp_dist = 0
+
+  if (da.length >= 2) {
+      tmp_dist = Math.abs(parseInt(da.slice(-1)) - parseInt(da.slice(-2)))
+  }
+  return tmp_dist
+}
+
 var distance_array = [];
 var count = 0;
 var count2 = 0;
