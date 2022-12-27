@@ -21,7 +21,7 @@
 
   video {
     object-fit: cover;
-    
+
   }
 
   #video-container {
@@ -37,397 +37,48 @@
     top: 0;
     left: 0;
   }
+
+  .mask {
+    z-index: 50;
+  }
 </style>
-{% endblock style %} 
-
-
-{% block headScript %}
-<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-<!-- json 파일 다루기 -->
-<script src="{% static 'js/opencv.js' %}"></script>
-<script defer src="{% static 'js/face-api.min.js' %}"></script>
-<script defer src="{% static 'js/face-camera.js' %}"></script>
-<script src="{% static 'js/window.js' %}"></script>
-{% comment %} {% include "mainapp/face-camera-wrapper.html" %} {% endcomment %}
-{% endblock headScript %} 
-
-
-{% block content %} 
-<div id="video-container">
-  <video id="video" width="100" height="200" playsinline autoplay muted></video>
-</div>
-{% comment %} 호출이 늦음 {% endcomment %}
-<script>
-  {% comment %} let video_elem = document.querySelector('#video'); {% endcomment %}
-  {% comment %} video_elem.style.width = window_width; {% endcomment %}
-</script>
-{% endblock content %} 
-
-
-{% block script %}
-<script src="{% static 'js/font-size.js' %}"></script>
-<script src="{% static 'js/create-button.js' %}"></script>
-<script src="{% static 'js/range.js' %}"></script>
-
-{% comment %} 소켓 {% endcomment %}
+{% endblock style %} {% block headScript %}
 <script>
   let room_name = "{{ room_name | escapejs }}";
   let player_name = "{{ player_name | escapejs }}";
-
-  let wsStart = 'ws';
-  if (window.location.protocol == 'https:') {
-       wsStart = 'wss'
-  }
-  let chatSocket = new WebSocket(
-    `${wsStart}://${window.location.host}/ws/mainapp/${room_name}/${player_name}/`
-  );
-
-  chatSocket.onclose = (e) => {
-    console.error("Chat socket closed unexpectedly");
-  };
 </script>
+<script defer src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<!-- json 파일 다루기 -->
+<script defer src="{% static 'js/opencv.js' %}"></script>
+<script defer src="{% static 'js/face-api.min.js' %}"></script>
+<script defer src="{% static 'js/face-camera.js' %}"></script>
+<script defer src="{% static 'js/window.js' %}"></script>
+<script defer src="{% static 'js/font-size.js' %}"></script>
+<script defer src="{% static 'js/create-button.js' %}"></script>
+<script defer src="{% static 'js/range.js' %}"></script>
+<script defer src="{% static 'js/boss-raid.js' %}"></script>
+{% comment %} <script defer src="{% static 'js/face-event-listener.js' %}"></script> {% endcomment %}
+{% endblock headScript %} {% block content %}
+<div>
+  {% comment %} video {% endcomment %}
+  <div id="video-container">
+    <video
+      id="video"
+      width="100"
+      height="200"
+      autoplay
+      playsinline
+      muted
+    ></video>
+  </div>
 
-{% comment %} game {% endcomment %}
-<script>
-  const GAME_TIME = 30;
-  const COLOR_BOARD_BACKGROUND = 0xffb617;
-
-  let night;
-  let boss;
-
-  let scoreBoardPanel;
-  let table;
-  let createPanel;
-
-  let _this;
-
-  function attackAction() {
-    // attack 후 idle
-    night.play("night_attack").once("animationcomplete", () => {
-      boss.play("boss_damaged").once("animationcomplete", () => {
-        boss.play("boss_idle");
-      });
-      night.play("night_idle");
-    });
-
-    chatSocket.send(
-      JSON.stringify({
-        // type 필요
-        type: "attack",
-        message: "One player attacked",
-      })
-    );
-  }
-
-  function preload() {
-    _this = this;
-    this.load.scenePlugin(
-      "rexuiplugin",
-      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js",
-      "rexUI",
-      "rexUI"
-    );
-    this.load.spritesheet(
-      "night",
-      "{% static 'assets/night/NightBorne.png' %}",
-      { frameWidth: 80, frameHeight: 80 }
-    );
-    this.load.spritesheet("boss", "{% static 'assets/boss/demon.png' %}", {
-      frameWidth: 288,
-      frameHeight: 160,
-    });
-    //this.load.image('attack', "{% static 'images/attack.png' %}");
-  }
-
-  function create() {
-    // night
-    this.anims.create({
-      key: "night_idle",
-      frames: this.anims.generateFrameNumbers("night", { frames: range(0, 9) }),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "night_attack",
-      frames: this.anims.generateFrameNumbers("night", {
-        frames: range(46, 58),
-      }),
-      frameRate: 8,
-      repeat: 0,
-    });
-
-    // boss
-    this.anims.create({
-      key: "boss_idle",
-      frames: this.anims.generateFrameNumbers("boss", { frames: range(0, 6) }),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "boss_attack",
-      frames: this.anims.generateFrameNumbers("boss", {
-        frames: range(44, 59),
-      }),
-      frameRate: 8,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "boss_damaged",
-      frames: this.anims.generateFrameNumbers("boss", {
-        frames: range(66, 71),
-      }),
-      frameRate: 8,
-      repeat: 0,
-    });
-
-    this.anims.create({
-      key: "boss_die",
-      frames: this.anims.generateFrameNumbers("boss", {
-        frames: range(88, 88 + 22),
-      }),
-      frameRate: 8,
-      repeat: 0,
-    });
-
-    // make characters
-    night = this.add.sprite(window_width / 10, 370, "night");
-    night.setScale(3);
-    night.play("night_idle");
-
-    boss = this.add.sprite(window_width - 100, 200, "boss");
-    boss.setScale(3);
-    boss.play("boss_idle");
-
-    // 스코어보드
-    createPanel = function (scene, data, state) {
-      let sizer = scene.rexUI.add
-        .sizer({
-          orientation: "y",
-          space: { item: 10 },
-        })
-        .add(
-          createTable(scene, data, state, 2), // child
-          { expand: true, key: state }
-        );
-
-      return sizer;
-    };
-
-    let createTable = function (scene, data, key, columns) {
-      let capKey = key.charAt(0).toUpperCase() + key.slice(1);
-      let title = scene.rexUI.add.label({
-        orientation: "x",
-        text: scene.add.text(0, 0, capKey, { color: "black" }),
-      });
-
-      // console.log(Math.floor((data.length - 1) / columns) + 1)
-      table = scene.rexUI.add.gridSizer({
-        column: columns,
-        row: data.length,
-
-        //rowProportions: 1,
-        //columnProportions: 1,
-        space: { column: 10, row: 10 },
-        name: key, // Search this name to get table back
-      });
-
-      let item, r, c;
-
-      // table header
-
-      // item을 테이블에 배치
-      for (let r = 0, cnt = data.length; r < cnt; r++) {
-        item = data[r];
-        for (let c = 0; c < 2; c++) {
-          table.add(
-            _this.add.text(0, 0, item[c], {
-              fontFamily: "Arial",
-              color: "white",
-            }),
-            c,
-            r,
-            "left",
-            0,
-            false
-          );
-        }
-      }
-
-      return scene.rexUI.add
-        .sizer({
-          orientation: "y",
-          space: { left: 15, right: 10, top: 10, bottom: 10, item: 10 },
-        })
-        .addBackground(
-          scene.rexUI.add
-            .roundRectangle(0, 0, 0, 0, 0, undefined)
-            .setStrokeStyle(2, COLOR_LIGHT, 1)
-        )
-        .add(
-          title, // child
-          0, // proportion
-          "center", // align
-          0, // paddingConfig
-          true // expand
-        )
-        .add(
-          table, // child
-          1, // proportion
-          "center", // align
-          0, // paddingConfig
-          false // expand
-        );
-    };
-
-    scoreBoardPanel = this.rexUI.add
-      .scrollablePanel({
-        x: window_width / 2,
-        y: window_height - window_height / 3 / 2 - 10,
-        width: window_width / 1.5,
-        height: window_height / 3,
-        scrollMode: 0,
-
-        background: this.rexUI.add.roundRectangle(
-          0,
-          0,
-          0,
-          0,
-          0,
-          COLOR_BOARD_BACKGROUND
-        ),
-
-        panel: {
-          //child: createPanel(this, [[player_name, 0]], 'scoreBoard'),
-          child: createTable(this, [[player_name, 0]], "scoreBoard", 2),
-          mask: {
-            padding: 0,
-            // layer: this.add.layer()
-          },
-        },
-
-        // scroller: true,
-        scroller: {
-          // pointerOutRelease: false
-        },
-
-        mouseWheelScroller: {
-          focus: false,
-          speed: 0.1,
-        },
-
-        space: {
-          left: 10,
-          right: 10,
-          top: 10,
-          bottom: 10,
-          panel: 10,
-          // slider: { left: 30, right: 30 },
-        },
-      })
-      .layout();
-
-    // timer
-    let remainedTime = GAME_TIME;
-    let timeText = _this.add.text(window_width / 2, 10, remainedTime, {
-      fontFamily: "Arial",
-      fontSize: 30,
-      color: COLOR_LIGHT,
-    });
-    for (let second = 0; second < GAME_TIME; second++) {
-      setTimeout(() => {
-        remainedTime--;
-        timeText.setText(remainedTime);
-      }, 1000 * second);
-    }
-  }
-
-  // 게임 생성
-  let config = {
-    type: Phaser.WEBGL,
-    width: window_width,
-    height: window_height,
-    parent: "phaser-example",
-    scene: {
-      preload: preload,
-      create: create,
-    },
-    backgroundColor: "#f2f7ff",
-  };
-
-  let game = new Phaser.Game(config);
-
-  // end of game
-  setTimeout(() => {
-    //video.removeEventListener("play");
-    night.stop();
-    video.pause();
-    boss.play("boss_die").once("animationcomplete", () => {
-      const state = { 
-        'left_eye': left_skill_count,
-        'right_eye': right_skill_count,
-        'mouth': mouth_skill_count
-      };
-      window.location.href = `/mainapp/result?left_eye=${left_skill_count}&right_eye=${right_skill_count}&mouth=${mouth_skill_count}`;
-    });
-  }, 1000 * GAME_TIME + 1000);
-
-  // scoreBoard update
-  function updatetScoreBoard(message) {
-    table.removeAll(true);
-    table.resetGrid(2, message.length, 0, 0, {
-      column: 10,
-      row: 10,
-    });
-
-    for (let r = 0, cnt = message.length; r < cnt; r++) {
-      item = message[r];
-      for (let c = 0; c < 2; c++) {
-        table.add(
-          _this.add.text(0, 0, item[c], {
-            fontFamily: "Arial",
-            color: "white",
-          }),
-          {
-            column: c,
-            row: undefined,
-            align: "left",
-            expand: false,
-          }
-        );
-      }
-    }
-
-    // re draw
-    table.layout();
-    scoreBoardPanel.layout();
-  }
-
-  // socket listener
-  chatSocket.onmessage = (e) => {
-    let data = JSON.parse(e.data);
-    const message = data["message"];
-    const type = data["type"];
-    console.log(data);
-    if (type == "attack") {
-      // console.log('attack trigger');
-      // attack 후 idle
-      // night.play('night_attack').once('animationcomplete', () => {
-      //    boss.play('boss_damaged').once('animationcomplete', () => {
-      //        boss.play('boss_idle');
-      //    });
-      //    night.play("night_idle");
-      //});
-
-      // scoreBoard update
-      updatetScoreBoard(message);
-    } else if (type == "enter") {
-      updatetScoreBoard(message);
-    }
-  };
-</script>
-
-<script src="{% static 'js/face-event-listener.js' %}"></script>
-{% endblock script %}
+  {% comment %} loading {% endcomment %}
+  <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)">
+    <div
+      class="loading d-flex justify-content-center align-items-center w-100 h-100"
+    >
+      <div class="h1" id="loading-text">READY</div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
