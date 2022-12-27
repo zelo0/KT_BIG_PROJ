@@ -5,7 +5,7 @@ from .models import *
 #admin.site.register(Item)
 admin.site.register(Shop)
 admin.site.register(Character)
-
+admin.site.register(HavingItem)
 
 # ItemImage 클래스를 inline으로 나타낸다.
 class ItemImageInline(admin.TabularInline):

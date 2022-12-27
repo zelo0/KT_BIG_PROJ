@@ -15,6 +15,7 @@ urlpatterns = [
     path('skills', views.skills),
     path('api/shop/', views.shopAPI.as_view()),
     path('api/item/', views.ItemAPI.as_view()),
-
+    path('api/store-post/', views.StoreAPI.as_view()),
+    path('api/store-money/', views.StoreAPI.as_view()),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

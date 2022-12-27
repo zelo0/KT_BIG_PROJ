@@ -2,7 +2,9 @@ from django.shortcuts import render
 from .models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import ShopSerializer, ItemSerializer
+from rest_framework import status
+from django.http import HttpResponse
+from .serializers import ShopSerializer, ItemSerializer, StorePostSerializer, MoneyPatchSerializer
 from core.models import User
 
 # Create your views here.
@@ -35,15 +37,25 @@ class ItemAPI(APIView):
     Item_list = Item.objects.prefetch_related('history').all()
     serializer = ItemSerializer(Item_list, many=True)
     return Response(serializer.data)
-
-def storePost(request) :
-  if request.method=='POST':
-    post = HavingItem()
-    post.userID = request.POST['userID']
-    post.itemID = request.POST['itemID']
+  
+class StoreAPI(APIView) :
+  def post(self, request) :
+    Post = StorePostSerializer(data=request.data)
+    print('post 요청')
+    print(Post)
+    if Post.is_valid() :
+      print('post alive')
+      Post.save()
+      return Response(Post.data)
+    else :
+      print('post dead')
+      return Response(Post.data)
     
-    userPost = User()
-    userPost.money = request.POST['money']
+  def patch(self, request) :
+    value = int(request.data.__getitem__('money'))
+    data = request.user.money - value
+    request.user.money = data
+    request.user.save()
+    return Response()
     
-    post.save()
-    userPost.save()
+    
