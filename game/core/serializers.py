@@ -4,7 +4,7 @@ from .models import *
 class CurrentUserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
-    fields = ['username', 'profile_image', 'money']
+    fields = ['username', 'profile_image', 'money', 'id']
     
 class AchieveUserSerializer(serializers.ModelSerializer):
   class Meta:
