@@ -56,7 +56,35 @@ class HavingItem(models.Model):
   character = models.ForeignKey(Character, on_delete=models.CASCADE, null=True)
   item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
 
+  def __str__(self):
+    return self.item.name
+
 class wearing(models.Model):
   id = models.AutoField(primary_key=True)
   character = models.ForeignKey(Character, on_delete=models.CASCADE, null=True)
   havingItem = models.ForeignKey(HavingItem, on_delete=models.CASCADE, null=True)
+
+  def __str__(self):
+    return self.item.name
+
+class Skill(models.Model):
+  class TypeChoices(models.TextChoices):
+    water = "물",
+    fire = "불",
+    grass = "풀"
+
+  id = models.AutoField(primary_key=True)
+  name = models.CharField(max_length=255)
+  type = models.CharField(choices=TypeChoices.choices, max_length=2)
+  damage = models.IntegerField(null=True)
+
+  def __str__(self):
+        return self.name
+
+
+class CharacterSkill(models.Model):
+  character = models.ForeignKey(Character, on_delete=models.CASCADE, null=True)
+  skill = models.ForeignKey(Skill, on_delete=models.CASCADE, null=True)
+
+  def __str__(self):
+        return self.skill.name

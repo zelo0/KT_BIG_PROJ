@@ -7,6 +7,9 @@ admin.site.register(Shop)
 admin.site.register(Character)
 admin.site.register(HavingItem)
 admin.site.register(wearing)
+admin.site.register(Skill)
+admin.site.register(CharacterSkill)
+
 
 # ItemImage 클래스를 inline으로 나타낸다.
 class ItemImageInline(admin.TabularInline):
