@@ -1,12 +1,19 @@
 var distance_array = [];
 var count = 0;
 var count2 = 0;
-var mouth_skill_count = 1;
-var left_skill_count = 1;
-var right_skill_count = 1;
+var mouth_skill_count = 0;
+var left_skill_count = 0;
+var right_skill_count = 0;
 let left_count2 = 0;
 let right_count2 = 0;
 var time_delay = 0;
+let for_name = 0;
+let total_distance = 0;
+let workout_count = 0;
+let capture_count_mouth = 0;
+let capture_count_left = 0;
+let capture_count_right = 0;
+let workout = 200;
 const getElNum = (arr, el) => arr.reduce((ac, v) => ac + (v === el), 0);
 x_arr = [];
 y_arr = [];
@@ -43,18 +50,7 @@ video.addEventListener("play", () => {
 
     x_arr.push(test_x);
     y_arr.push(test_x);
-
-    // cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
-    // 눈을 감았는지 떴는지를 opencv로 확인
-
-    // cvtGray()
-    // let src = new cv.Mat(canvas.height, canvas.width, cv.CV_8UC4);
-
-    // let ctx = textToImg.getContext('2d');
-    // let imgData = ctx.getImageData(0, 0, 720, 560);
-
-    // let src = cv.matFromImageData(imgData);
-
+    
     let x_left = (30 - (test_x[39] - test_x[36])) / 2;
     let x_right = (30 - (test_x[45] - test_x[42])) / 2;
     let y_left = (20 - (test_y[40] - test_y[37])) / 2;
@@ -65,13 +61,13 @@ video.addEventListener("play", () => {
     // let x_df_eye_left_end = parseInt(test_x[39] + x_left) - x_df_eye_left_start
 
     let y_df_eye_left_start = parseInt(test_y[38] - y_left);
-    let y_df_eye_left_end = 20;
+    let y_df_eye_left_end = 40;
 
     let x_df_eye_right_start = parseInt(test_x[42] - x_right);
     let x_df_eye_right_end = 30;
 
     let y_df_eye_right_start = parseInt(test_y[44] - y_right);
-    let y_df_eye_right_end = 20;
+    let y_df_eye_right_end = 40;
 
     // You can try more different parameters
     let rect_left = new cv.Rect(
@@ -107,45 +103,51 @@ video.addEventListener("play", () => {
     let left_count_check;
     let right_count_check;
 
-    for (var i = 12; i <= 20; i++) {
+    for (var i = 20; i <= 40; i++) {
       if (Array.isArray(right_matrix[i])) {
         right_count_check = getElNum(right_matrix[i], 255);
       }
 
-      if (right_count_check < 20) {
+      if (right_count_check <= 16) {
         // console.log('왼쪽 눈을 감음')
         right_count++;
-      } else {
-        // console.log('왼쪽 눈을 뜸')
-        right_count2 = 0;
       }
       if (Array.isArray(left_matrix[i])) {
         left_count_check = getElNum(left_matrix[i], 255);
       }
 
-      if (left_count_check < 10) {
+      if (left_count_check <= 10) {
         // console.log('오른쪽 눈을 감음')
         left_count++;
-      } else {
-        // console.log('오른쪽 눈을 뜸')
-        left_count2 = 0;
       }
     }
     //console.log("눈 감은 횟수", left_count_check, right_count_check);
-    if (left_count >= 8 && left_count2 == 0) {
+    if (left_count >= 2 && left_count2 == 0) {
       attackAction();
       console.log("오른쪽 눈 스킬발동" + String(left_skill_count) + "번!");
-      left_count = 0;
-      left_count2++;
+      left_count2 = 1;
       left_skill_count++;
-    }
+      if (capture_count_right <= 3) {
+        PartShot(for_name)
+        capture_count_right++
+        }
+      };
+      if (left_count < 2) {
+        left_count2 = 0
+      }
 
-    if (right_count >= 8 && right_count2 == 0) {
+    if (right_count >= 2 && right_count2 == 0) {
       attackAction();
       console.log("왼쪽 눈 스킬발동" + String(right_skill_count) + "번!");
-      right_count = 0;
-      right_count2++;
+      right_count2 = 1;
       right_skill_count++;
+      if (capture_count_left <= 3) {
+        PartShot(for_name)
+        capture_count_left++
+        }
+    }
+    if (right_count < 2) {
+      right_count2 = 0
     }
 
     src.delete();
@@ -167,7 +169,15 @@ video.addEventListener("play", () => {
 
     distance_array.push(distance);
 
-    if (distance >= distance_array[0] * 1.35) {
+    total_distance += move_mouth(distance_array)
+    if (total_distance % workout <= 50 &&  total_distance / workout >= 1 && workout_count == 0){
+    console.log('운동량' + total_distance + '돌파! 구강이 튼튼하시군요')
+    workout_count = 1
+    }
+    if (total_distance % workout >= 50 &&  total_distance / workout >= 1){
+    workout_count = 0}
+    
+    if (distance >= distance_array[0] * 1.4) {
       // console.log( " 입벌림 " );
       count++;
     } else {
@@ -178,6 +188,10 @@ video.addEventListener("play", () => {
     if (count == 1 && count2 == 0) {
       attackAction();
       console.log("입 스킬발동" + String(mouth_skill_count) + "번!");
+      if (capture_count_mouth <= 3){
+        PartShot(for_name)
+        capture_count_mouth++ 
+      }
       count2++;
       mouth_skill_count++;
     }
