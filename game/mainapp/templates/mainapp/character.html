@@ -1,12 +1,66 @@
 {% extends "base.html" %}
 {%load static%}
 {% block script %}
+<script src={% static 'js/window.js' %}></script>
 <script>
     const COLOR_PRIMARY = 0xF5F5F5;
     const COLOR_LIGHT = 0xD0CCCC;
     const COLOR_DARK = 0x260e04;
-    let shopData
-    let itemData
+    let HavingItemData
+    let wearingData
+    let data = {
+        name: 'Rex', 
+        helmet:[
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+        ], 
+        hair:[
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+        ], 
+        top:[
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+        ], 
+        bottom:[
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+        ], 
+        shoe:[
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+        ], 
+        weapon:[
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+        ], 
+        shield:[
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+        ]
+    };
 
     function getKeyByValue(obj, value) {
         return Object.keys(obj).find(key => obj[key] === value);
@@ -14,25 +68,25 @@
 
     var createPanel = function (scene, data, state) {
         var sizer = scene.rexUI.add.sizer({
-            orientation: 'y',
+            orientation: 'x',
             space: { item: 10 }
         })
             .add(
-                createTable(scene, data, state, 4), // child
+                createTable(scene, data, state, 1), // child
                 { expand: true }
             ) 
         return sizer;
     }
 
-    var createTable = function (scene, data, key, columns) {
+    var createTable = function (scene, data, key, rows) {
         var capKey = key.charAt(0).toUpperCase() + key.slice(1);
         var title = scene.rexUI.add.label({
             orientation: 'x',
-            text: scene.add.text(0, 0, capKey, {color:'black'}),
+            //text: scene.add.text(0, 0, capKey, {color:'black'}),
         });
     
         var items = data[key];
-        var rows = Math.ceil(items.length / columns);
+        var columns = Math.ceil(items.length / rows);
         var table = scene.rexUI.add.gridSizer({
             column: columns,
             row: rows,
@@ -41,9 +95,9 @@
             space: { column: 10, row: 10 },
             name: key  // Search this name to get table back
         });
-    
+
         var item, r, c;
-        var iconSize = 70;
+        var iconSize = 80;
         for (var i = 0, cnt = items.length; i < cnt; i++) {
             item = items[i];
             r = i % columns;
@@ -55,7 +109,7 @@
                 'top',
                 0,
                 true
-            );
+            )
         }
     
         return scene.rexUI.add.sizer({
@@ -85,8 +139,7 @@
             orientation: 'y',
             icon: scene.rexUI.add.roundRectangle(0, 0, iconWidth, iconHeight, 5, COLOR_LIGHT),
             text: scene.add.text(0, 0, item.name, {color:'black'}),
-    
-            space: { top: 10, icon: 10}
+            space: { icon: 3 }
         });
     
         return label;
@@ -95,55 +148,72 @@
 
   function preload ()
   {
-      //bgs
-      this.load.image('bg', "{% static '/resource/ui/background.jpg'%}")
-      this.load.image('bg1', "{% static '/resource/ui//bg1.png'%}")
+    this.load.scenePlugin({
+        key: 'rexuiplugin',
+        url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
+        sceneKey: 'rexUI'
+    });   
+    
+    //bgs
+    this.load.image('bg', "{% static '/resource/ui//bg1.png'%}")
+
+    {% comment %} //havingitem
+    await fetch('http://localhost:8000/mainapp/api/havingitem')
+            .then(res=>res.json())
+            .then((data)=>{havingitemData=data})
+
+    //wearing
+    await fetch('http://localhost:8000/mainapp/api/wearing')
+            .then(res=>res.json())
+            .then((data)=>{wearingData=data}) {% endcomment %}
+
+    
   
-      //player_head
-      this.load.image('hair', "http://localhost:8000/media/images/0HAIR.png")
-      this.load.image('face', "http://localhost:8000/media/images/0HEAD EYES OPEN.png")
-      this.load.image('head', "http://localhost:8000/media/images/HEAD EYES OPEN.png")
-      this.load.image('helmet', "http://localhost:8000/media/images/HELMET.png")
+    //player_head
+    this.load.image('hair', "http://localhost:8000/media/images/0HAIR.png")
+    this.load.image('face', "http://localhost:8000/media/images/0HEAD EYES OPEN.png")
+    this.load.image('head', "http://localhost:8000/media/images/HEAD EYES OPEN.png")
+    this.load.image('helmet', "http://localhost:8000/media/images/HELMET.png")
       
-      //player_top
-      this.load.image('arm_a1', "http://localhost:8000/media/images/ARM A1.png")
-      this.load.image('arm_a2', "http://localhost:8000/media/images/ARM A2.png")
-      this.load.image('arm_a3', "http://localhost:8000/media/images/ARM A3.png")
-      this.load.image('arm_b1', "http://localhost:8000/media/images/ARM B1.png")
-      this.load.image('arm_b2', "http://localhost:8000/media/images/ARM B2.png")
-      this.load.image('arm_b3b', "http://localhost:8000/media/images/ARM B3B.png")
-      this.load.image('arm_b3f', "http://localhost:8000/media/images/ARM B3F.png")
-      this.load.image('shoulder_a', "http://localhost:8000/media/images/SHOULDER A.png")
-      this.load.image('shoulder_b', "http://localhost:8000/media/images/SHOULDER B.png")
-      this.load.image('body', "http://localhost:8000/media/images/BODY.png")
-      this.load.image('hip', "http://localhost:8000/media/images/HIP.png")
+    //player_top
+    this.load.image('arm_a1', "http://localhost:8000/media/images/ARM A1.png")
+    this.load.image('arm_a2', "http://localhost:8000/media/images/ARM A2.png")
+    this.load.image('arm_a3', "http://localhost:8000/media/images/ARM A3.png")
+    this.load.image('arm_b1', "http://localhost:8000/media/images/ARM B1.png")
+    this.load.image('arm_b2', "http://localhost:8000/media/images/ARM B2.png")
+    this.load.image('arm_b3b', "http://localhost:8000/media/images/ARM B3B.png")
+    this.load.image('arm_b3f', "http://localhost:8000/media/images/ARM B3F.png")
+    this.load.image('shoulder_a', "http://localhost:8000/media/images/SHOULDER A.png")
+    this.load.image('shoulder_b', "http://localhost:8000/media/images/SHOULDER B.png")
+    this.load.image('body', "http://localhost:8000/media/images/BODY.png")
+    this.load.image('hip', "http://localhost:8000/media/images/HIP.png")
       
-      //player_bottom
-      this.load.image('leg_a1', "http://localhost:8000/media/images/LEG A1.png")
-      this.load.image('leg_a2', "http://localhost:8000/media/images/LEG A2.png")
-      this.load.image('leg_b1', "http://localhost:8000/media/images/LEG B1.png")
-      this.load.image('leg_b2', "http://localhost:8000/media/images/LEG B2.png")
+    //player_bottom
+    this.load.image('leg_a1', "http://localhost:8000/media/images/LEG A1.png")
+    this.load.image('leg_a2', "http://localhost:8000/media/images/LEG A2.png")
+    this.load.image('leg_b1', "http://localhost:8000/media/images/LEG B1.png")
+    this.load.image('leg_b2', "http://localhost:8000/media/images/LEG B2.png")
 
-      //player_shoes
-      this.load.image('leg_a3', "http://localhost:8000/media/images/LEG A3.png")
-      this.load.image('leg_b3', "http://localhost:8000/media/images/LEG B3.png")
+    //player_shoes
+    this.load.image('leg_a3', "http://localhost:8000/media/images/LEG A3.png")
+    this.load.image('leg_b3', "http://localhost:8000/media/images/LEG B3.png")
       
-      //player_weapon
-      this.load.image('weapon', "http://localhost:8000/media/images/WEAPON.png")
+    //player_weapon
+    this.load.image('weapon', "http://localhost:8000/media/images/WEAPON.png")
 
 
-      //player_shield
-      this.load.image('shield', "http://localhost:8000/media/images/SHIELD.png")
+    //player_shield
+    this.load.image('shield', "http://localhost:8000/media/images/SHIELD.png")
 
-      //hairs
-      this.load.image('hair1', "http://localhost:8000/media/images/1HAIR.png")
-      this.load.image('hair2', "http://localhost:8000/media/images/3HAIR.png")
-      this.load.image('hair3', "http://localhost:8000/media/images/8HAIR.png")
-      this.load.image('hair4', "http://localhost:8000/media/images/9HAIR.png")
-      this.load.image('hair5', "http://localhost:8000/media/images/11HAIR.png")
-      this.load.image('hair6', "http://localhost:8000/media/images/16HAIR.png")
-      this.load.image('hair7', "http://localhost:8000/media/images/18HAIR.png")
-      this.load.image('hair8', "http://localhost:8000/media/images/23HAIR.png")
+    //hairs
+    this.load.image('hair1', "http://localhost:8000/media/images/1HAIR.png")
+    this.load.image('hair2', "http://localhost:8000/media/images/3HAIR.png")
+    this.load.image('hair3', "http://localhost:8000/media/images/8HAIR.png")
+    this.load.image('hair4', "http://localhost:8000/media/images/9HAIR.png")
+    this.load.image('hair5', "http://localhost:8000/media/images/11HAIR.png")
+    this.load.image('hair6', "http://localhost:8000/media/images/16HAIR.png")
+    this.load.image('hair7', "http://localhost:8000/media/images/18HAIR.png")
+    this.load.image('hair8', "http://localhost:8000/media/images/23HAIR.png")
 
       //face
       //추후추가
@@ -224,9 +294,6 @@
       this.load.image('weaponui', "{% static '/resource/ui/character/무기.png'%}");
       this.load.image('shieldui', "{% static '/resource/ui/character/방패.png'%}");
       this.load.image('selectui', "{% static '/resource/ui/character/확정.png'%}");
-
-
-      var data={helmet:[], hair:[], top:[], bottom:[], shoe:[], weapon:[], shield:[]}
   
   }
   
@@ -235,95 +302,317 @@
 
   function create ()
   {
-      player = this.physics.add.staticGroup();
-      btn = this.physics.add.staticGroup();
-      ui = this.physics.add.staticGroup();
-      box = this.physics.add.staticGroup();
-      hairs = this.physics.add.staticGroup();
-      tops = this.physics.add.staticGroup();
+    player = this.physics.add.staticGroup();
+    btn = this.physics.add.staticGroup();
+    ui = this.physics.add.staticGroup();
+    box = this.physics.add.staticGroup();
+    hairs = this.physics.add.staticGroup();
+    tops = this.physics.add.staticGroup();
 
-        skills = this.physics.add.staticGroup();
-        ui = this.physics.add.staticGroup();
+    skills = this.physics.add.staticGroup();
+    ui = this.physics.add.staticGroup();
 
-  
-      this.add.image(150,300,'bg');
-      this.add.image(100,300,'bg1').setScale(0.3);
-      box = this.add.image(150,550,'box').setInteractive({cursor:'pointer', draggable: true});
-      back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'});
+    this.add.image(130,300,'bg').setScale(0.35);
+    back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'});
 
-        back.on('pointerover', function(event){
-            this.setTint(0x50bcdf)
-        })
-        back.on('pointerout', function(event){
-            this.clearTint()
-        })
-        back.on('pointerdown', function(event){
-            location.replace('http://localhost:8000/mainapp/main')
-        })
+    back.on('pointerover', function(event){
+        this.setTint(0x50bcdf)
+    })
+    back.on('pointerout', function(event){
+        this.clearTint()
+    })
+    back.on('pointerdown', function(event){
+        location.replace('http://localhost:8000/mainapp/main')
+    })
+
+    mypanel = [helmetPanel, hairPanel, topPanel, bottomPanel, shoePanel, weaponPanel, shieldPanel]
+    
+    var helmetPanel = this.rexUI.add.scrollablePanel({
+        x: window_width/2,
+        y: window_height-80,
+        width: window_width-20,
+        height: window_height*0.05,
+
+        scrollMode: 1,
+
+        background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
+
+        panel: {
+            child: createPanel(this, data, "helmet"),
+            mask: {
+                padding: 1,
+                // layer: this.add.layer()
+            },
+        },
+
+        // scroller: true,
+        scroller: {
+            // pointerOutRelease: false
+        },
+
+        mouseWheelScroller: {
+            focus: false,
+            speed: 0.1
+        },
+
+        space: {
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10,
+            panel: 10,
+        }
+    }).layout()
+
+    var hairPanel = this.rexUI.add.scrollablePanel({
+        x: window_width/2,
+        y: window_height-80,
+        width: window_width-20,
+        height: window_height*0.05,
+
+        scrollMode: 1,
+
+        background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
+
+        panel: {
+            child: createPanel(this, data, "hair"),
+            mask: {
+                padding: 1,
+                // layer: this.add.layer()
+            },
+        },
+
+        // scroller: true,
+        scroller: {
+            // pointerOutRelease: false
+        },
+
+        mouseWheelScroller: {
+            focus: false,
+            speed: 0.1
+        },
+
+        space: {
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10,
+            panel: 10,
+        }
+    }).layout()
+
+    var topPanel = this.rexUI.add.scrollablePanel({
+        x: window_width/2,
+        y: window_height-80,
+        width: window_width-20,
+        height: window_height*0.05,
+
+        scrollMode: 1,
+
+        background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
+
+        panel: {
+            child: createPanel(this, data, "top"),
+            mask: {
+                padding: 1,
+                // layer: this.add.layer()
+            },
+        },
+
+        // scroller: true,
+        scroller: {
+            // pointerOutRelease: false
+        },
+
+        mouseWheelScroller: {
+            focus: false,
+            speed: 0.1
+        },
+
+        space: {
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10,
+            panel: 10,
+        }
+    }).layout()
+
+    var bottomPanel = this.rexUI.add.scrollablePanel({
+        x: window_width/2,
+        y: window_height-80,
+        width: window_width-20,
+        height: window_height*0.05,
+
+        scrollMode: 1,
+
+        background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
+
+        panel: {
+            child: createPanel(this, data, "bottom"),
+            mask: {
+                padding: 1,
+                // layer: this.add.layer()
+            },
+        },
+
+        // scroller: true,
+        scroller: {
+            // pointerOutRelease: false
+        },
+
+        mouseWheelScroller: {
+            focus: false,
+            speed: 0.1
+        },
+
+        space: {
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10,
+            panel: 10,
+        }
+    }).layout()
+
+    var shoePanel = this.rexUI.add.scrollablePanel({
+        x: window_width/2,
+        y: window_height-80,
+        width: window_width-20,
+        height: window_height*0.05,
+
+        scrollMode: 1,
+
+        background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
+
+        panel: {
+            child: createPanel(this, data, "shoe"),
+            mask: {
+                padding: 1,
+                // layer: this.add.layer()
+            },
+        },
+
+        // scroller: true,
+        scroller: {
+            // pointerOutRelease: false
+        },
+
+        mouseWheelScroller: {
+            focus: false,
+            speed: 0.1
+        },
+
+        space: {
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10,
+            panel: 10,
+        }
+    }).layout()
+
+    var weaponPanel = this.rexUI.add.scrollablePanel({
+        x: window_width/2,
+        y: window_height-80,
+        width: window_width-20,
+        height: window_height*0.05,
+
+        scrollMode: 1,
+
+        background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
+
+        panel: {
+            child: createPanel(this, data, "weapon"),
+            mask: {
+                padding: 1,
+                // layer: this.add.layer()
+            },
+        },
+
+        // scroller: true,
+        scroller: {
+            // pointerOutRelease: false
+        },
+
+        mouseWheelScroller: {
+            focus: false,
+            speed: 0.1
+        },
+
+        space: {
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10,
+            panel: 10,
+        }
+    }).layout()
+
+    var shieldPanel = this.rexUI.add.scrollablePanel({
+        x: window_width/2,
+        y: window_height-80,
+        width: window_width-20,
+        height: window_height*0.05,
+
+        scrollMode: 1,
+
+        background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
+
+        panel: {
+            child: createPanel(this, data, "shield"),
+            mask: {
+                padding: 1,
+                // layer: this.add.layer()
+            },
+        },
+
+        // scroller: true,
+        scroller: {
+            // pointerOutRelease: false
+        },
+
+        mouseWheelScroller: {
+            focus: false,
+            speed: 0.1
+        },
+
+        space: {
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10,
+            panel: 10,
+        }
+    }).layout()
+
+
+    hairPanel.visible=false
+    topPanel.visible=false
+    bottomPanel.visible = false
+    shoePanel.visible = false
+    weaponPanel.visible = false
+    shieldPanel.visible = false
 
 
 
 
      //BTN 
-     helmetui = btn.create(250,150, 'helmetui').setScale(0.5).setInteractive();
-     hairui = btn.create(250,190, 'hairui').setScale(0.5).setInteractive();
-     topui = btn.create(250,230, 'topui').setScale(0.5).setInteractive();
-     bottomui = btn.create(250,270, 'bottomui').setScale(0.5).setInteractive();
-     shoesui = btn.create(250,310, 'shoesui').setScale(0.5).setInteractive();
-     weaponui = btn.create(250,350, 'weaponui').setScale(0.5).setInteractive();
-     shieldui = btn.create(250,390, 'shieldui').setScale(0.5).setInteractive();
-     selectui = btn.create(250,450, 'selectui').setScale(0.9).setInteractive();
+     btn_x = window_width-70
+     helmetui = btn.create(btn_x,150, 'helmetui').setScale(0.5).setInteractive();
+     hairui = btn.create(btn_x,190, 'hairui').setScale(0.5).setInteractive();
+     topui = btn.create(btn_x,230, 'topui').setScale(0.5).setInteractive();
+     bottomui = btn.create(btn_x,270, 'bottomui').setScale(0.5).setInteractive();
+     shoesui = btn.create(btn_x,310, 'shoesui').setScale(0.5).setInteractive();
+     weaponui = btn.create(btn_x,350, 'weaponui').setScale(0.5).setInteractive();
+     shieldui = btn.create(btn_x,390, 'shieldui').setScale(0.5).setInteractive();
+     selectui = btn.create(btn_x,450, 'selectui').setScale(0.9).setInteractive();
      btnui = [helmetui, hairui, topui, bottomui, shoesui, weaponui, shieldui];
 
-     
-      //아이템창
-      box_x = 40
-      box1 = ui.create(box_x,545, 'box1').setScale(0.8).setInteractive();
-      box2 = ui.create(box_x+80,545, 'box1').setScale(0.8).setInteractive();
-      box3 = ui.create(box_x+160,545, 'box1').setScale(0.8).setInteractive();
-      box4 = ui.create(box_x+240,545, 'box1').setScale(0.8).setInteractive();
-      box5 = ui.create(box_x+320,545, 'box1').setScale(0.8).setInteractive();
-
-      box1.setScrollFactor(1);
-
-      this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
-
-        gameObject.x = dragX;
-        gameObject.y = dragY;
-
-      });
-
-      //헤어 미리보기
-      minihair1 = hairs.create(box1.x,box1.y, 'hair1').setScale(0.5).setInteractive();
-      minihair2 = hairs.create(box2.x,box2.y, 'hair2').setScale(0.5).setInteractive();
-      minihair3 = hairs.create(box3.x,box3.y, 'hair3').setScale(0.5).setInteractive();
-      minihair4 = hairs.create(box4.x,box4.y, 'hair4').setScale(0.5).setInteractive();
-      minihair5 = hairs.create(box5.x,box5.y, 'hair5').setScale(0.5).setInteractive();
-      minihair = [minihair1, minihair2, minihair3, minihair4, minihair5];
-
-      minihair1.visible = false
-      minihair2.visible = false
-      minihair3.visible = false
-      minihair4.visible = false
-      minihair5.visible = false
-
-      //상의 미리보기
-      minitop1 = tops.create(box1.x,box1.y, 'body1').setScale(0.5).setInteractive();
-      minitop2 = tops.create(box2.x,box2.y, 'body2').setScale(0.5).setInteractive();
-      minitop3 = tops.create(box3.x,box3.y, 'body3').setScale(0.5).setInteractive();
-      minitop4 = tops.create(box4.x,box4.y, 'body4').setScale(0.5).setInteractive();
-      minitop5 = tops.create(box5.x,box5.y, 'body5').setScale(0.5).setInteractive();
-      var minitop = [minitop1, minitop2, minitop3, minitop4, minitop5];
-
-      minitop1.visible = false
-      minitop2.visible = false
-      minitop3.visible = false
-      minitop4.visible = false
-      minitop5.visible = false
-
+     helmetui.setTint(0x50bcdf);
 
       //player
-      x = 80;
+      x = 105;
       y = 300;
       arm_b1 = this.add.sprite(x+8, y+12, 'arm_b1').setScale(0.5); //왼팔 위
       arm_b3b = this.add.sprite(x+40, y+45, 'arm_b3b').setScale(0.5); //왼손 뒤
@@ -511,13 +800,13 @@
 
     this.input.on('gameobjectdown', function(pointer, gameObject){
 
-        if(gameObject==helmetui){choicetype(helmetui, btnui); menuOptions(0);}
-        if(gameObject==hairui){choicetype(hairui, btnui); menuOptions(1);}
-        if(gameObject==topui){choicetype(topui, btnui); menuOptions(2);}
-        if(gameObject==bottomui){choicetype(bottomui, btnui); menuOptions(3);}
-        if(gameObject==shoesui){choicetype(shoesui, btnui); menuOptions(4);}
-        if(gameObject==weaponui){choicetype(weaponui, btnui); menuOptions(5);}
-        if(gameObject==shieldui){choicetype(shieldui, btnui); menuOptions(6);}
+        if(gameObject==helmetui){choicetype(0); menuOptions(0);}
+        if(gameObject==hairui){choicetype(1); menuOptions(1);}
+        if(gameObject==topui){choicetype(2); menuOptions(2);}
+        if(gameObject==bottomui){choicetype(3); menuOptions(3);}
+        if(gameObject==shoesui){choicetype(4); menuOptions(4);}
+        if(gameObject==weaponui){choicetype(5); menuOptions(5);}
+        if(gameObject==shieldui){choicetype(6); menuOptions(6);}
 
         if(gameObject==minihair1){hair.setTexture('hair1')}
         if(gameObject==minihair2){hair.setTexture('hair2')}
@@ -587,21 +876,16 @@
 
     })
 
-    //아이템창 드래그
-    {% comment %} box.on('drag', function (pointer, gameObject, dragX, dragY) {
 
-        box1.x = 40 + dragX;
-        box2.x = 120 + dragX;
-        box3.x = 200 + dragX;
-        box4.x = 240 + dragX;
-        box5.x = 280 + dragX;
-    })  {% endcomment %}
-
-    function choicetype(icon, array){
-        for(var i=0;i<array.length;i++){
-            icon.setTint(0x50bcdf);
-            if(icon!=array[i]){
-                array[i].clearTint();
+    function choicetype(num){
+        for(var i=0;i<btnui.length;i++){
+            if (num==i){
+                btnui[i].setTint(0x50bcdf);
+                mypanel[i].visible = true
+            }
+            if(num!=i){
+                btnui[i].clearTint();
+                mypanel[i].visible = false
             }
         }
     } 
@@ -611,23 +895,11 @@
     
     if(num==0){ };
     if(num==1){
-        for(var i=0;i<minihair.length;i++){
-            minihair[i].visible = true
-        }
-        for(var i=0;i<minitop.length;i++){
-            minitop[i].visible = false
-        }
     };
     if(num==2){
 
     };
     if(num==3){
-        for(var i=0;i<minihair.length;i++){
-            minihair[i].visible = false
-        }
-        for(var i=0;i<minitop.length;i++){
-            minitop[i].visible = true
-        }
     };
     if(num==4){};
     if(num==5){};
@@ -638,11 +910,10 @@
     function selection(icon, array){
         for(var i=0;i<array.length;i++){
             if(icon==array[i]){
-                array[i].visible = true
-                console.log(array[i])
+                array[i].visible = true;
             }
             else{
-                array[i].visible = false
+                array[i].visible = false;
             }
         }
 
@@ -669,8 +940,8 @@
   
   var config = {
     type: Phaser.AUTO,
-    width: 300,
-    height: 600,
+    width: window_width,
+    height: window_height,
     physics: {
         default: 'arcade',
         arcade: {
@@ -680,15 +951,20 @@
             }
         }
     },
-    backgroundColor: '#2d2d2d',
+    backgroundColor: '#ffffff',
     scene: {
       preload: preload,
       create: create,
       update:update,
     },
     scale: {
-        mode: Phaser.Scale.ScaleModes.FIT
-    }
+        mode: Phaser.Scale.ScaleModes.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
+    pixelArt: false,
+    render:{
+      antialias: true
+    },
   }
   var game =  new Phaser.Game(config)
 </script>
