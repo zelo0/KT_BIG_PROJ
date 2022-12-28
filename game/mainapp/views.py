@@ -26,6 +26,9 @@ def character(request):
 def skills(request):
   return render(request, 'mainapp/skills.html')
 
+def analysis(request):
+  return render(request, 'mainapp/analysis.html')
+
 class shopAPI(APIView):
   def get(self, request):
     shop_list = Shop.objects.all()
