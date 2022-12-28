@@ -15,10 +15,6 @@
     var data={hair:[], top:[], bottom:[], shoe:[], weapon:[]}
     var userID
     var userMoney
-    
-    function getKeyByValue(obj, value) {
-        return Object.keys(obj).find(key => obj[key] === value);
-    }
 
     var createPanel = function (scene, data, state) {
         var sizer = scene.rexUI.add.sizer({
@@ -64,6 +60,7 @@
                 0,
                 true
             );
+            console.log(item.name)
         }
     
         return scene.rexUI.add.sizer({
@@ -91,10 +88,11 @@
     var createIcon = function (scene, item, iconWidth, iconHeight) {
         var label = scene.rexUI.add.label({
             orientation: 'y',
-            icon: scene.rexUI.add.roundRectangle(0, 0, iconWidth, iconHeight, 5, COLOR_LIGHT),
+            icon: scene.add.image(0, 0, item.name).setScale(0.9),
+            //icon : scene.rexUI.add.roundRectangle(0, 0, iconWidth, iconHeight, 5, COLOR_LIGHT),
             text: scene.add.text(0, 0, item.name, {color:'black', font:'16px Arial'}),
     
-            space: { top: 10, icon: 10}
+            space: { top: 10, icon: 10,}
         });
     
         return label;
@@ -497,7 +495,7 @@
             }
         })
 
-        var productPanel = this.add.rectangle(window_width/2, 250, window_width*0.7, window_height*0.3, 0xffffff).setInteractive({pointer:'cursor'})
+        var productPanel = this.add.rectangle(window_width/2, 250, window_width*0.8, window_height*0.3, 0xffffff).setInteractive({pointer:'cursor'})
         productPanel.visible=false
         productPanel.setStrokeStyle(1, 0x4f4f4f)
         
