@@ -1,21 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% block script %}
-<script src="{% static 'js/range.js' %}"></script>
+
 <script>
   let status = 'off_battle'
-
-
-  class Monster {
-    constructor(name, hp, type) {
-      this.name = name;
-      this.hp = hp;
-      this.type = type
-
-    }
-  }
-
-
+  
   var config = {
     type: Phaser.AUTO,
     width: 300,
@@ -45,34 +34,15 @@
       let skill_selector
 
       function preload(){
-        this.load.image('char', "{% static '/images/char_back.jpg'%}")
+        this.load.image('face', "{% static '/images/char_back.jpg'%}")
         this.load.image('attk_button', "{% static '/images/attack.png'%}")
         this.load.image('def_button', "{% static '/images/defence.png'%}")
-        
+        this.load.image('enemy', "{% static '/images/mob.png'%}")
         this.load.image('background', "{% static '/images/background.jpg'%}")
         this.load.image('hp', "{% static '/images/hp.png'%}")
-        
-        
-        //background
-        this.load.spritesheet('map', "{% static '/assets/background/TilesetInteriorFloor.png'%}", { frameWidth: 160, frameHeight: 60 })
-
-
-
-        //monsters
-        this.load.spritesheet('Cyclope', "{% static '/assets/monsters/Cyclope/SpriteSheet.png'%}", { frameWidth: 16, frameHeight: 16 })
-        this.load.spritesheet('Cyclope2', "{% static '/assets/monsters/Cyclope2/SpriteSheet.png'%}",{ frameWidth: 16, frameHeight: 16 })
-        
-
-
-
-
-        //skills
-        this.load.image('skill1', "{% static '/resource/ui/skills/skills/skill1.png'%}")
-        this.load.image('skill2', "{% static '/resource/ui/skills/skills/skill2.png'%}")
-        this.load.image('skill3', "{% static '/resource/ui/skills/skills/skill3.png'%}")
-        this.load.image('skill4', "{% static '/resource/ui/skills/skills/skill4.png'%}")
-        this.load.image('skill5', "{% static '/resource/ui/skills/skills/skill5.png'%}")
-        this.load.image('skill6', "{% static '/resource/ui/skills/skills/skill6.png'%}")
+        this.load.image('skill1', "{% static '/images/thunder.png'%}")
+        this.load.image('skill2', "{% static '/images/flash.png'%}")
+        this.load.image('skill3', "{% static '/images/heart.png'%}")
 
 
         //health Bar image
@@ -87,49 +57,15 @@
         
 
       }
-      let Monsters = []
-      let Cyclope
-      let Cyclope2
+      let mob
       let mob_move = false
-      
       function create(){
 
         this.add.image(150,300,'background')
         //health bar create
-        let y = 250
-        let x = 150
-        this.add.image(150, 100, 'map').setScale(2)
-
-
-        // mob
-      this.anims.create({
-        key: 'mob1_stable',
-        frames: this.anims.generateFrameNumbers('Cyclope', { frames: range(0, 6) }),
-        frameRate: 8,   
-        repeat: -1
-      });
-    
-      this.anims.create({
-        key: 'mob1_attack',
-        frames: this.anims.generateFrameNumbers('Cyclope', { frames: range(44, 59) }),
-        frameRate: 8,
-        repeat: 0
-      });
-    
-      this.anims.create({
-        key: 'mob1_damaged',
-        frames: this.anims.generateFrameNumbers('Cyclope', { frames: range(66, 71) }),
-        frameRate: 8,
-        repeat: 0
-      });
-
-      
-
-      
-
-      Monsters.push(this.add.sprite(240, 200, 'Cyclope'))
-      Monsters[0].setScale(1);
-      Monsters[0].play('mob1_stable');
+        let y = 100
+        let x = 160
+       
 
         // background shadow
         let leftShadowCap = this.add.image(x, y, 'left-cap-shadow')
@@ -154,11 +90,11 @@
 
 
         //hp text
-        var hp_text = this.add.text(230,220, '100/100', { fontFamily: 'Arial', fontSize: 14, color: '#00ff00' });
+        var hp_text = this.add.text(230, 72, '100/100', { fontFamily: 'Arial', fontSize: 14, color: '#00ff00' });
         let current_hp = 100
         
-        this.add.image(40,200,'char').setScale(0.05).setInteractive({cursor:'pointer'})
-        //mob = this.add.sprite(240, 200, 'enemy').setScale(0.06);
+        this.add.image(80,400,'face').setScale(0.08).setInteractive({cursor:'pointer'})
+        mob = this.add.sprite(240, 50, 'enemy').setScale(0.1);
         //this.add.image(240,50,'enemy').setScale(0.1).setInteractive({cursor:'pointer'})
         //this.add.image(250,80,'hp').setScale(0.07).setInteractive({cursor:'pointer'})
         
@@ -170,15 +106,6 @@
 
         skill_three = this.add.image(240,500, 'skill3').setScale(0.5).setInteractive();
         skill_three.visible =false
-
-        skill_four = this.add.image(80,500, 'skill4').setScale(0.5).setInteractive();
-        skill_four.visible =false
-
-        skill_five = this.add.image(160,500, 'skill5').setScale(0.5).setInteractive();
-        skill_five.visible =false
-
-        skill_six = this.add.image(240,500, 'skill6').setScale(0.5).setInteractive();
-        skill_six.visible =false
         //MOUSE INTERACTIONS
   
         //click colour tiles
@@ -211,9 +138,6 @@
           skill_one.visible = false
           skill_two.visible = false
           skill_three.visible = false
-          skill_five.visible = false
-          skill_six.visible = false
-          skill_four.visible = false
           back_button.visible = false
         }
 
@@ -226,23 +150,13 @@
           back_button.visible = true
           
         }
-
-        function action_deffence(){
-          btn_attack.visible = false 
-          btn_deffence.visible = false 
-          skill_five.visible = true
-          skill_six.visible = true
-          skill_four.visible = true
-          back_button.visible = true
-          
-        }
         
        
         //tween to move image
         tween = this.tweens.add({
-          targets: Monsters,
+          targets: mob,
           x: 250,
-          y: 180,
+          y: 40,
           ease: 'Power1',
           duration: 50,
           yoyo: true,
@@ -258,24 +172,13 @@
           });
 
         btn_deffence.on('pointerdown', function (pointer) { 
-          action_deffence()
+          action_attack()
         });
-        
-        //DB에서 스킬의 정보를 읽어오기
-        //stage 정보 DB 만들기
-        //1 stage에선 몬스터 한마리가 나옴 2는 두마리 등등
-        //스테이지가 올라갈수록 강한 몬스터
-        //죽으면 첫 스테이지 부터 다시 시작
-        // 스테이지를 클리어하면 캐릭터가 경험치를 얻음
-        // 경험치를 충족해서 레벨업을하면 능력치가 올라감
-
-
 
         skill_one.on('pointerdown', function (pointer) { 
           //  You can set the text proprety directly like this:
           //hp_text.text = '90/100';
           current_hp -= 10;
-          
           //  Or use the setText method if you need method chaining:
           hp_text.setText(current_hp+'/100');
           use_skill()
