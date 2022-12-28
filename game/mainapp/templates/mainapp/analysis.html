@@ -63,20 +63,50 @@
             }
         }
 
-        //eye_daily = this.add.text(53, 85, '오늘은 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
-        //eye_weekly = this.add.text(53, 110, '이번주는 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})  
-        //nose_daily = this.add.text(53, 85, '오늘은 코 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
-        //nose_weekly = this.add.text(53, 110, '이번주는 코 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})    
-        //mouth_weekly = this.add.text(53, 85, '오늘은 입 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
-        //mouth_weekly = this.add.text(53, 110, '이번주는 입 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})         
+        eye_daily = this.add.text(53, 85, '오늘은 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        eye_weekly = this.add.text(53, 110, '이번주는 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})  
+        nose_daily = this.add.text(53, 85, '오늘은 코 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        nose_weekly = this.add.text(53, 110, '이번주는 코 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})    
+        mouth_daily = this.add.text(53, 85, '오늘은 입 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        mouth_weekly = this.add.text(53, 110, '이번주는 입 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})         
+
+        eye_daily.visible = false
+        eye_weekly.visible = false
+        nose_daily.visible = false
+        nose_weekly.visible = false
+        mouth_daily.visible = false
+        mouth_weekly.visible = false
 
         // 눈 버튼
-
+        function eye_button(){
+            eye_daily.visible = true
+            eye_weekly.visible = true
+            nose_daily.visible = false
+            nose_weekly.visible = false
+            mouth_daily.visible = false
+            mouth_weekly.visible = false            
+        }
 
         // 코 버튼
+        function nose_button(){
+            eye_daily.visible = false
+            eye_weekly.visible = false
+            nose_daily.visible = true
+            nose_weekly.visible = true
+            mouth_daily.visible = false
+            mouth_weekly.visible = false                 
+        }
 
 
         // 입 버튼
+        function mouth_button(){
+            eye_daily.visible = false
+            eye_weekly.visible = false
+            nose_daily.visible = false
+            nose_weekly.visible = false
+            mouth_daily.visible = true
+            mouth_weekly.visible = true                 
+        }
 
     }
 
