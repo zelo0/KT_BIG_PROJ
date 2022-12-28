@@ -13,6 +13,7 @@ urlpatterns = [
     path('result', views.result),
     path('api/shop/', views.ShopAPI.as_view()),
 
-    path('room/', views.room),
+    path('room/', views.find_room),
+    path('room/wait/<str:room_name>/', views.wait_room),
     path('room/<str:room_name>/', views.pvp)
 ]

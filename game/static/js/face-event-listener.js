@@ -97,7 +97,7 @@ video.addEventListener("play", () => {
       .withFaceLandmarks();
     // .withFaceExpressions(); // 주석
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    canvas.getContext("2d").clearRect(0, 0, video.width, video.height);
 
     ///////////// 새로 추가
     let context = canvas.getContext("2d");
