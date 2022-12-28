@@ -7,6 +7,10 @@
   left: 0;
   right: 0;
 }
+
+#players-board {
+  max-height: 15rem;
+}
 </style>
 {% endblock style %}
 
@@ -15,11 +19,12 @@
   {% include 'core/components/back-button.html' %}
   <div class="my-5 text-center">
     <h1>GAME ROOM</h1>
+    <div class="mt-1 fs-3">{{room_name}}</div>
   </div>
 
   <div class="text-center">
     <div class="fs-5 fw-bold">PLAYERS</div>
-    <div class="fs-3 border-dark border border-opacity-25 border-2 w-75 m-auto p-2 rounded-9">
+    <div id="players-board" class="overflow-y-scroll fs-3 border-dark border border-opacity-25 border-2 w-75 m-auto p-2 rounded-9">
       {% for player_name in players_in_room %}
       <div>
         {{player_name}}
