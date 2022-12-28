@@ -74,18 +74,15 @@
         
         // 새로고침, 페이지 이동, 재접속 등 환경이 변경되었을때 bgm의 상태를 유지하기 위하여 localstorage에 상태를 저장
         if(localStorage.getItem('bgm')==null){ 
-          console.log(localStorage.getItem('bgm'))
           this.bgm = this.sound.play("title_music", {loop:true})
           sound_off.visible = false
           sound_on.visible = true
           localStorage.setItem("bgm", 'true')
-          console.log(localStorage.getItem('bgm'))
         }
         else if(localStorage.getItem('bgm')=='true'){ 
           this.bgm = this.sound.play("title_music", {loop:true})
           sound_off.visible = false
           sound_on.visible = true
-          console.log(localStorage.getItem('bgm'))
         }
         else if(localStorage.getItem('bgm')=='false'){
           game.sound.mute = true
@@ -112,9 +109,6 @@
         .then(res=>res.json())
         .then((data)=>{achieveUser=data
         })
-
-        console.log(achieveUser)
-        console.log(achieveData)
 
         // 각 UI 이벤트 할당
 

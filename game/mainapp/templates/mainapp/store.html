@@ -60,7 +60,6 @@
                 0,
                 true
             );
-            console.log(item.name)
         }
     
         return scene.rexUI.add.sizer({
@@ -84,7 +83,7 @@
                 true // expand
             );
     }
-    
+    // panel에 아이콘으로 아이템 이미지를 보여주기 위함 
     var createIcon = function (scene, item, iconWidth, iconHeight) {
         var label = scene.rexUI.add.label({
             orientation: 'y',
@@ -117,7 +116,7 @@
             .then(res=>res.json())
             .then((data)=>{itemData=data
         })
-        
+        // 아이템 이미지가 추가되어있지 않으면 오류가 생깁니다. admin에 가서 추가하시면 됩니다.
         for(i=0; i<itemData.length; i++){
             const item = itemData[i]
             const shop = shopData[i]
@@ -137,9 +136,7 @@
                 data['weapon'].push({id:item.id, name:item.name , pay:shop.pay, img:item.image})
             }
         }
-        console.log(data.hair[0].img[0].image)
-        console.log(itemData)
-        //console.log(shopData)
+        
         for(i=0; i<data.hair.length; i++){
             this.load.image(`헤어${i+1}`, data.hair[i].img[0].image)
         }
@@ -187,7 +184,6 @@
         await fetch('http://localhost:8000/core/api/user')
           .then(res=>res.json())
           .then((data)=>{
-            console.log(data)
             let money = String(data.money)
             this.money.setText(money)
             userID=data.id
@@ -414,11 +410,9 @@
 
             }
             if(hairPanel.visible == true){
-                console.log(hairPanel.visible)
                 hairPanel.visible=false
             }
             else{
-                console.log(hairPanel.visible)
                 hairPanel.visible=true
             }
         })
@@ -432,11 +426,9 @@
 
             }
             if(topPanel.visible == true){
-                console.log(topPanel.visible)
                 topPanel.visible=false
             }
             else{
-                console.log(topPanel.visible)
                 topPanel.visible=true
             }
         })
@@ -450,11 +442,9 @@
 
             }
             if(bottomPanel.visible == true){
-                console.log(bottomPanel.visible)
                 bottomPanel.visible=false
             }
             else{
-                console.log(bottomPanel.visible)
                 bottomPanel.visible=true
             }
         })
@@ -468,11 +458,9 @@
 
             }
             if(shoePanel.visible == true){
-                console.log(shoePanel.visible)
                 shoePanel.visible=false
             }
             else{
-                console.log(shoePanel.visible)
                 shoePanel.visible=true
             }
         })
@@ -486,11 +474,9 @@
 
             }
             if(weaponPanel.visible == true){
-                console.log(weaponPanel.visible)
                 weaponPanel.visible=false
             }
             else{
-                console.log(weaponPanel.visible)
                 weaponPanel.visible=true
             }
         })
@@ -526,8 +512,6 @@
                 var category = child.getParentSizer().name
                 for(i=0; i<data[category].length; i++){
                     if(data[category][i].name == child.text){
-                        console.log(child.text)
-                        console.log(data[category][i].pay)
                         itemName = child.text
                         itemPay = data[category][i].pay
                         itemID = data[category][i].id
@@ -553,8 +537,6 @@
                 var category = child.getParentSizer().name
                 for(i=0; i<data[category].length; i++){
                     if(data[category][i].name == child.text){
-                        console.log(child.text)
-                        console.log(data[category][i].pay)
                         itemName = child.text
                         itemPay = data[category][i].pay
                     }
@@ -579,8 +561,6 @@
                 var category = child.getParentSizer().name
                 for(i=0; i<data[category].length; i++){
                     if(data[category][i].name == child.text){
-                        console.log(child.text)
-                        console.log(data[category][i].pay)
                         itemName = child.text
                         itemPay = data[category][i].pay
                     }
@@ -605,8 +585,6 @@
                 var category = child.getParentSizer().name
                 for(i=0; i<data[category].length; i++){
                     if(data[category][i].name == child.text){
-                        console.log(child.text)
-                        console.log(data[category][i].pay)
                         itemName = child.text
                         itemPay = data[category][i].pay
                     }
@@ -631,8 +609,6 @@
                 var category = child.getParentSizer().name
                 for(i=0; i<data[category].length; i++){
                     if(data[category][i].name == child.text){
-                        console.log(child.text)
-                        console.log(data[category][i].pay)
                         itemName = child.text
                         itemPay = data[category][i].pay
                     }
@@ -661,7 +637,6 @@
 
         purchaseButton.on('pointerdown', function(event){
             var chargeMoney = userMoney-itemPay
-            console.log(userMoney)
             if(chargeMoney<0){
                 errorPanel.visible=true
                 errorText.visible=true
