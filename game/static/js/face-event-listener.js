@@ -8,6 +8,56 @@ function move_mouth(da) {
   }
   return tmp_dist
 }
+
+function PartShot(str1) {
+  //특정부분 스크린샷
+  html2canvas(document.getElementById("video"))
+  //id container 부분만 스크린샷
+      .then(function (canvas) {
+          //jpg 결과값
+          drawImg(canvas.toDataURL('image/jpeg'));
+          //이미지 저장
+          saveAs(canvas.toDataURL(), 'face_org'+String(str1)+'.jpg');
+      }).catch(function (err) {
+          console.log(err);
+      });
+}
+
+function saveAs(uri, filename) {
+  var link = document.createElement("a");
+  if (typeof link.download === "string") {
+    link.href = uri;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } else {
+    window.open(uri);
+  }
+}
+
+function drawImg(imgData) {
+  // console.log(imgData);
+  //imgData의 결과값을 console 로그롤 보실 수 있습니다.
+  return new Promise(
+    function reslove() {
+      //내가 결과 값을 그릴 canvas 부분 설정
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      //canvas의 뿌려진 부분 초기화
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      var imageObj = new Image();
+      imageObj.onload = function () {
+        ctx.drawImage(imageObj, 0, 0);
+        //canvas img를 그리겠다.
+      };
+      imageObj.src = imgData;
+      //그릴 image데이터를 넣어준다.
+    },
+    function reject() {}
+  );
+}
 // 수정된 부분
 
 
@@ -126,7 +176,7 @@ video.addEventListener("play", () => {
         right_count_check = getElNum(right_matrix[i], 255);
       }
 
-      if (right_count_check <= 16) { // 값을 낮출수록 인식 기준이 하드해집니다
+      if (right_count_check <= 20) { // 값을 낮출수록 인식 기준이 하드해집니다
         // console.log('왼쪽 눈을 감음')
         right_count++;
       }
@@ -134,12 +184,12 @@ video.addEventListener("play", () => {
         left_count_check = getElNum(left_matrix[i], 255);
       }
 
-      if (left_count_check <= 10) { // 값을 낮출수록 인식 기준이 하드해집니다
+      if (left_count_check <= 15) { // 값을 낮출수록 인식 기준이 하드해집니다
         // console.log('오른쪽 눈을 감음')
         left_count++;
       }
     }
-    //console.log("눈 감은 횟수", left_count_check, right_count_check);
+    console.log("255 횟수 체크: ", left_count, right_count);
     if (left_count >= 2 && left_count2 == 0) { // 값을 높일수록 인식 기준이 하드해집니다
       attackAction();
       console.log("오른쪽 눈 스킬발동" + String(left_skill_count) + "번!");
