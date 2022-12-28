@@ -7,7 +7,9 @@
     let achieveUser;
     let dic_onoff = -1; // dic panel을 관리하기위한 전역변수
     let achievement_onoff = -1; // achievement panel을 관리하기위한 전역변수
-      function preload(){
+    let name
+    let profile
+      async function preload(){
         this.load.scenePlugin({
           key: 'rexuiplugin',
           url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
@@ -18,14 +20,25 @@
         this.load.image('sound_on', "{% static '/resource/ui/main/musicOn.png'%}")
         this.load.image('sound_off', "{% static '/resource/ui/main/musicOff.png'%}")
         this.load.audio('title_music', "{% static '/resource/bgm/title_music.mp3'%}")
-        this.load.image('profile_image', "http://localhost:8000/media/profile/profile_image.png")
+
+        await fetch('http://localhost:8000/core/api/user')
+          .then(res=>res.json())
+          .then((data)=>{
+            name = String(data.username)
+            profile = data.profile_image
+           })
+
+        this.load.image('profile_image', profile)
 
       }
       
       async function create(){ 
+        
         this.bgm = this.sound.play("title_music", {loop:true})
         this.add.image(35,35,'profile_image').setInteractive({cursor:'pointer'})
         let circle = this.add.circle(35,35,25)
+
+        // 각종 UI 배치
 
         var chr = this.rexUI.add.roundRectangle(window_width/2,130,210,100,7,0xD9D9D9).setInteractive({cursor:'pointer'})
         this.add.text(window_width/2-(window_width*0.09), 120, '캐릭터', {color:'black', font:'450 20px Arial'})
@@ -84,22 +97,12 @@
         this.username = this.add.text(
           window_width/2-(window_width*0.045),
           20,
-          "",
+          name,
           {
             color:'black',
             font:'550 20px Poppins',
           }
         )
-
-        fetch('http://localhost:8000/core/api/user')
-          .then(res=>res.json())
-          .then((data)=>{
-            console.log(data)
-            let name = String(data.username)
-            this.username.setText(name)
-            console.log(name)
-           })
-
         await fetch('http://localhost:8000/core/api/achievement')
         .then(res=>res.json())
         .then((data)=>{achieveData=data
@@ -113,7 +116,7 @@
         console.log(achieveUser)
         console.log(achieveData)
 
-        // object에 마우스를 올려놨을때 작동하는 코드
+        // 각 UI 이벤트 할당
 
         store.on('pointerover', function(event){
           this.setFillStyle(0x50bcdf)
