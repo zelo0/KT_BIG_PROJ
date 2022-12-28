@@ -61,7 +61,7 @@ class wearing(models.Model):
   havingItem = models.ForeignKey(HavingItem, on_delete=models.CASCADE, null=True)
 
   def __str__(self):
-    return self.item.name
+    return self.havingitem.item.name
 
 class Skill(models.Model):
   class TypeChoices(models.TextChoices):

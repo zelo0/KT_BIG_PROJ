@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponse
-from .serializers import ShopSerializer, ItemSerializer, StorePostSerializer, MoneyPatchSerializer
+from .serializers import *
 from core.models import User
 
 # Create your views here.
@@ -61,4 +61,9 @@ class StoreAPI(APIView) :
     request.user.save()
     return Response()
     
-    
+class HavingItemAPI(APIView):
+  def get(self, request):
+    HavingItem_list = HavingItem.objects.all()
+    serializer = HavingItemSerializer(HavingItem_list, many=True)
+    return Response(serializer.data)
+  

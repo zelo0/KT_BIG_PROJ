@@ -50,3 +50,8 @@ class MoneyPatchSerializer(serializers.ModelSerializer) :
     class Meta:
         model = User
         fields=['money']
+
+class HavingItemSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = HavingItem
+    fields = '__all__'
