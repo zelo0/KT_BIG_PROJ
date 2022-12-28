@@ -25,8 +25,6 @@
     function create(){
         // 분석글
         this.add.text(53, 60, '현재 회원님의 안면 근육 나이는 3세 입니다', {color:'black', font:'450 14px Arial'})
-        this.add.text(53, 85, '오늘은 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
-        this.add.text(53, 110, '이번주는 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
 
         // 얼굴 이미지
         face = this.physics.add.staticGroup();
@@ -65,6 +63,54 @@
             }
         } 
 
+        // 눈 버튼
+        eye_daily = this.add.text(53, 85, '오늘은 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        eye_weekly = this.add.text(53, 110, '이번주는 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+
+        eye_daily.visible = false
+        eye_weekly.visible = false
+
+        eyeui.on('pointerdown', function(event){
+            eye_daily.visible = true
+            eye_weekly.visible = true
+            nose_daily.visible = false
+            nose_weekly.visible = false
+            mouth_daily.visible = false
+            mouth_weekly.visible = false
+
+        })
+
+        // 코 버튼
+        nose_daily = this.add.text(53, 85, '오늘은 코 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        nose_weekly = this.add.text(53, 110, '이번주는 코 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+
+        nose_daily.visible = false
+        nose_weekly.visible = false
+
+        noseui.on('pointerdown', function(event){
+            nose_daily.visible = true
+            nose_weekly.visible = true
+            eye_daily.visible = false
+            eye_weekly.visible = false
+            mouth_daily.visible = false
+            mouth_weekly.visible = false
+        })
+
+        // 입 버튼
+        mouth_daily = this.add.text(53, 85, '오늘은 입 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        mouth_weekly = this.add.text(53, 110, '이번주는 입 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+
+        mouth_daily.visible = false
+        mouth_weekly.visible = false
+
+        mouthui.on('pointerdown', function(event){
+            mouth_daily.visible = true
+            mouth_weekly.visible = true
+            eye_daily.visible = false
+            eye_weekly.visible = false
+            nose_daily.visible = false
+            nose_weekly.visible = false
+        })
     }
 
     function update(){
