@@ -9,14 +9,14 @@
     let HavingItemData
     let wearingData
     let data = {
-        name: 'Rex', 
+        name: 'Rex',
         helmet:[
             { name: 'A' },
             { name: 'B' },
             { name: 'C' },
             { name: 'D' },
             { name: 'E' },
-        ], 
+        ],
         hair:[
             { name: 'A' },
             { name: 'B' },
@@ -24,35 +24,32 @@
             { name: 'D' },
             { name: 'E' },
             { name: 'F' },
-        ], 
+        ],
         top:[
             { name: 'A' },
             { name: 'B' },
             { name: 'C' },
             { name: 'D' },
             { name: 'E' },
-        ], 
+        ],
         bottom:[
             { name: 'A' },
             { name: 'B' },
             { name: 'C' },
             { name: 'D' },
             { name: 'E' },
-        ], 
+        ],
         shoe:[
             { name: 'A' },
             { name: 'B' },
             { name: 'C' },
             { name: 'D' },
             { name: 'E' },
-        ], 
+        ],
         weapon:[
             { name: 'A' },
             { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-        ], 
+        ],
         shield:[
             { name: 'A' },
             { name: 'B' },
@@ -61,11 +58,11 @@
             { name: 'E' },
         ]
     };
-
+ 
     function getKeyByValue(obj, value) {
         return Object.keys(obj).find(key => obj[key] === value);
     }
-
+ 
     var createPanel = function (scene, data, state) {
         var sizer = scene.rexUI.add.sizer({
             orientation: 'x',
@@ -74,28 +71,28 @@
             .add(
                 createTable(scene, data, state, 1), // child
                 { expand: true }
-            ) 
+            )
         return sizer;
     }
-
+ 
     var createTable = function (scene, data, key, rows) {
         var capKey = key.charAt(0).toUpperCase() + key.slice(1);
         var title = scene.rexUI.add.label({
             orientation: 'x',
             //text: scene.add.text(0, 0, capKey, {color:'black'}),
         });
-    
+   
         var items = data[key];
         var columns = Math.ceil(items.length / rows);
         var table = scene.rexUI.add.gridSizer({
             column: columns,
             row: rows,
-    
+   
             rowProportions: 1,
             space: { column: 10, row: 10 },
             name: key  // Search this name to get table back
         });
-
+ 
         var item, r, c;
         var iconSize = 80;
         for (var i = 0, cnt = items.length; i < cnt; i++) {
@@ -111,7 +108,7 @@
                 true
             )
         }
-    
+   
         return scene.rexUI.add.sizer({
             orientation: 'y',
             space: { left: 15, right: 10, top: 10, bottom: 10, item: 10 }
@@ -133,7 +130,7 @@
                 true // expand
             );
     }
-    
+   
     var createIcon = function (scene, item, iconWidth, iconHeight) {
         var label = scene.rexUI.add.label({
             orientation: 'y',
@@ -141,40 +138,40 @@
             text: scene.add.text(0, 0, item.name, {color:'black'}),
             space: { icon: 3 }
         });
-    
+   
         return label;
     };
-
-
+ 
+ 
   function preload ()
   {
     this.load.scenePlugin({
         key: 'rexuiplugin',
         url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
         sceneKey: 'rexUI'
-    });   
-    
+    });  
+   
     //bgs
     this.load.image('bg', "{% static '/resource/ui//bg1.png'%}")
-
+ 
     {% comment %} //havingitem
     await fetch('http://localhost:8000/mainapp/api/havingitem')
             .then(res=>res.json())
             .then((data)=>{havingitemData=data})
-
+ 
     //wearing
     await fetch('http://localhost:8000/mainapp/api/wearing')
             .then(res=>res.json())
             .then((data)=>{wearingData=data}) {% endcomment %}
-
-    
-  
+ 
+   
+ 
     //player_head
     this.load.image('hair', "http://localhost:8000/media/images/0HAIR.png")
     this.load.image('face', "http://localhost:8000/media/images/0HEAD EYES OPEN.png")
     this.load.image('head', "http://localhost:8000/media/images/HEAD EYES OPEN.png")
     this.load.image('helmet', "http://localhost:8000/media/images/HELMET.png")
-      
+     
     //player_top
     this.load.image('arm_a1', "http://localhost:8000/media/images/ARM A1.png")
     this.load.image('arm_a2', "http://localhost:8000/media/images/ARM A2.png")
@@ -187,24 +184,24 @@
     this.load.image('shoulder_b', "http://localhost:8000/media/images/SHOULDER B.png")
     this.load.image('body', "http://localhost:8000/media/images/BODY.png")
     this.load.image('hip', "http://localhost:8000/media/images/HIP.png")
-      
+     
     //player_bottom
     this.load.image('leg_a1', "http://localhost:8000/media/images/LEG A1.png")
     this.load.image('leg_a2', "http://localhost:8000/media/images/LEG A2.png")
     this.load.image('leg_b1', "http://localhost:8000/media/images/LEG B1.png")
     this.load.image('leg_b2', "http://localhost:8000/media/images/LEG B2.png")
-
+ 
     //player_shoes
     this.load.image('leg_a3', "http://localhost:8000/media/images/LEG A3.png")
     this.load.image('leg_b3', "http://localhost:8000/media/images/LEG B3.png")
-      
+     
     //player_weapon
     this.load.image('weapon', "http://localhost:8000/media/images/WEAPON.png")
-
-
+ 
+ 
     //player_shield
     this.load.image('shield', "http://localhost:8000/media/images/SHIELD.png")
-
+ 
     //hairs
     this.load.image('hair1', "http://localhost:8000/media/images/1HAIR.png")
     this.load.image('hair2', "http://localhost:8000/media/images/3HAIR.png")
@@ -214,10 +211,10 @@
     this.load.image('hair6', "http://localhost:8000/media/images/16HAIR.png")
     this.load.image('hair7', "http://localhost:8000/media/images/18HAIR.png")
     this.load.image('hair8', "http://localhost:8000/media/images/23HAIR.png")
-
+ 
       //face
       //추후추가
-
+ 
       //tops
       this.load.image('arm_a11', "http://localhost:8000/media/images/1ARM A1.png")
       this.load.image('arm_a21', "http://localhost:8000/media/images/1ARM A2.png")
@@ -230,7 +227,7 @@
       this.load.image('shoulder_b1', "http://localhost:8000/media/images/1SHOULDER B.png")
       this.load.image('body1', "http://localhost:8000/media/images/1BODY.png")
       this.load.image('hip1', "http://localhost:8000/media/images/1HIP.png")
-
+ 
       this.load.image('arm_a12', "http://localhost:8000/media/images/2ARM A1.png")
       this.load.image('arm_a22', "http://localhost:8000/media/images/2ARM A2.png")
       this.load.image('arm_a32', "http://localhost:8000/media/images/2ARM A3.png")
@@ -242,7 +239,7 @@
       this.load.image('shoulder_b2', "http://localhost:8000/media/images/2SHOULDER B.png")
       this.load.image('body2', "http://localhost:8000/media/images/2BODY.png")
       this.load.image('hip2', "http://localhost:8000/media/images/2HIP.png")
-
+ 
       this.load.image('arm_a13', "http://localhost:8000/media/images/3ARM A1.png")
       this.load.image('arm_a23', "http://localhost:8000/media/images/3ARM A2.png")
       this.load.image('arm_a33', "http://localhost:8000/media/images/3ARM A3.png")
@@ -254,38 +251,38 @@
       this.load.image('shoulder_b3', "http://localhost:8000/media/images/3SHOULDER B.png")
       this.load.image('body3', "http://localhost:8000/media/images/3BODY.png")
       this.load.image('hip3', "http://localhost:8000/media/images/3HIP.png")
-
+ 
       //bottoms
       this.load.image('leg_a11', "http://localhost:8000/media/images/1LEG A1.png")
       this.load.image('leg_a21', "http://localhost:8000/media/images/1LEG A2.png")
       this.load.image('leg_b11', "http://localhost:8000/media/images/1LEG B1.png")
       this.load.image('leg_b21', "http://localhost:8000/media/images/1LEG B2.png")
-
+ 
       this.load.image('leg_a12', "http://localhost:8000/media/images/LEG A1.png")
       this.load.image('leg_a22', "http://localhost:8000/media/images/LEG A2.png")
       this.load.image('leg_b12', "http://localhost:8000/media/images/LEG B1.png")
       this.load.image('leg_b22', "http://localhost:8000/media/images/LEG B2.png")
-  
+ 
       //shoes
       this.load.image('leg_a3', "http://localhost:8000/media/images/LEG A3.png")
       this.load.image('leg_b3', "http://localhost:8000/media/images/LEG B3.png")
-
+ 
       this.load.image('leg_a3', "http://localhost:8000/media/images/LEG A3.png")
       this.load.image('leg_b3', "http://localhost:8000/media/images/LEG B3.png")
-  
+ 
       //weapons
       this.load.image('weapon1', "http://localhost:8000/media/images/WEAPON1.png")
       this.load.image('weapon2', "http://localhost:8000/media/images/WEAPON2.png")
-
+ 
       //shields
       this.load.image('shield1', "http://localhost:8000/media/images/SHIELD1.png")
       this.load.image('shield2', "http://localhost:8000/media/images/SHIELD2.png")
-
+ 
       //UI
       this.load.image('back', "{% static '/resource/ui/back2.png'%}");
       this.load.image('box', "{% static '/resource/ui/character/box.png'%}");
       this.load.image('box1', "{% static '/resource/ui/character/box1.png'%}");
-
+ 
       this.load.image('helmetui', "{% static '/resource/ui/character/헬멧.png'%}");
       this.load.image('hairui', "{% static '/resource/ui/character/헤어.png'%}");
       this.load.image('topui', "{% static '/resource/ui/character/상의.png'%}");
@@ -294,12 +291,12 @@
       this.load.image('weaponui', "{% static '/resource/ui/character/무기.png'%}");
       this.load.image('shieldui', "{% static '/resource/ui/character/방패.png'%}");
       this.load.image('selectui', "{% static '/resource/ui/character/확정.png'%}");
-  
+ 
   }
-  
-  
-
-
+ 
+ 
+ 
+ 
   function create ()
   {
     player = this.physics.add.staticGroup();
@@ -308,13 +305,13 @@
     box = this.physics.add.staticGroup();
     hairs = this.physics.add.staticGroup();
     tops = this.physics.add.staticGroup();
-
+ 
     skills = this.physics.add.staticGroup();
     ui = this.physics.add.staticGroup();
-
+ 
     this.add.image(130,300,'bg').setScale(0.35);
     back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'});
-
+ 
     back.on('pointerover', function(event){
         this.setTint(0x50bcdf)
     })
@@ -324,19 +321,19 @@
     back.on('pointerdown', function(event){
         location.replace('http://localhost:8000/mainapp/main')
     })
-
-    mypanel = [helmetPanel, hairPanel, topPanel, bottomPanel, shoePanel, weaponPanel, shieldPanel]
-    
+ 
+    //mypanel = [helmetPanel, hairPanel, topPanel, bottomPanel, shoePanel, weaponPanel, shieldPanel]
+   
     var helmetPanel = this.rexUI.add.scrollablePanel({
         x: window_width/2,
         y: window_height-80,
         width: window_width-20,
         height: window_height*0.05,
-
+ 
         scrollMode: 1,
-
+ 
         background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
-
+ 
         panel: {
             child: createPanel(this, data, "helmet"),
             mask: {
@@ -344,17 +341,17 @@
                 // layer: this.add.layer()
             },
         },
-
+ 
         // scroller: true,
         scroller: {
             // pointerOutRelease: false
         },
-
+ 
         mouseWheelScroller: {
             focus: false,
             speed: 0.1
         },
-
+ 
         space: {
             left: 10,
             right: 10,
@@ -363,17 +360,17 @@
             panel: 10,
         }
     }).layout()
-
+ 
     var hairPanel = this.rexUI.add.scrollablePanel({
         x: window_width/2,
         y: window_height-80,
         width: window_width-20,
         height: window_height*0.05,
-
+ 
         scrollMode: 1,
-
+ 
         background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
-
+ 
         panel: {
             child: createPanel(this, data, "hair"),
             mask: {
@@ -381,17 +378,17 @@
                 // layer: this.add.layer()
             },
         },
-
+ 
         // scroller: true,
         scroller: {
             // pointerOutRelease: false
         },
-
+ 
         mouseWheelScroller: {
             focus: false,
             speed: 0.1
         },
-
+ 
         space: {
             left: 10,
             right: 10,
@@ -400,17 +397,17 @@
             panel: 10,
         }
     }).layout()
-
+ 
     var topPanel = this.rexUI.add.scrollablePanel({
         x: window_width/2,
         y: window_height-80,
         width: window_width-20,
         height: window_height*0.05,
-
+ 
         scrollMode: 1,
-
+ 
         background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
-
+ 
         panel: {
             child: createPanel(this, data, "top"),
             mask: {
@@ -418,17 +415,17 @@
                 // layer: this.add.layer()
             },
         },
-
+ 
         // scroller: true,
         scroller: {
             // pointerOutRelease: false
         },
-
+ 
         mouseWheelScroller: {
             focus: false,
             speed: 0.1
         },
-
+ 
         space: {
             left: 10,
             right: 10,
@@ -437,17 +434,17 @@
             panel: 10,
         }
     }).layout()
-
+ 
     var bottomPanel = this.rexUI.add.scrollablePanel({
         x: window_width/2,
         y: window_height-80,
         width: window_width-20,
         height: window_height*0.05,
-
+ 
         scrollMode: 1,
-
+ 
         background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
-
+ 
         panel: {
             child: createPanel(this, data, "bottom"),
             mask: {
@@ -455,17 +452,17 @@
                 // layer: this.add.layer()
             },
         },
-
+ 
         // scroller: true,
         scroller: {
             // pointerOutRelease: false
         },
-
+ 
         mouseWheelScroller: {
             focus: false,
             speed: 0.1
         },
-
+ 
         space: {
             left: 10,
             right: 10,
@@ -474,17 +471,17 @@
             panel: 10,
         }
     }).layout()
-
+ 
     var shoePanel = this.rexUI.add.scrollablePanel({
         x: window_width/2,
         y: window_height-80,
         width: window_width-20,
         height: window_height*0.05,
-
+ 
         scrollMode: 1,
-
+ 
         background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
-
+ 
         panel: {
             child: createPanel(this, data, "shoe"),
             mask: {
@@ -492,17 +489,17 @@
                 // layer: this.add.layer()
             },
         },
-
+ 
         // scroller: true,
         scroller: {
             // pointerOutRelease: false
         },
-
+ 
         mouseWheelScroller: {
             focus: false,
             speed: 0.1
         },
-
+ 
         space: {
             left: 10,
             right: 10,
@@ -511,17 +508,17 @@
             panel: 10,
         }
     }).layout()
-
+ 
     var weaponPanel = this.rexUI.add.scrollablePanel({
         x: window_width/2,
         y: window_height-80,
         width: window_width-20,
         height: window_height*0.05,
-
+ 
         scrollMode: 1,
-
+ 
         background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
-
+ 
         panel: {
             child: createPanel(this, data, "weapon"),
             mask: {
@@ -529,17 +526,17 @@
                 // layer: this.add.layer()
             },
         },
-
+ 
         // scroller: true,
         scroller: {
             // pointerOutRelease: false
         },
-
+ 
         mouseWheelScroller: {
             focus: false,
             speed: 0.1
         },
-
+ 
         space: {
             left: 10,
             right: 10,
@@ -548,17 +545,17 @@
             panel: 10,
         }
     }).layout()
-
+ 
     var shieldPanel = this.rexUI.add.scrollablePanel({
         x: window_width/2,
         y: window_height-80,
         width: window_width-20,
         height: window_height*0.05,
-
+ 
         scrollMode: 1,
-
+ 
         background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_PRIMARY),
-
+ 
         panel: {
             child: createPanel(this, data, "shield"),
             mask: {
@@ -566,17 +563,17 @@
                 // layer: this.add.layer()
             },
         },
-
+ 
         // scroller: true,
         scroller: {
             // pointerOutRelease: false
         },
-
+ 
         mouseWheelScroller: {
             focus: false,
             speed: 0.1
         },
-
+ 
         space: {
             left: 10,
             right: 10,
@@ -585,19 +582,19 @@
             panel: 10,
         }
     }).layout()
-
-
+ 
+ 
     hairPanel.visible=false
     topPanel.visible=false
     bottomPanel.visible = false
     shoePanel.visible = false
     weaponPanel.visible = false
     shieldPanel.visible = false
-
-
-
-
-     //BTN 
+ 
+ 
+ 
+ 
+     //BTN
      btn_x = window_width-70
      helmetui = btn.create(btn_x,150, 'helmetui').setScale(0.5).setInteractive();
      hairui = btn.create(btn_x,190, 'hairui').setScale(0.5).setInteractive();
@@ -608,9 +605,9 @@
      shieldui = btn.create(btn_x,390, 'shieldui').setScale(0.5).setInteractive();
      selectui = btn.create(btn_x,450, 'selectui').setScale(0.9).setInteractive();
      btnui = [helmetui, hairui, topui, bottomui, shoesui, weaponui, shieldui];
-
+ 
      helmetui.setTint(0x50bcdf);
-
+ 
       //player
       x = 105;
       y = 300;
@@ -620,34 +617,34 @@
       arm_b3f = this.add.sprite(x+45, y+45, 'arm_b3f').setScale(0.5); //왼손 앞
       arm_b2 = this.add.sprite(x+20, y+35, 'arm_b2').setScale(0.5); //왼팔 아래
       shoulder_b = this.add.sprite(x+2, y-7, 'shoulder_b').setScale(0.5); //왼쪽 어깨
-      
+     
       leg_b3 = this.add.sprite(x+20, y+105, 'leg_b3').setScale(0.5); //왼발
       leg_b1 = this.add.sprite(x, y+50, 'leg_b1').setScale(0.5); //왼다리 위
       leg_b1.angle -= 60;
       leg_b2 = this.add.sprite(x+16, y+77, 'leg_b2').setScale(0.5); //왼다리 아래
-
+ 
       hip = this.add.sprite(x-15, y+30, 'hip').setScale(0.5); //엉덩이
       body = this.add.sprite(x-15, y, 'body').setScale(0.5); //몸통
-
+ 
       leg_a3 = this.add.sprite(x-40, y+105, 'leg_a3').setScale(0.5); //오른발
       leg_a1 = this.add.sprite(x-22, y+50, 'leg_a1').setScale(0.5); //오른다리 위
       leg_a2 = this.add.sprite(x-30, y+77, 'leg_a2').setScale(0.5); //오른다리 아래
       leg_a2.angle += 30;
-      
+     
       arm_a1 = this.add.sprite(x-40, y+12, 'arm_a1').setScale(0.5); //오른팔 위
       arm_a3 = this.add.sprite(x-42, y+60, 'arm_a3').setScale(0.5); //오른손
       arm_a2 = this.add.sprite(x-45, y+35, 'arm_a2').setScale(0.5); //오른팔 아래
       shoulder_a = this.add.sprite(x-35, y-7, 'shoulder_a').setScale(0.5); //오른쪽 어깨
-      
-
-
+     
+ 
+ 
       face = this.add.sprite(x-10, y-35, 'face').setScale(0.5); //얼굴
       hair = this.add.sprite(x-10, y-43, 'hair').setScale(0.5); //머리
       helmet = this.add.sprite(x-11, y-47, 'helmet').setScale(0.55); //헬멧
       shield = this.add.sprite(x-42, y+50, 'shield').setScale(0.5); //방패
-
+ 
       helmet.visible = false
-
+ 
     //palyer animation
     facetween = this.tweens.add({
         targets: face,
@@ -656,7 +653,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //머리
     hairtween = this.tweens.add({
         targets: hair,
@@ -665,7 +662,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //헬멧
     helmettween = this.tweens.add({
         targets: helmet,
@@ -674,7 +671,7 @@
         yoyo: true,
         repeat: -1
     });
-    
+   
     //몸통
     bodyween = this.tweens.add({
         targets: body,
@@ -683,7 +680,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //오른다리 아래
     leg_a2tween = this.tweens.add({
         targets: leg_a2,
@@ -693,7 +690,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //오른손
     arm_a3tween = this.tweens.add({
         targets: arm_a3,
@@ -703,7 +700,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //오른팔 위
     arm_a1tween = this.tweens.add({
         targets: arm_a1,
@@ -713,7 +710,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //오른팔 아래
     arm_a2tween = this.tweens.add({
         targets: arm_a2,
@@ -723,7 +720,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //왼다리 아래
     leg_b2tween = this.tweens.add({
         targets: leg_b2,
@@ -733,7 +730,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //왼손 뒤
     arm_b3btween = this.tweens.add({
         targets: arm_b3b,
@@ -743,7 +740,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //왼손 앞
     arm_b3ftween = this.tweens.add({
         targets: arm_b3f,
@@ -753,7 +750,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //왼팔 위
     arm_b1tween = this.tweens.add({
         targets: arm_b1,
@@ -763,7 +760,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //왼팔 아래
     arm_b2tween = this.tweens.add({
         targets: arm_b2,
@@ -773,8 +770,8 @@
         yoyo: true,
         repeat: -1
     });
-
-
+ 
+ 
     //무기
     weapontween = this.tweens.add({
         targets: weapon,
@@ -784,7 +781,7 @@
         yoyo: true,
         repeat: -1
     });
-
+ 
     //방패
     shieldtween = this.tweens.add({
         targets: shield,
@@ -795,19 +792,82 @@
         repeat: -1
     });
     //palyer animation end
-
-
-
+ 
+ 
+ 
     this.input.on('gameobjectdown', function(pointer, gameObject){
-
-        if(gameObject==helmetui){choicetype(0); menuOptions(0);}
-        if(gameObject==hairui){choicetype(1); menuOptions(1);}
-        if(gameObject==topui){choicetype(2); menuOptions(2);}
-        if(gameObject==bottomui){choicetype(3); menuOptions(3);}
-        if(gameObject==shoesui){choicetype(4); menuOptions(4);}
-        if(gameObject==weaponui){choicetype(5); menuOptions(5);}
-        if(gameObject==shieldui){choicetype(6); menuOptions(6);}
-
+ 
+        if(gameObject==helmetui){
+            choicetype(0);
+            helmetPanel.visible = true
+            hairPanel.visible = false
+            topPanel.visible = false
+            bottomPanel.visible = false
+            shoePanel.visible = false
+            weaponPanel.visible = false
+            shieldPanel.visible = false
+        }
+        if(gameObject==hairui){
+            choicetype(1);
+            helmetPanel.visible = false
+            hairPanel.visible = true
+            topPanel.visible = false
+            bottomPanel.visible = false
+            shoePanel.visible = false
+            weaponPanel.visible = false
+            shieldPanel.visible = false
+        }
+        if(gameObject==topui){
+            choicetype(2);
+            helmetPanel.visible = false
+            hairPanel.visible = false
+            topPanel.visible = true
+            bottomPanel.visible = false
+            shoePanel.visible = false
+            weaponPanel.visible = false
+            shieldPanel.visible = false
+        }
+        if(gameObject==bottomui){
+            choicetype(3);
+            helmetPanel.visible = false
+            hairPanel.visible = false
+            topPanel.visible = false
+            bottomPanel.visible = true
+            shoePanel.visible = false
+            weaponPanel.visible = false
+            shieldPanel.visible = false
+        }
+        if(gameObject==shoesui){
+            choicetype(4);
+            helmetPanel.visible = false
+            hairPanel.visible = false
+            topPanel.visible = false
+            bottomPanel.visible = false
+            shoePanel.visible = true
+            weaponPanel.visible = false
+            shieldPanel.visible = false
+        }
+        if(gameObject==weaponui){
+            choicetype(5);
+            helmetPanel.visible = false
+            hairPanel.visible = false
+            topPanel.visible = false
+            bottomPanel.visible = false
+            shoePanel.visible = false
+            weaponPanel.visible = true
+            shieldPanel.visible = false
+        }
+        if(gameObject==shieldui){
+            choicetype(6);
+            helmetPanel.visible = false
+            hairPanel.visible = false
+            topPanel.visible = false
+            bottomPanel.visible = false
+            shoePanel.visible = false
+            weaponPanel.visible = false
+            shieldPanel.visible = true
+        }
+ 
         if(gameObject==minihair1){hair.setTexture('hair1')}
         if(gameObject==minihair2){hair.setTexture('hair2')}
         if(gameObject==minihair3){hair.setTexture('hair3')}
@@ -873,31 +933,30 @@
             body.setTexture('body2'),
             hip.setTexture('hip2')
         }
-
+ 
     })
-
-
+ 
+ 
     function choicetype(num){
         for(var i=0;i<btnui.length;i++){
             if (num==i){
                 btnui[i].setTint(0x50bcdf);
-                mypanel[i].visible = true
             }
             if(num!=i){
                 btnui[i].clearTint();
-                mypanel[i].visible = false
+ 
             }
         }
-    } 
-
-    
+    }
+ 
+   
     function menuOptions(num){
-    
+   
     if(num==0){ };
     if(num==1){
     };
     if(num==2){
-
+ 
     };
     if(num==3){
     };
@@ -906,7 +965,7 @@
     if(num==6){};
     if(num==7){};
     }
-
+ 
     function selection(icon, array){
         for(var i=0;i<array.length;i++){
             if(icon==array[i]){
@@ -916,28 +975,28 @@
                 array[i].visible = false;
             }
         }
-
+ 
     }
-
-
+ 
+ 
 }
-
+ 
   //end create
-  
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   //Game Main
   function update ()
-  { 
-    
+  {
+   
   }
-  
-  
-  
+ 
+ 
+ 
   var config = {
     type: Phaser.AUTO,
     width: window_width,
