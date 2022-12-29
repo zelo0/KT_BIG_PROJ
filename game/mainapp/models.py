@@ -54,14 +54,17 @@ class Character(models.Model):
 class HavingItem(models.Model) :
   userID = models.ForeignKey('core.user', models.CASCADE)
   itemID = models.ForeignKey('Item', models.CASCADE)
-
+  
+  def __str__(self):
+    return self.itemID.name
+  
 class wearing(models.Model):
   id = models.AutoField(primary_key=True)
   character = models.ForeignKey(Character, on_delete=models.CASCADE, null=True)
   havingItem = models.ForeignKey(HavingItem, on_delete=models.CASCADE, null=True)
 
   def __str__(self):
-    return self.havingitem.item.name
+    return self.havingItem.itemID.name
 
 class Skill(models.Model):
   class TypeChoices(models.TextChoices):
