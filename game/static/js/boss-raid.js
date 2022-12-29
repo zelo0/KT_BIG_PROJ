@@ -164,7 +164,6 @@ function create() {
     let item, r, c;
 
     // table header
-
     // item을 테이블에 배치
     for (let r = 0, cnt = data.length; r < cnt; r++) {
       item = data[r];
@@ -347,6 +346,17 @@ function move_mouth(da) {
 function partShot(str1, canvas) {
   // 스크린샷
   let image = canvas.toDataURL("image/jpeg");
+  $.ajax({
+    url: "api/face/",
+    async: true,
+    type: "POST",
+    data: {
+      face: image,
+      csrfmiddlewaretoken: "{{ csrf_token }}",
+    },
+    datatype: "json",
+    headers: { "X-CSRFToken": "{{ csrf_token }}" },
+  });
   console.log(image);
 }
 

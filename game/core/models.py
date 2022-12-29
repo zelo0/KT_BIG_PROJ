@@ -17,7 +17,7 @@ class User(AbstractUser):
     age = models.CharField(max_length=3, blank=True, null=True)
     gender = models.CharField(max_length=2, blank=True, null=True)
     money = models.IntegerField(default=0)
-    profile_image = models.ImageField(upload_to='profile', default="default.png")
+    profile_image = models.ImageField(upload_to='profile', default="profile/default.png")
 
 
 
@@ -74,10 +74,28 @@ class Monster(models.Model):
     mob_type = models.CharField(max_length=255, blank=True, null=True)
     class Meta:
         db_table = 'monster'
+        
+class Achievement(models.Model):
+    id = models.AutoField(primary_key=True)
+    achieveName = models.CharField(max_length=255)
+    achieve = models.CharField(max_length=255)
+    achieveImage = models.ImageField(upload_to='acievement', default="default.png")
+    
+    owner = models.ManyToManyField(User, through='AchieveUser')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.achieveName
+    
+class AchieveUser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    achieve = models.ForeignKey(Achievement,on_delete=models.CASCADE)
+    achieveGet = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class HistoryByDay(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignObject(User, models.CASCADE)
+    user = models.ForeignKey(User, models.CASCADE)
     face_image = models.ImageField(upload_to='face')
     date = models.DateField(auto_now_add=True)
     mouseCnt = models.IntegerField(default=0)

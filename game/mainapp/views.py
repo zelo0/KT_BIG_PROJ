@@ -2,9 +2,12 @@ from django.shortcuts import render
 from .models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import ShopSerializer
 import redis
 
+from rest_framework import status
+from django.http import HttpResponse
+from .serializers import *
+from core.models import User, HistoryByDay
 
 # Create your views here.
 def main(request):
@@ -62,3 +65,53 @@ def pvp(request, room_name):
     'room_name': room_name,
     'player_name': request.user.username
   })
+
+def analysis(request):
+  return render(request, 'mainapp/analysis.html')
+
+class shopAPI(APIView):
+  def get(self, request):
+    shop_list = Shop.objects.all()
+    serializer = ShopSerializer(shop_list, many=True)
+    return Response(serializer.data)
+  
+class ItemAPI(APIView):
+  def get(self, request):
+    Item_list = Item.objects.prefetch_related('history').all()
+    serializer = ItemSerializer(Item_list, many=True)
+    return Response(serializer.data)
+  
+class StoreAPI(APIView) :
+  def post(self, request) :
+    Post = StorePostSerializer(data=request.data)
+    print('post 요청')
+    print(Post)
+    if Post.is_valid() :
+      print('post alive')
+      Post.save()
+      return Response(Post.data)
+    else :
+      print('post dead')
+      return Response(Post.data)
+    
+  def patch(self, request) :
+    value = int(request.data.__getitem__('money'))
+    data = request.user.money - value
+    request.user.money = data
+    request.user.save()
+    return Response()
+    
+class HavingItemAPI(APIView):
+  def get(self, request):
+    HavingItem_list = HavingItem.objects.all()
+    serializer = HavingItemSerializer(HavingItem_list, many=True)
+    return Response(serializer.data)
+  
+
+class FaceImageAPI(APIView):
+  def post(self, request):
+    face_image = request.data.__getitem__('face')
+    history = HistoryByDay()
+    history.user = request.user
+    history.face_image = face_image
+    history.save()
