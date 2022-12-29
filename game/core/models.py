@@ -72,6 +72,7 @@ class Monster(models.Model):
     hp = models.IntegerField()
     skills = models.ForeignKey(MonsterAbility, models.CASCADE)
     mob_type = models.CharField(max_length=255, blank=True, null=True)
+    
     class Meta:
         db_table = 'monster'
         

@@ -13,7 +13,7 @@
         });
 
         //face
-        this.load.image('face', "{% static '/resource/ui/analysis/kwon.jpg'%}")
+        this.load.image('face', "{% static '/resource/ui/analysis/숲.png'%}")
 
         //ui
         this.load.image('back', "{% static '/resource/ui/back2.png'%}")
@@ -24,11 +24,13 @@
 
     function create(){
         // 분석글
-        this.add.text(53, 60, '현재 회원님의 안면 근육 나이는 3세 입니다', {color:'black', font:'450 14px Arial'})
+        face_age = 3 // DB에서 받아오기
+
+        this.add.text(53, 60, '현재 회원님의 안면 근육 나이는 ' + face_age + '세 입니다', {color:'black', font:'450 14px Arial'})
 
         // 얼굴 이미지
         face = this.physics.add.staticGroup();
-        test_face = this.add.image(188, 334, 'face').setScale(0.25).setInteractive({cursor:'pointer'})
+        test_face = this.add.image(188, 334, 'face').setScale(0.60).setInteractive({cursor:'pointer'})
     
         // 뒤로가기 버튼
         back = this.add.image(30,30,'back').setInteractive({cursor:'pointer'}); // 뒤로 돌아가기? preload에서 가져온 이미지
@@ -64,8 +66,11 @@
         } 
 
         // 눈 버튼
-        eye_daily = this.add.text(53, 85, '오늘은 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
-        eye_weekly = this.add.text(53, 110, '이번주는 눈 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        eye_momentum_daily = 3 // DB에서 받아오기
+        eye_momentum_weekly = 3 // DB에서 받아오기
+
+        eye_daily = this.add.text(53, 85, '오늘은 눈 주변 근육을 ' + eye_momentum_daily + '만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        eye_weekly = this.add.text(53, 110, '이번주는 눈 주변 근육을 ' + eye_momentum_weekly + '만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
 
         eye_daily.visible = false
         eye_weekly.visible = false
@@ -81,8 +86,11 @@
         })
 
         // 코 버튼
-        nose_daily = this.add.text(53, 85, '오늘은 코 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
-        nose_weekly = this.add.text(53, 110, '이번주는 코 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        nose_momentum_daily = 789 // DB에서 받아오기
+        nose_momentum_weekly = 494 // DB에서 받아오기
+
+        nose_daily = this.add.text(53, 85, '오늘은 코 주변 근육을 ' + nose_momentum_daily + '만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        nose_weekly = this.add.text(53, 110, '이번주는 코 주변 근육을 ' + nose_momentum_weekly + '만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
 
         nose_daily.visible = false
         nose_weekly.visible = false
@@ -97,8 +105,11 @@
         })
 
         // 입 버튼
-        mouth_daily = this.add.text(53, 85, '오늘은 입 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
-        mouth_weekly = this.add.text(53, 110, '이번주는 입 주변 근육을 n만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        mouth_momentum_daily = 489 // DB에서 받아오기
+        mouth_momentum_weekly = 561 // DB에서 받아오기
+
+        mouth_daily = this.add.text(53, 85, '오늘은 입 주변 근육을 ' + mouth_momentum_daily + '만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
+        mouth_weekly = this.add.text(53, 110, '이번주는 입 주변 근육을 ' + mouth_momentum_weekly + '만큼 사용하였습니다', {color:'black', font:'450 14px Arial'})
 
         mouth_daily.visible = false
         mouth_weekly.visible = false

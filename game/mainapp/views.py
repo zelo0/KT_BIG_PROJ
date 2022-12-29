@@ -37,6 +37,11 @@ def result(request):
     'right_eye_cnt': right_eye_cnt,
     'mouth_cnt': mouth_cnt
   })
+
+
+def analysis(request):
+  return render(request, 'mainapp/analysis.html')
+  
 class ShopAPI(APIView):
   def get(self, request):
     shop_list = Shop.objects.prefetch_related('item').all()

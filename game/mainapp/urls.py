@@ -15,6 +15,7 @@ urlpatterns = [
     path('character', views.character),
     path('skills', views.skills),
     path('result', views.result),
+    path('analysis', views.analysis),
     path('api/shop/', views.ShopAPI.as_view()),
 
     path('room/', views.find_room),
