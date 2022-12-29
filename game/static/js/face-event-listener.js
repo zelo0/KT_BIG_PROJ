@@ -1,26 +1,29 @@
 // 수정된 부분
 function move_mouth(da) {
-
-  let tmp_dist = 0
+  let tmp_dist = 0;
 
   if (da.length >= 2) {
-      tmp_dist = Math.abs(parseInt(da.slice(-1)) - parseInt(da.slice(-2)))
+    tmp_dist = Math.abs(parseInt(da.slice(-1)) - parseInt(da.slice(-2)));
   }
-  return tmp_dist
+  return tmp_dist;
 }
 
 function PartShot(str1) {
   //특정부분 스크린샷
   html2canvas(document.getElementById("video"))
-  //id container 부분만 스크린샷
-      .then(function (canvas) {
-          //jpg 결과값
-          drawImg(canvas.toDataURL('image/jpeg'));
-          //이미지 저장
-          saveAs(canvas.toDataURL(), 'face_org'+String(str1)+'.jpg');
-      }).catch(function (err) {
-          console.log(err);
-      });
+    //id container 부분만 스크린샷
+    .then(function (canvas) {
+      //jpg 결과값
+      drawImg(canvas.toDataURL("image/jpeg"));
+      //이미지 저장
+      saveAs(
+        canvas.toDataURL(),
+        "/media/face/face_org" + String(str1) + ".jpg"
+      );
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
 }
 
 function saveAs(uri, filename) {
@@ -59,7 +62,6 @@ function drawImg(imgData) {
   );
 }
 // 수정된 부분
-
 
 var distance_array = [];
 var count = 0;
@@ -115,7 +117,7 @@ video.addEventListener("play", () => {
 
     x_arr.push(test_x);
     y_arr.push(test_x);
-    
+
     let x_left = (30 - (test_x[39] - test_x[36])) / 2;
     let x_right = (30 - (test_x[45] - test_x[42])) / 2;
     let y_left = (20 - (test_y[40] - test_y[37])) / 2;
@@ -135,7 +137,7 @@ video.addEventListener("play", () => {
     let y_df_eye_right_start = parseInt(test_y[44] - y_right);
     let y_df_eye_right_end = 40; // 파라미터가 수정되었습니다 20 --> 40
     // 수정된 부분
-    
+
     // You can try more different parameters
     let rect_left = new cv.Rect(
       x_df_eye_left_start,
@@ -171,12 +173,14 @@ video.addEventListener("play", () => {
     let right_count_check;
 
     // 수정된 부분
-    for (var i = 20; i <= 40; i++) { // 파라미터가 수정되었습니다 12, 20 --> 20, 40
+    for (var i = 20; i <= 40; i++) {
+      // 파라미터가 수정되었습니다 12, 20 --> 20, 40
       if (Array.isArray(right_matrix[i])) {
         right_count_check = getElNum(right_matrix[i], 255);
       }
 
-      if (right_count_check <= 20) { // 값을 낮출수록 인식 기준이 하드해집니다
+      if (right_count_check <= 20) {
+        // 값을 낮출수록 인식 기준이 하드해집니다
         // console.log('왼쪽 눈을 감음')
         right_count++;
       }
@@ -184,43 +188,47 @@ video.addEventListener("play", () => {
         left_count_check = getElNum(left_matrix[i], 255);
       }
 
-      if (left_count_check <= 15) { // 값을 낮출수록 인식 기준이 하드해집니다
+      if (left_count_check <= 15) {
+        // 값을 낮출수록 인식 기준이 하드해집니다
         // console.log('오른쪽 눈을 감음')
         left_count++;
       }
     }
     console.log("255 횟수 체크: ", left_count, right_count);
-    if (left_count >= 2 && left_count2 == 0) { // 값을 높일수록 인식 기준이 하드해집니다
+    if (left_count >= 2 && left_count2 == 0) {
+      // 값을 높일수록 인식 기준이 하드해집니다
       attackAction();
       console.log("오른쪽 눈 스킬발동" + String(left_skill_count) + "번!");
       left_count2 = 1;
       left_skill_count++;
       // 수정된 부분
-      if (capture_count_right <= 3) { // 웃긴 얼굴 캡쳐, 너무 많이 다운로드되어 일단은 저장개수를 변수 한개로 임시조정해두었습니다
-        PartShot(for_name)
-        capture_count_right++
-        }
-      };
-      if (left_count < 2) {
-        left_count2 = 0
+      if (capture_count_right <= 3) {
+        // 웃긴 얼굴 캡쳐, 너무 많이 다운로드되어 일단은 저장개수를 변수 한개로 임시조정해두었습니다
+        PartShot(for_name);
+        capture_count_right++;
       }
-      // 수정된 부분
-    if (right_count >= 2 && right_count2 == 0) { // 값을 높일수록 인식 기준이 하드해집니다
+    }
+    if (left_count < 2) {
+      left_count2 = 0;
+    }
+    // 수정된 부분
+    if (right_count >= 2 && right_count2 == 0) {
+      // 값을 높일수록 인식 기준이 하드해집니다
       attackAction();
       console.log("왼쪽 눈 스킬발동" + String(right_skill_count) + "번!");
       right_count2 = 1;
       right_skill_count++;
       // 수정된 부분
       if (capture_count_left <= 3) {
-        PartShot(for_name)
-        capture_count_left++
-        }
+        PartShot(for_name);
+        capture_count_left++;
+      }
     }
     if (right_count < 2) {
-      right_count2 = 0
+      right_count2 = 0;
     }
-      // 수정된 부분
-    
+    // 수정된 부분
+
     src.delete();
     dst.delete();
     dst_left.delete();
@@ -239,17 +247,22 @@ video.addEventListener("play", () => {
     let distance = (x_sub ** 2 + y_sub ** 2) ** (1 / 2);
 
     distance_array.push(distance);
-    
+
     // 수정된 부분
-    total_distance += move_mouth(distance_array)
-    if (total_distance % workout <= 50 &&  total_distance / workout >= 1 && workout_count == 0){
-    console.log('운동량' + total_distance + '돌파! 구강이 튼튼하시군요')
-    workout_count = 1
+    total_distance += move_mouth(distance_array);
+    if (
+      total_distance % workout <= 50 &&
+      total_distance / workout >= 1 &&
+      workout_count == 0
+    ) {
+      console.log("운동량" + total_distance + "돌파! 구강이 튼튼하시군요");
+      workout_count = 1;
     }
-    if (total_distance % workout >= 50 &&  total_distance / workout >= 1){
-    workout_count = 0}
+    if (total_distance % workout >= 50 && total_distance / workout >= 1) {
+      workout_count = 0;
+    }
     // 수정된 부분
-    
+
     if (distance >= distance_array[0] * 1.4) {
       // console.log( " 입벌림 " );
       count++;
@@ -262,9 +275,9 @@ video.addEventListener("play", () => {
       attackAction();
       console.log("입 스킬발동" + String(mouth_skill_count) + "번!");
       // 수정된 부분
-      if (capture_count_mouth <= 3){
-        PartShot(for_name)
-        capture_count_mouth++ 
+      if (capture_count_mouth <= 3) {
+        PartShot(for_name);
+        capture_count_mouth++;
       }
       // 수정된 부분
       count2++;

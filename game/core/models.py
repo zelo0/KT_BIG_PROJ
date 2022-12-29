@@ -75,6 +75,14 @@ class Monster(models.Model):
     class Meta:
         db_table = 'monster'
 
+class HistoryByDay(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignObject(User, models.CASCADE)
+    face_image = models.ImageField(upload_to='face')
+    date = models.DateField(auto_now_add=True)
+    mouseCnt = models.IntegerField(default=0)
+    eyeCnt = models.IntegerField(default=0)
+
 class FacePoint(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, models.CASCADE)

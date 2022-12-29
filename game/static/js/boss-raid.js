@@ -15,7 +15,7 @@ chatSocket.onclose = (e) => {
 };
 
 // GAME
-const GAME_TIME = 30;
+const GAME_TIME = 60;
 const COLOR_BOARD_BACKGROUND = 0xffb617;
 let remainedTime = GAME_TIME;
 let timeText;
@@ -344,6 +344,12 @@ function move_mouth(da) {
   return tmp_dist;
 }
 
+function partShot(str1, canvas) {
+  // 스크린샷
+  let image = canvas.toDataURL("image/jpeg");
+  console.log(image);
+}
+
 var distance_array = [];
 var count = 0;
 var count2 = 0;
@@ -385,7 +391,7 @@ video.addEventListener("play", () => {
     let context = canvas.getContext("2d");
     let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
     let dst = new cv.Mat(video.height, video.width, cv.CV_8UC1);
-    //context.drawImage(video, 0, 0, video.width, video.height);
+    context.drawImage(video, 0, 0, video.width, video.height);
     src.data.set(context.getImageData(0, 0, video.width, video.height).data);
     // faceapi.draw.drawDetections(canvas, resizedDetections); // 주석
     // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections); // 주석
@@ -493,7 +499,7 @@ video.addEventListener("play", () => {
       // 수정된 부분
       if (capture_count_right <= 3) {
         // 웃긴 얼굴 캡쳐, 너무 많이 다운로드되어 일단은 저장개수를 변수 한개로 임시조정해두었습니다
-        // PartShot(for_name)
+        partShot(for_name, canvas);
         capture_count_right++;
       }
     }
@@ -509,7 +515,7 @@ video.addEventListener("play", () => {
       right_skill_count++;
       // 수정된 부분
       if (capture_count_left <= 3) {
-        // PartShot(for_name)
+        partShot(for_name, canvas);
         capture_count_left++;
       }
     }
@@ -561,7 +567,7 @@ video.addEventListener("play", () => {
       attackAction();
       console.log("입 스킬발동" + String(mouth_skill_count) + "번!");
       if (capture_count_mouth <= 3) {
-        // PartShot(for_name)
+        partShot(for_name, canvas);
         capture_count_mouth++;
       }
       count2++;
