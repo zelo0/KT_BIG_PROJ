@@ -75,6 +75,7 @@ class Monster(models.Model):
     
     class Meta:
         db_table = 'monster'
+<<<<<<< HEAD
         
 class Achievement(models.Model):
     id = models.AutoField(primary_key=True)
@@ -104,6 +105,9 @@ class HistoryByDay(models.Model):
     eyeCnt = models.IntegerField(default=0)
 
 =======
+>>>>>>> parent of 8a4dc9b (feat: 게임 중 스냅샷)
+=======
+
 >>>>>>> parent of 8a4dc9b (feat: 게임 중 스냅샷)
 class FacePoint(models.Model):
     id = models.AutoField(primary_key=True)

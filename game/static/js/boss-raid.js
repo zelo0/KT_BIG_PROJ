@@ -343,7 +343,6 @@ function move_mouth(da) {
   return tmp_dist;
 }
 
-<<<<<<< HEAD
 function partShot(str1, canvas) {
   // 스크린샷
   let image = canvas.toDataURL("image/jpeg");
@@ -361,8 +360,6 @@ function partShot(str1, canvas) {
   console.log(image);
 }
 
-=======
->>>>>>> parent of 8a4dc9b (feat: 게임 중 스냅샷)
 var distance_array = [];
 var count = 0;
 var count2 = 0;
