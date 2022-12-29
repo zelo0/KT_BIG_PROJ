@@ -98,9 +98,13 @@ class HistoryByDay(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, models.CASCADE)
     face_image = models.ImageField(upload_to='face')
+    age = models.IntegerField(null=True, blank=True)
     date = models.DateField(auto_now_add=True)
-    mouseCnt = models.IntegerField(default=0)
+    mouthCnt = models.IntegerField(default=0)
     eyeCnt = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.user.username + '/' + str(self.date)
 
 class FacePoint(models.Model):
     id = models.AutoField(primary_key=True)

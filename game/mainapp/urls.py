@@ -36,6 +36,8 @@ urlpatterns = [
     path('result', views.result),
     path('room/', views.find_room),
     path('room/wait/<str:room_name>/', views.wait_room),
-    path('room/<str:room_name>/', views.pvp)
+    path('room/<str:room_name>/', views.pvp),
+
+    path('api/face/', views.FaceImageAPI.as_view()),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

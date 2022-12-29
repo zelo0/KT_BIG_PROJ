@@ -162,11 +162,11 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
     ### sqlite
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    'default': dj_database_url.parse('postgres://runnig_hi_db_user:UtSu9lOKggJVu62U5Aqf2E4e5WIHOYO7@dpg-cefainsgqg4b3hao43lg-a.singapore-postgres.render.com/runnig_hi_db', conn_max_age=600),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+    # 'default': dj_database_url.parse('postgres://runnig_hi_db_user:UtSu9lOKggJVu62U5Aqf2E4e5WIHOYO7@dpg-cefainsgqg4b3hao43lg-a.singapore-postgres.render.com/runnig_hi_db', conn_max_age=600),
 }
 
 # Password validation
@@ -221,7 +221,7 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# MODEL_ROOT = os.path.join(BASE_DIR, 'model', 'face_models')
+AGE_MODEL_PATH = os.path.join(BASE_DIR, 'static', 'models', 'age_model.h5')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
