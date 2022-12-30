@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% load static %} {% block style %}
+<link rel="stylesheet" href="{% static 'libs/cute-alert/style.css' %}" type="text/css" />
 <style>
   {% comment %} body {
     margin: 0;
@@ -84,4 +85,6 @@
     </div>
   </div>
 </div>
+
+<script src="{% static "libs/cute-alert/cute-alert.js" %}"></script>
 {% endblock content %}

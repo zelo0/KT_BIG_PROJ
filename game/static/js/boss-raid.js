@@ -310,10 +310,11 @@ function updatetScoreBoard(message) {
   scoreBoardPanel.layout();
 }
 
+let message = [];
 // socket listener
 chatSocket.onmessage = (e) => {
   let data = JSON.parse(e.data);
-  const message = data["message"];
+  message = data["message"];
   const type = data["type"];
   console.log(data);
   if (type == "attack") {
@@ -598,7 +599,6 @@ video.addEventListener("play", () => {
 
       // end of game
       setTimeout(() => {
-        //video.removeEventListener("play");
         night.stop();
         video.pause();
         boss.play("boss_die").once("animationcomplete", () => {
@@ -607,7 +607,8 @@ video.addEventListener("play", () => {
             right_eye: right_skill_count,
             mouth: mouth_skill_count,
           };
-          window.location.href = `/mainapp/result?left_eye=${left_skill_count}&right_eye=${right_skill_count}&mouth=${mouth_skill_count}`;
+
+          showFinalScore(message);
         });
       }, 1000 * GAME_TIME + 1000);
     }
@@ -615,3 +616,36 @@ video.addEventListener("play", () => {
     document.querySelector(".mask").style.visibility = "hidden";
   }, 5000); // 딜레이로 5초 뒤 시작
 });
+
+function showFinalScore(scoreData) {
+  tableElement = "";
+  for (let row = 0; row < scoreData.length; row++) {
+    const oneScore = scoreData[row];
+    tableElement += `<tr>
+                      <th>${oneScore[0]}</th>
+                      <th>${oneScore[1]}</th>
+                    </tr>`;
+  }
+
+  cuteAlert({
+    type: "success",
+    title: "GAME END",
+    message: `당신은 ${
+      scoreData.map((arr) => arr[0]).indexOf(player_name) + 1
+    }등을 하셨습니다`,
+    img: `<table class='table'>
+            <thead class='table-dark'>
+              <tr>
+                <th>player</th>
+                <th>score</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableElement}
+            </tbody>
+          </table>`,
+    buttonText: "NEXT",
+  }).then(() => {
+    window.location.href = `/mainapp/result?left_eye=${left_skill_count}&right_eye=${right_skill_count}&mouth=${mouth_skill_count}`;
+  });
+}
