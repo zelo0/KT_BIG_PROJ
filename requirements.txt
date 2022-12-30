@@ -12,3 +12,5 @@ redis
 Twisted[tls,http2]
 psycopg2-binary
 dj-database-url
+base64
+tensorflow
