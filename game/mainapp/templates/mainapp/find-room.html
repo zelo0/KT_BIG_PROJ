@@ -2,6 +2,10 @@
 {% load static %}
 
 
+{% comment %} {% block style %}
+<link rel="stylesheet" href="{% static 'libs/cute-alert/style.css' %}" type="text/css" />
+{% endblock style %} {% endcomment %}
+
 {% block content %}
 <div class="container position-relative h-100 w-100">
   {% include 'core/components/back-button.html' %}
@@ -22,5 +26,20 @@
     const room_name = document.querySelector('#room-name-input').value;
     window.location.href = `/mainapp/room/wait/${room_name}`
   });
+{% comment %} 
+  window.onload = function() {
+    cuteAlert({
+      type: "success",
+      title: "GAME END",
+      message: 'asfsd',
+      img: `<img src='/static/icons/youtube.png'/>`,
+      buttonText: "NEXT",
+    }).then(() => {
+      window.location.href = `/mainapp/result?left_eye=${left_skill_count}&right_eye=${right_skill_count}&mouth=${mouth_skill_count}`;
+    });
+  } {% endcomment %}
 </script>
+
+{% comment %} <script src="{% static "libs/cute-alert/cute-alert.js" %}"></script> {% endcomment %}
+
 {% endblock content %}
